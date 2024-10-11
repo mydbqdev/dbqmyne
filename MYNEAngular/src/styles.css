@@ -1,0 +1,208 @@
+/** ----------------------------- Common css ------------------------------------------------------- **/
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+body{
+    font-size: 14px;
+}
+.form-control:focus {
+    box-shadow: none;
+}
+
+.btn{
+    border-radius: 3px;
+}
+
+.btn-lg{
+    font-size: 18px;
+}
+
+.alert{
+    padding: 15.5px 20px;
+    font-size: 13px;
+    border: none !important;
+    border-radius: 3px;
+    margin-bottom: 25px;
+}
+
+.alert-dismissible .btn-close{
+    padding: 18.5px 19px;
+    background-size: 8px;
+}
+
+.alert-dismissible .btn-close:focus,
+.alert-dismissible .btn-close:active {
+    box-shadow: none;
+}
+
+.input-group-text{
+    background:#4c4c4c;
+    color:#ffffff;
+}
+.content-wrapper {
+    padding-top: 20px;
+}
+.card-secondary:not(.card-outline)>.card-header {
+    background-color: #001533;
+}
+label:not(.form-check-label):not(.custom-file-label) {
+    font-weight: 500;
+}
+.content-wrapper form .fa, .content-wrapper form .fas {
+    font-weight: 600;
+    font-size: 0.5rem;
+}
+.fa-asterisk{
+    color:#dc3545;
+    font-size: 9px;
+}
+.bg{
+    background-image: linear-gradient(to top right,rgb(228, 180, 91),rgb(5, 179, 248));
+}
+.form-check-input{
+ margin-left: 0px;
+ margin-top: 10px;
+}
+.form-control{
+    appearance: auto;
+}
+/* ------------------------------------ end common css -------------------------------------------- */
+
+.layout-navbar-fixed .wrapper .sidebar-dark-warning .brand-link:not([class*=navbar]) {
+    background-color: #001533 !important;
+}
+
+.card-secondary:not(.card-outline)>.card-header {
+    background-color:rgb(11, 70, 97);
+}
+
+/*tables */
+.table .thead-dark th {
+    color: #000 !important;
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    font-weight: 600 !important;
+}
+.table td, .table th {
+    padding: 8px 10px;
+}
+.wrapper, body, html {
+    min-height: calc(100vh - 3.6rem);
+}
+.layout-navbar-fixed .wrapper .content-wrapper {
+    min-height: calc(100vh - 3.6rem);
+}
+.toast-bottom-left{
+    bottom:0;
+    left:0;
+
+}
+.layout-navbar-fixed .wrapper .content-wrapper {
+    margin-top: calc(5.5rem + 1px);
+}
+.card-height{
+    min-height: calc(100vh - 110px);
+}
+.company-holidays {
+    background-color: #5b7ce0 !important;
+    border-radius: 100%;
+
+  }
+  .restricted-holidays {
+    background-color: green !important;
+    border-radius: 100%;
+    color:#fff;
+
+  }
+  .pending-leaves {
+
+    background-color: rgb(242, 115, 208)!important;
+    border-radius: 100%;
+
+  }
+  .approved-leaves {
+    background-color: rgb(98, 196, 238) !important;
+    border-radius: 100%;
+    color:#fff;
+
+  } 
+  .ts-lop-leaves {
+    background-color: rgb(172, 174, 175) !important;
+    border-radius: 100%;
+    color:#fff;
+
+  }
+  .today-date
+  {
+    background-color: rgb(241, 182, 73) !important;
+    border-radius: 100%;
+
+  }
+  .modal-backdrop {
+      z-index: 1040 !important;
+  }
+  [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active,
+  [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:focus,
+  [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:hover {
+    background-color: #0f6890 !important;
+    color:#fff !important;
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 0.5rem;
+}
+
+.restricted-holidays .mat-calendar-body-cell-content,.company-holidays .mat-calendar-body-cell-content,.today-date .mat-calendar-body-cell-content
+{
+    color: #fff !important;
+
+}
+.mat-calendar-table {
+    width: 80% !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mat-mdc-card {
+    box-shadow: none !important;
+}
+.restricted-holidays,.company-holidays,.today-date,.pending-leaves ,.approved-leaves,.ts-lop-leaves{
+
+    color: #fff !important;
+    width: 70%!important;
+    height: 70% !important;
+}
+.mat-calendar-table-header th {
+    font-weight: 700;
+    color: #000000;
+}
+.navbar-nav>.user-menu>.dropdown-menu>li.user-header>p{
+    font-size: 14px;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+display: none;
+}
+
+
+.my-custom-tooltip{
+    max-width: unset !important;
+}
+
+.mat-mdc-table .mdc-data-table__row{
+    height:32px !important;
+}
+.mat-mdc-table .mdc-data-table__pagination{
+    min-height:32px !important;
+}
+.mat-mdc-table .mdc-data-table__header-row{
+    height:36px !important;
+}
+
+.carousel-control-next, .carousel-control-prev {
+ width: 2% !important;
+}
+
+
+.input-group-text {
+    background: #e9e7e7 !important;
+    color: #000 !important;
+}

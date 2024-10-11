@@ -1,0 +1,45 @@
+import { AccountSubMenu } from './account-sub-menu';
+import { AdminReportSubMenu } from './admin-reports-sub-menu';
+import { AdminSubMenu } from './admin-sub-menu';
+import { ApprovalSubMenu } from './approvals-sub-menu';
+import { EmployementSubMenu } from './employement-sub-menu';
+import { EMSSubMenu } from './ems-sub-menus';
+import { FinanceAndAccountSubMenu } from './finance-and-account-sub-menu';
+import { LMSSubMenu } from './lms-sub-menu';
+import { PersonalSubMenu } from './personal-sub-menu';
+import { ReportsSubmenu } from './reports-sub-menus';
+import { SuperadminSubMenu } from './super-admin-sub-menu';
+import { TaxDecSubMenu } from './taxdec-sub-menus';
+import { TimeSheetSubMenu } from './timesheet-sub-menus';
+import { SettingsSubMenu } from './validation/settingsSubMenu';
+
+export class DefMenu{
+    public personalMenu:boolean;
+    public personalSubMenu:PersonalSubMenu;
+    public employmentMenu:boolean;
+    public employmentSubMenu:EmployementSubMenu;
+    public accountMenu:boolean;
+    public accountSubMenu:AccountSubMenu;
+    public lmsMenu:boolean;
+    public lmsSubMenu:LMSSubMenu;
+    public emsMenu:boolean;
+    public emsSubMenu:EMSSubMenu;
+    public reportMenu:boolean;
+    public reportSubMenu:ReportsSubmenu;
+    public taxdecMenu:boolean;
+    public taxdecSubMenu:TaxDecSubMenu;
+    public adminMenu:boolean;
+    public adminSubMenu:AdminSubMenu;
+    public superadminMenu:boolean;
+    public superadminSubMenu:SuperadminSubMenu;
+    public timesheetMenu:boolean;
+    public timesheetSubMenu:TimeSheetSubMenu;
+    public adminreportMenu:boolean;
+    public adminReportSubMenu:AdminReportSubMenu;
+    public approvalMenu:boolean;
+    public approvalSubMenu:ApprovalSubMenu;
+    public financeAndAccount:boolean;
+    public financeAndAccountSubMenu:FinanceAndAccountSubMenu;
+    public settingsMenu:boolean;
+    public settingsSubMenu:SettingsSubMenu;
+    }
