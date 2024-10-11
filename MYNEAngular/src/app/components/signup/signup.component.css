@@ -114,9 +114,9 @@
 }
 
 .logo img {
-    margin-bottom: 5px;
-    height: 80px;
-    border-radius:5px;
+    margin-top: 20px;
+    margin-bottom: 1px;
+    height: 60px;
 }
 
 .loginPage .lines {
