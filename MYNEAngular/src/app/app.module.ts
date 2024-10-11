@@ -28,6 +28,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
 import { SigninComponent } from './components/signin/signin.component';
 import { MainPipe } from './main-pipe.module';
 import { Routes, RouterModule } from '@angular/router';
+import { SignupComponent } from './components/signup/signup.component';
 
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
     ForbiddenComponent,
     MaskInputDirective,
     SigninComponent,
+    SignupComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes,
