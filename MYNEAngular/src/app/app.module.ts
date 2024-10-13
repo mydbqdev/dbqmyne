@@ -29,6 +29,11 @@ import { SigninComponent } from './components/signin/signin.component';
 import { MainPipe } from './main-pipe.module';
 import { Routes, RouterModule } from '@angular/router';
 import { SignupComponent } from './components/signup/signup.component';
+import { LeftPanelComponent } from './components/left-panel/left-panel.component';
+import { HomeComponent } from './components/home/home.component';
+import { RightPanelComponent } from './components/right-panel/right-panel.component';
+import { ListingComponent } from './listing/listing/listing.component';
+import { ListingLeftPanelComponent } from './listing/listing-left-panel/listing-left-panel.component';
 
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
@@ -44,6 +49,11 @@ const appRoutes: Routes = [
     MaskInputDirective,
     SigninComponent,
     SignupComponent,
+    LeftPanelComponent,
+    HomeComponent,
+    RightPanelComponent,
+    ListingComponent,
+    ListingLeftPanelComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

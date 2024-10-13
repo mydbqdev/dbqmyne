@@ -1,0 +1,46 @@
+<div class="left-full-height">
+<div class="m-2" style="padding-left: 70px;">
+	<a href="index.html" class="logo">
+		<img src="assets/images/myne-logo.svg" alt="logo">
+	</a>
+</div>
+
+<div class="m-2" style="padding-top: 12px;">
+	<nav class="nav flex-column">
+		<a class="nav-link left-menu" href="#"><i class="fas fa-home mr-1"></i>Home</a>
+		<a class="nav-link left-menu" href="#"><i class="fas fa-tag mr-1"></i>All listings</a>
+		<a class="nav-link left-menu" href="#"><i class="far fa-user mr-1"></i>Your listings</a>
+		<a class="nav-link left-menu" href="#"><i class="far fa-comment"></i> Listing chats</a>
+		<a class="nav-link left-menu" href="#"><i class="far fa-bookmark mr-1"></i>Saved listings</a>
+	  </nav>
+</div>
+<div class="m-2" style="padding-top: 12px;padding-left: 15px;">
+	<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#newPost" style="width: 225px;">Create a listings</button>
+</div>
+
+</div>
+
+
+<!--modal for create-->
+<div class="modal fade" id="newPost" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content" >
+		  <div>
+		  <button type="button" class="close mr-2" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewSave>
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		   </div>
+		   <div class="modal-body" style="margin-top: -5px;">
+			<div class="row mb-3">
+			  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 35px;" class="img-circle elevation-2"></div>			 
+			  <div class="col-sm-11">
+				<textarea class="form-control" placeholder="What's on your mind?"></textarea>
+			  </div>
+			</div>
+			<div class="modal-footer"> 
+                 <button type="button" class="btn btn-light">Post</button>
+		   </div>
+		   </div>		   
+		</div>
+	</div>
+  </div>

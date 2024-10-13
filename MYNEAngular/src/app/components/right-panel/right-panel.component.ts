@@ -9,25 +9,17 @@ import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.css']
+	selector: 'app-right-panel',
+	templateUrl: './right-panel.component.html',
+	styleUrls: ['./right-panel.component.css']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class RightPanelComponent implements OnInit, AfterViewInit {
 	public defHomeMenu: DefMenu;
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
-	//@ViewChild(SideNavMenuComponent) sidemenuComp;
-	//public rolesArray: string[] = [];
-
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService) {
-		//this.userNameSession = userService.getUsername();
-		//this.defHomeMenu=defMenuEnable;
-		//if (userService.getUserinfo() != undefined) {
-		//	this.rolesArray = userService.getUserinfo().previlageList;
-		//}
 		this.router.routeReuseStrategy.shouldReuseRoute = function () {
 			return false;
 		};
@@ -51,7 +43,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//}
 	}
 	ngAfterViewInit() {
-		//this.sidemenuComp.expandMenu(1);
-		//this.sidemenuComp.activeMenu(1, '');
+
 	}
 }

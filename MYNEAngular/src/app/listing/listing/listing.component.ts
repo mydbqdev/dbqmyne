@@ -9,11 +9,11 @@ import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.css']
+	selector: 'app-listing',
+	templateUrl: './listing.component.html',
+	styleUrls: ['./listing.component.css']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class ListingComponent implements OnInit, AfterViewInit {
 	public defHomeMenu: DefMenu;
 	public userNameSession: string = "";
 	errorMsg: any = "";
