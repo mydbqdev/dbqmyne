@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { SignupComponent } from './components/signup/signup.component';
 import { HomeComponent } from './components/home/home.component';
 import { ListingComponent } from './listing/listing/listing.component';
+import { Home1Component } from './components/home1/home1.component';
 
 const routes: Routes = [
 	{path:'',redirectTo:'/startup',pathMatch:'full'},
@@ -13,6 +14,7 @@ const routes: Routes = [
 	{ path: 'signup', component: SignupComponent },
 	{ path: 'signin', component: SigninComponent },
 	{ path: 'home', component: HomeComponent },
+	{ path: 'home1', component: Home1Component },
 	{ path: 'listing', component: ListingComponent },
 	{
 		path: 'forbidden', component: ForbiddenComponent

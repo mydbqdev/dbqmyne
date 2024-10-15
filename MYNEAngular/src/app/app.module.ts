@@ -34,6 +34,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { ListingComponent } from './listing/listing/listing.component';
 import { ListingLeftPanelComponent } from './listing/listing-left-panel/listing-left-panel.component';
+import { Home1Component } from './components/home1/home1.component';
 
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
@@ -53,7 +54,8 @@ const appRoutes: Routes = [
     HomeComponent,
     RightPanelComponent,
     ListingComponent,
-    ListingLeftPanelComponent
+    ListingLeftPanelComponent,
+    Home1Component
   ],
   imports: [
     RouterModule.forRoot(appRoutes,
