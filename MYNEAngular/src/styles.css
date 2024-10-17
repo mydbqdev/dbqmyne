@@ -280,3 +280,14 @@ a.nav-link.top-menu:hover{
   }
   
   /* Custom scrollbar for Firefox */
+
+  a.link-2{
+      text-decoration: none;
+      font-size: 18px;
+      color: #888;
+  }
+
+  a.link-2:hover{
+    text-decoration: none;
+    color: #F57F0C;
+}
