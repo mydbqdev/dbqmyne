@@ -35,6 +35,8 @@ import { RightPanelComponent } from './components/right-panel/right-panel.compon
 import { ListingComponent } from './listing/listing/listing.component';
 import { ListingLeftPanelComponent } from './listing/listing-left-panel/listing-left-panel.component';
 import { Home1Component } from './components/home1/home1.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { UnderConstructionComponent } from './under-construction/under-construction.component';
 
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
@@ -55,7 +57,9 @@ const appRoutes: Routes = [
     RightPanelComponent,
     ListingComponent,
     ListingLeftPanelComponent,
-    Home1Component
+    Home1Component,
+    UnderConstructionComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes,

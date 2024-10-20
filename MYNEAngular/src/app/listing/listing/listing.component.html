@@ -1,7 +1,7 @@
 <div id="header" style="top:0;height: 100px;position: fixed;z-index: 1;width: 100%;background-color: #fff;">
   <div class="d-flex">
      <div style="width: 225px;border-right: 1px solid rgb(203, 203, 203);height: 100px;">
-      <div class="m-2" style="padding-left: 60px;">
+      <div class="mt-1 ml-2 mr-2 mb-2" style="padding-left: 60px;">
         <a href="index.html" class="logo">
           <img src="assets/images/myne-logo.svg" alt="logo">
         </a>
@@ -16,6 +16,24 @@
       </div>
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
+      <div class="d-flex" style="margin-top: 10px;">
+        <div class="m-2"><img src="assets/images/profile.PNG" style="width: 70px;" class="img-circle elevation-2"></div>
+        <div>
+           <div style="font-weight: 500;" class="ml-2 mt-3">Shesh</div>
+           <div class="fw-lighter ml-2">Small text</div>
+        </div>
+        <div>
+          <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
+                                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                          <i class="fas fa-ellipsis-h ml-2 mt-5 text-gray-400"></i>
+                                          </a>
+                                          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                              aria-labelledby="dropdownMenuLink">
+                                              <a class="dropdown-item" href="javascript:void(0)">Settings</a>
+                                              <a class="dropdown-item" href="javascript:void(0)" routerLink="/signin">Logout</a>
+                                          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -24,26 +42,61 @@
      <div style="z-index: 1;position: fixed;width: 225px;border-right: 1px solid rgb(203, 203, 203);height: calc(100vh - 100px);top:100px;">
       <div class="ml-4 mr-4 mt-2 mb-2">
         <nav class="nav flex-column">
-          <a class="nav-link left-menu" href="#"><i class="fas fa-home mr-1"></i>Home</a>
-          <a class="nav-link left-menu" href="#"><i class="fas fa-tag mr-1"></i>All listings</a>
-          <a class="nav-link left-menu" href="#"><i class="far fa-user mr-1"></i>Your listings</a>
-          <a class="nav-link left-menu" href="#"><i class="far fa-comment"></i> Listing chats</a>
-          <a class="nav-link left-menu" href="#"><i class="far fa-bookmark mr-1"></i>Saved listings</a>
+          <a class="nav-link left-menu" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-lemon mr-2"></i>Discover</a>
+          <a class="nav-link left-menu active" routerLink="/listing"><i class="fas fa-tag mr-2"></i>For Sale</a>
+          <a class="nav-link left-menu" routerLink="/listing"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-bell mr-1"></i> Notifications</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-comment mr-1"></i> Chats</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="fas fa-users mr-1"></i> Groups</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="fas fa-user-friends mr-2"></i>Neighbors</a>
           </nav>
       </div>
       <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
-        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#newPost" style="width: 145px;">Create a listings</button>
+        <button type="button" class="btn btn-info border-0" style="border-radius: 20px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
       </div>
     </div>
     <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 230px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
       <div >
-        <div style="padding-top: 5px;"> 
-          <div class="header-text">
-            For Free
+        <div> 
+          <div>
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link top-menu active" href="#">All Listings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link top-menu" href="#">Your listings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link top-menu" href="#">Saved listings</a>
+              </li>
+            </ul>
           </div>
             <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
         </div>
       </div>
+     <div  style="padding:10px 22px 0px 5px;">
+      <div class="m-1 d-flex">
+        <div>
+          <select class="form-control form-control-sm border-0">
+            <option>Sorted by</option>
+          </select>
+        </div>
+        <div>
+          <select class="form-control form-control-sm border-0">
+            <option>Distance</option>
+          </select>
+        </div>
+        <div>
+          <select class="form-control form-control-sm border-0">
+            <option>Categories</option>
+          </select>
+        </div>
+        <div></div>
+        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" >List an Item</button></div>
+      </div>
+     </div>
+
       <div  style="padding:10px 22px;">
         <div>
           <div class="card-deck">
@@ -61,6 +114,14 @@
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
             </div>
+            <div class="card">
+              <img class="card-img-top" src="assets/images/listing3.JPG" alt="Card image cap">
+              <div class="card-body" style="padding:0px;">
+                <h5 class="card-title" style="font-weight: 500;">Wooden Chair</h5>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+
             <div class="card">
               <img class="card-img-top" src="assets/images/listing3.JPG" alt="Card image cap">
               <div class="card-body" style="padding:0px;">
@@ -96,6 +157,14 @@
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
             </div>
+
+            <div class="card">
+              <img class="card-img-top" src="assets/images/listing2.JPG" alt="Card image cap">
+              <div class="card-body" style="padding:0px;">
+                <h5 class="card-title" style="font-weight: 500;">Wooden Chair</h5>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -119,12 +188,30 @@
 			<div class="row mb-3">
 			  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 35px;" class="img-circle elevation-2"></div>			 
 			  <div class="col-sm-11">
-				<textarea class="form-control" placeholder="What's on your mind?"></textarea>
+          <div><textarea class="form-control" placeholder="What's on your mind?"></textarea></div>
+        <div class="m-1 d-flex">
+          <div>
+            <select class="form-control form-control-sm border-0">
+              <option>Anywhere</option>
+              <option>Only Friends</option>
+              <option>Groups</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+                 <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
+                  <div class="d-flex mt-1">
+                        <div>
+                          <a  routerLink="/signup" class="link-2" title="Upload Photo"><i class="far fa-image mr-2"></i></a>
+                          <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
+                          <a  routerLink="/signup" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/signup" class="link-2"><i class="fas fa-gift mr-2"></i></a>
+                        </div>
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" >Post</button></div>
+                  </div>
 			  </div>
 			</div>
-			<div class="modal-footer"> 
-                 <button type="button" class="btn btn-light">Post</button>
-		   </div>
 		   </div>		   
 		</div>
 	</div>

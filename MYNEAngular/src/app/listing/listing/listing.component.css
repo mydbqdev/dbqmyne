@@ -8,3 +8,8 @@
     color: rgb(127, 129, 127);
     font-weight:500;
   }
+
+  .card {
+    box-shadow: 0 0 0px #00000020, 0 0px 0px #0003  !important;
+    margin-bottom: 1rem;
+}
