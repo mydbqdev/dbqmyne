@@ -18,6 +18,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
+	fileData: File = null;
+		 previewUrl:any = null;
+		 previewUrl2:any = null;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
@@ -53,5 +56,36 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
+	}
+
+	onFileChanged(event,id:number) {
+		this.previewUrl=false;
+		this.previewUrl2=false;
+		//console.info("hrloo0");
+		if(event.target.files.length>0){
+		  this.fileData = <File>event.target.files[0];
+		  console.info("hrloo0:"+this.fileData);
+		  this.preview(id);
+		}
+	
+	}
+	preview(id) {
+		// Show preview 
+		//console.info("hrloo");
+		var mimeType = this.fileData.type;
+		if (mimeType.match(/image\/*/) == null) {
+		  return;
+		}
+		var reader = new FileReader();      
+		reader.readAsDataURL(this.fileData); 
+		reader.onload = (_event) => { 
+			if(id==1){
+				this.previewUrl = reader.result; 
+			}else{
+				this.previewUrl2 = reader.result; 
+			}
+		  //this.previewUrl = reader.result; 
+		  //console.info("hrloo:"+this.previewUrl);
+		}
 	}
 }

@@ -90,7 +90,15 @@
             <div class="row" style="margin:20px 10px 5px 20px;">
               <div class="col-sm-1"><img src="assets/images/profile.PNG" style="width: 55px;" class="img-circle elevation-2"></div>
               <div class="col-sm-11">
-                  <div><textarea class="form-control" placeholder="What's on your mind?"></textarea></div>
+                  <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
+                    <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
+                    <div id="imgSec"></div>
+                    <div id="emoSec"></div>
+                    <div class="image-preview mb-3" *ngIf="previewUrl">
+                      <img [src]="previewUrl" height="140px" width="120px"  class="elevation-2"/> &nbsp;
+                      <img [src]="previewUrl" height="140px" width="120px"  class="elevation-2"/>                 
+                     </div>
+                  </div>
                   <div class="m-1 d-flex">
                     <div>
                       <select class="form-control form-control-sm border-0">
@@ -106,7 +114,7 @@
                         <div>
                           <label>
                             <i class="far fa-image link3 mr-2"  title="Upload Photo"></i>
-                            <input type="file" id="file" style="display: none" name="image" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="true" data-original-title="upload photos">
+                            <input type="file" id="file" style="display: none" name="image" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="true" data-original-title="upload photos" (change)="onFileChanged($event,1)">
                           </label>
                           <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
                           <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
@@ -142,7 +150,15 @@
                     </div>
                     
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
-                    <div class="d-flex" style="font-size: 13px;font-weight: 400;padding: 5px 0px"><div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div></div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
+                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                     <!--start 2 photo list-->
+                       <div class="d-flex" style="padding-top: 10px;">
+                        <div ><img src="assets/images/listing2.JPG" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" alt="logo"></div>
+                        <div class="ml-1"><img src="assets/images/listing3.JPG" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px;" alt="logo"></div>
+                       </div>
+                       <!--end 2 photo list-->
+                    </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
@@ -174,11 +190,14 @@
                    </div>
                    
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
-                    <div class="d-flex" style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
-                     <div class="ml-auto" style="width: 120px;padding-left: 10px;">
-                      <img src="assets/images/myne-logo.svg" alt="logo">
+                     <!--start single photo -->
+                     <div class="d-flex" style="padding-top: 10px;">
+                      <div><img src="assets/images/coast-6310250_1280.png" alt="logo"></div>
                      </div>
+                     <!--end photo -->
                     </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
@@ -197,7 +216,38 @@
                   <div class="col-sm-11">
                     <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
-                    <div class="d-flex" style="font-size: 13px;font-weight: 400;padding: 5px 0px"><div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div></div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
+                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
+                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                      <!--start 3 photo list-->
+                      <div class="d-flex" style="padding-top: 10px;">
+                        <div><img src="assets/images/car-8647805_1280.png" alt="logo"></div>
+                        <div class="ml-1">
+                          <div><img src="assets/images/dashboard-3510327_1280.png" alt="logo"></div>
+                          <div class="mt-1"><img src="assets/images/speedometer-1249610_1280.png" alt="logo"></div>
+                        </div>
+                       </div>
+                       <!--end 3 photo list-->
+                    </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
@@ -215,10 +265,60 @@
                   <div class="col-sm-11">
                     <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
-                    <div class="d-flex" style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
-                     <div class="ml-auto" style="width: 120px;padding-left: 10px;">
-                      <img src="assets/images/myne-logo.svg" alt="logo">
+                     <div style="padding-top: 10px;">
+                       <!--start two row 4 photo list-->
+                       <div class="d-flex" style="padding-top: 10px;">
+                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" alt="logo"></div>
+                        <div class="ml-1">
+                          <div><img src="assets/images/pexels-katebranch-8634412.png" alt="logo"></div>
+                        </div>
+                       </div>
+                       <div class="d-flex mt-1">
+                        <div><img src="assets/images/Frame_3234257.png" alt="logo"></div>
+                        <div class="ml-1">
+                          <div><img src="assets/images/Frame_32342572.png" alt="logo"></div>
+                        </div>
+                       </div>
+                      <!--end two row 4 photo list-->
+                     </div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+                     <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                     <div style="padding-top: 10px;">
+                      <!--start two row more than 4 photo list-->
+                       <div class="d-flex" style="padding-top: 10px;">
+                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" alt="logo"></div>
+                        <div class="ml-1">
+                          <div><img src="assets/images/pexels-katebranch-8634412.png" alt="logo"></div>
+                        </div>
+                       </div>
+                       <div class="d-flex mt-1">
+                        <div><img src="assets/images/Frame_3234257.png" alt="logo"></div>
+                        <div class="ml-1">
+                          <div><img src="assets/images/Frame_32342572.png" alt="logo"></div>
+                        </div>
+                       </div>
+                       <!--end two row more than 4 photo list-->
                      </div>
                     </div>
                     <div class="d-flex">
@@ -255,7 +355,15 @@
 			<div class="row mb-3">
 			  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 35px;" class="img-circle elevation-2"></div>			 
 			  <div class="col-sm-11">
-          <div><textarea class="form-control" placeholder="What's on your mind?"></textarea></div>
+          <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
+            <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
+            <div id="imgSec"></div>
+            <div id="emoSec"></div>
+            <div class="image-preview mb-3" *ngIf="previewUrl2">
+              <img [src]="previewUrl2" height="140px" width="120px"  class="elevation-2"/> &nbsp;
+              <img [src]="previewUrl2" height="140px" width="120px"  class="elevation-2"/>                 
+             </div>
+          </div>
         <div class="m-1 d-flex">
           <div>
             <select class="form-control form-control-sm border-0">
@@ -271,7 +379,7 @@
                         <div>
                           <label>
                             <i class="far fa-image mr-2 link3"  title="Upload Photo"></i>
-                            <input type="file" id="file" style="display: none" name="image" accept="image/jpeg,image/jpg,image/png" multiple="true" data-original-title="upload photos">
+                            <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChanged($event,2)">
                           </label>
                           <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
                           <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
