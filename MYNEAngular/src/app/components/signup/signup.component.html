@@ -15,21 +15,21 @@
 					<strong>{{error}}</strong> 
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>
-				<form  name='signinForm'>
+				<form  name='signupForm' (ngSubmit)="doSignup()">
 					<div class="form-group position-relative clearfix" style="margin-bottom: 0.5rem !important;">
 						<div class="row">
 							<div class="col-sm-5">
 							<label for="exampleInputFirst1" class="form-label">First name</label>
-							<input type="text" class="form-control form-control-sm" id="exampleInputFirst1" name="firstname"  placeholder="First name" required>
-							<div *ngIf="submitted && username==''" class="text-danger">
+							<input type="text" class="form-control form-control-sm" id="exampleInputFirst1" name="firstname" [(ngModel)]="firstname"  placeholder="First name" required>
+							<div *ngIf="submitted && firstname==''" class="text-danger">
 								Please enter your first name
 							</div>
 							</div>
 							<div class="col-sm-2"></div>
 							<div class="col-sm-5">
 								<label for="exampleInputLast1" class="form-label">Last name</label>
-								<input type="text" class="form-control form-control-sm" id="exampleInputLast1" name="lastname"  placeholder="Last name"  required>
-								<div *ngIf="submitted && username==''" class="text-danger">
+								<input type="text" class="form-control form-control-sm" id="exampleInputLast1" name="lastname" [(ngModel)]="lastname"  placeholder="Last name"  required>
+								<div *ngIf="submitted && lastname==''" class="text-danger">
 									Please enter your last name
 								</div>
 								</div>
@@ -38,8 +38,8 @@
 					<div class="form-group position-relative clearfix" style="margin-bottom: 0.5rem !important;">
 						<div>
 							<label for="exampleInputEmail1" class="form-label">Email</label>
-							<input type="email" class="form-control form-control-sm" id="exampleInputEmail1" name="email"  placeholder="Email" aria-describedby="emailHelp" required>
-							<div *ngIf="submitted && username==''" class="text-danger">
+							<input type="email" class="form-control form-control-sm" id="exampleInputEmail1" [(ngModel)]="email" name="email"  placeholder="Email" aria-describedby="emailHelp" required>
+							<div *ngIf="submitted && email==''" class="text-danger">
 								Please enter your email
 						    </div>
 						  </div>
@@ -47,7 +47,7 @@
 					<div class="form-group clearfix position-relative" style="margin-bottom: 0.5rem !important;">
 						<div>
 							<label for="exampleInputPassword1" class="form-label">Password</label>
-							<input type="password" class="form-control form-control-sm" id="exampleInputPassword1" placeholder="Password" required>
+							<input type="password" class="form-control form-control-sm" name="password" id="exampleInputPassword1" [(ngModel)]="password" placeholder="Password" required>
 							<div *ngIf="submitted && password==''" class="text-danger">
 								Please enter the password
 						    </div>
@@ -56,8 +56,8 @@
 					<div class="form-group clearfix position-relative" style="margin-bottom: 0.5rem !important;">
 						<div>
 							<label for="exampleInputZipcode1" class="form-label">Zipcode</label>
-							<input type="text" class="form-control form-control-sm" id="exampleInputZipcode1" placeholder="Zipcode" required>
-							<div *ngIf="submitted && password==''" class="text-danger">
+							<input type="text" class="form-control form-control-sm" id="exampleInputZipcode1" [(ngModel)]="zipcode" name="zipcode" placeholder="Zipcode" required>
+							<div *ngIf="submitted && zipcode==''" class="text-danger">
 								Please enter the zipcode
 						    </div>
 						  </div>

@@ -20,7 +20,7 @@
 					<div class="form-group position-relative clearfix">
 						<div class="mb-1">
 							<label for="exampleInputEmail1" class="form-label">Email</label>
-							<input type="email" class="form-control form-control-sm" id="exampleInputEmail1" name="email"  placeholder="Email" aria-describedby="emailHelp" required>
+							<input type="email" class="form-control form-control-sm" id="exampleInputEmail1" name="username" [(ngModel)]="username" placeholder="Email" (ngModelChange)="username = $event.toLowerCase()" aria-describedby="emailHelp" required>
 							<div *ngIf="submitted && username==''" class="text-danger">
 								Please enter your email
 						    </div>
@@ -29,7 +29,7 @@
 					<div class="form-group clearfix position-relative">
 						<div class="mb-1">
 							<label for="exampleInputPassword1" class="form-label">Password</label>
-							<input type="password" class="form-control form-control-sm" id="exampleInputPassword1" placeholder="Password" required>
+							<input type="password" class="form-control form-control-sm" id="exampleInputPassword1" name="password" [(ngModel)]="password" placeholder="Password" required>
 							<div *ngIf="submitted && password==''" class="text-danger">
 								Please enter the password
 						    </div>

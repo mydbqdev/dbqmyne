@@ -10,12 +10,13 @@ import { ResponseStore } from 'src/app/common/models/response.model';
 })
 export class ForgotPasswordComponent implements OnInit {
 
-	username: string = '';
-	password: string = '';
-	rememberme:boolean=false;
+	email: string = '';
+	newPassword: string = '';
+	confirmPassword: string = '';
     stepPassword: number=0;
-	isSignedin = false;
 	submitted=false;
+	submittedVerifyCode=false;
+	submittedResetPwd=false;
 	error: string = '';
 	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
 
@@ -24,35 +25,35 @@ export class ForgotPasswordComponent implements OnInit {
 	}
 
 	doSignin() {
-		this.submitted=true;
-	    
-		if (this.username !== '' && this.username !== null && this.password !== '' && this.password !== null) {
-			localStorage.removeItem('username');
-			localStorage.removeItem('userpwd');
-			localStorage.removeItem('rememberme');
-
-			if(this.rememberme){
-				localStorage.setItem('username', this.username);
-				localStorage.setItem('userpwd', this.password);
-				localStorage.setItem('rememberme', JSON.stringify(this.rememberme));
-			}
-
-			const user: User = { empEmail: this.username.toLowerCase(), empPassword: this.password };
+		this.submitted=true;    
+		if (this.email !== '' && this.email !== null) {		
+			const user: User = { empEmail: this.email.toLowerCase()};
             this.submitted=false;
-			this.authService.getAuthUser(user).subscribe((result) => {
-				const res: ResponseStore = { empEmail: this.username.toLowerCase(), token: result.token };
-				this.authService.setSessionStore(res);
-				this.authService.checkLoginUser();
-				this.router.navigate(['/home']);
-			}, () => {
-				this.error = 'Invalid credentials or something went wrong';
-			});
-		}// else {
-		//	this.error = 'Username or Password is required';
-		//}
+			
+		}
 	}
 
 	nextStep(id:number){
+		this.submitted=false;
+	this.submittedVerifyCode=false;
+	this.submittedResetPwd=false;
+	 if(id==1){
+		if (this.email !== '' && this.email !== null) {		
+            this.submitted=false;
+			this.doSignin();
+		}else{
+			this.submitted=true; 
+			return;
+		}
+	 }else if(id==3){
+		if (this.newPassword !== '' && this.newPassword !== null && this.confirmPassword !== '' && this.confirmPassword !== null) {		
+            this.submittedResetPwd=false;
+			this.doSignin();
+		}else{
+			this.submittedResetPwd=true; 
+			return;
+		}
+	 }	
      this.stepPassword=id;
 	}
 
