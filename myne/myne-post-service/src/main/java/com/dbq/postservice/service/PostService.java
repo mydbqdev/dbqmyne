@@ -107,13 +107,20 @@ public class PostService {
 	    }
 
 	    public List<PostsResponse> getPosts(String filterType, Integer pageIndex, Integer pageSize, String zipCode, String searchTerm) {
-	    			
+	    	
 	    	List<PostsResponse> list = new ArrayList<>();
 	    	
 	        	PageRequest pageable = PageRequest.of(pageIndex, pageSize);
 	        //	Page<PostCollection> posts = postRepository.findPosts(zipCode, searchTerm, pageable);
 	        	
-	        	List<PostCollection> posts = postRepository.findAll();
+	        	List<PostCollection> allPosts = postRepository.findAll();
+	        	int count = allPosts.size();
+	        	
+				
+				int num =pageIndex>count?0:pageIndex;
+			
+				List<PostCollection> posts =  allPosts.subList(num, pageSize+num >count?count: pageSize+num) ;
+	        	
 	        	for (PostCollection postCollection : posts) {
 	        		
 	        		PostsResponse responce = new PostsResponse();
@@ -121,7 +128,7 @@ public class PostService {
 	        		responce.setUserId(postCollection.getUserId());
 	        		responce.setZipCode(postCollection.getZipCode());
 	        		responce.setPostId(postCollection.getPostId());
-	        		//responce.setCreatorName(postCollection.getUserId());
+	        		responce.setCreatorName(postCollection.getUserId());
 	        		responce.setDescription(postCollection.getDescription());
 	        	
 	        		responce.setLikeCount(postCollection.getLikdUserIds() != null ? postCollection.getLikdUserIds().length : 0);
