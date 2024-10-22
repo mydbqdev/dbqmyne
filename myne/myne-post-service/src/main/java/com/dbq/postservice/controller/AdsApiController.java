@@ -8,10 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.dto.AdsBody;
 import com.dbq.postservice.interfeces.AdsApi;
 import com.dbq.postservice.service.AdsService;
@@ -36,17 +38,12 @@ public class AdsApiController implements AdsApi {
     
     private final AdsService adsService;
 
-    public ResponseEntity<Object> adsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody AdsBody body) {
-    	
-    	ResponseEntity<Object> entity =null;
+    public ResponseEntity<Object> adsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @ModelAttribute AdsBody body) {
 
             try {
             	
-            	String message = adsService.createAdss(body) ;
-            	
-        		String listData = "{\"status\":\"" + message + "\"}";
-    			entity = new ResponseEntity<Object>(listData, HttpStatus.OK) {};
-            	return entity ;
+            	return new ResponseEntity<Object>(adsService.createAdss(body) , HttpStatus.OK) {};
+          
             } catch (Exception e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return  new ResponseEntity<Object>(e,HttpStatus.BAD_REQUEST);

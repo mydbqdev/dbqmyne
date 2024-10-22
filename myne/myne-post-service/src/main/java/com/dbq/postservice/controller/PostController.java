@@ -67,15 +67,11 @@ public class PostController implements PostsApi {
     
 	@Override
 	public ResponseEntity<Object> savePosts(String userId,PostsBody body) {
-		ResponseEntity<Object> entity =null;
 
 	    try {
-	    	System.out.println(userId+">>"+"body"+body.toString());
-	    	String message =  postService.createPosts(userId,body) ;
 	    	
-			String listData = "{\"status\":\"" + message + "\"}";
-			entity = new ResponseEntity<Object>(listData, HttpStatus.OK) {};
-	    	return entity ;
+	    	return new ResponseEntity<Object>(postService.createPosts(userId,body), HttpStatus.OK) {};
+	    	
 	    } catch (Exception e) {
 	        log.error("Couldn't serialize response for content type application/json", e);
 	        return  new ResponseEntity<Object>(e,HttpStatus.BAD_REQUEST);
@@ -123,11 +119,7 @@ public class PostController implements PostsApi {
 		ResponseEntity<Object> entity =null;
 
 	    try {
-	    	
-	    	String message = postService.updatePosts(userId,postId,body) ;
-	    	
-			String listData = "{\"status\":\"" + message + "\"}";
-			entity = new ResponseEntity<Object>(listData, HttpStatus.OK) {};
+			entity = new ResponseEntity<Object>(postService.updatePosts(userId,postId,body) , HttpStatus.OK) {};
 	    	return entity ;
 	    } catch (Exception e) {
 	        log.error("Couldn't serialize response for content type application/json", e);

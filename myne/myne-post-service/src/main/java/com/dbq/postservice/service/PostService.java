@@ -36,7 +36,9 @@ public class PostService {
 	 
 
 	 
-	    public String createPosts(String userId, PostsBody body) {
+	    public Object createPosts(String userId, PostsBody body) {
+	    	
+	    	   PostCollection savedPost = new PostCollection();
 	        try {
 	        	
 	            PostCollection post = new PostCollection();
@@ -51,37 +53,37 @@ public class PostService {
 	            String formattedDateTime = currentDateTime.format(formatter);
 	            post.setCreatedAt(formattedDateTime);
 	            post.setUpdatedAt("");
-//	            List<MediaUrlDetails>  mediaUrlDetails = new ArrayList<>();
+	            List<MediaUrlDetails>  mediaUrlDetails = new ArrayList<>();
 	            
-//	            if(null != body.getMediaDetails() ) {
-//	            	
-//	            for (MediaDetailsForRequest bodyMedia : body.getMediaDetails()) {
-//	            	 
-//	            	MediaUrlDetails entyMedia = new MediaUrlDetails();
-//	            	
-//	            	entyMedia.setContentType(bodyMedia.getContentType());
-//	            	entyMedia.setType(bodyMedia.getType());
-//	            	entyMedia.setUrl("");
-//	            	
-//	               // fileUploadService.uploadFileAsync(userId, zipCode, formattedDateTime, null);
-//	            	
-//	            	mediaUrlDetails.add(entyMedia);
-//				}
-//	            }
-	            
-	            post.setMediaDetails(new ArrayList<>());
-	            
-	            PostCollection savedPost = postRepository.save(post);
-	            
-	            CompletableFuture <List <MediaUrlDetails>>  mediaUrl= s3StorageClient.uploadFilesToS3(body.getMediaDetails(), "Posts");
-	            
-	            if(null != mediaUrl && null != mediaUrl.get() ) {
+	            if(null != body.getMediaDetails() ) {
 	            	
-	            	List <MediaUrlDetails> updateUrl= mediaUrl.get();
-	            	savedPost.setMediaDetails(updateUrl);
+	            for (MediaDetailsForRequest bodyMedia : body.getMediaDetails()) {
+	            	 
+	            	MediaUrlDetails entyMedia = new MediaUrlDetails();
 	            	
-	            	postRepository.save(savedPost);
+	            	entyMedia.setContentType(bodyMedia.getContentType());
+	            	entyMedia.setType(bodyMedia.getType());
+	            	entyMedia.setUrl("");
+	            	
+	               // fileUploadService.uploadFileAsync(userId, zipCode, formattedDateTime, null);
+	            	
+	            	mediaUrlDetails.add(entyMedia);
+				}
 	            }
+	            
+	            post.setMediaDetails(mediaUrlDetails);
+	            
+	            savedPost = postRepository.save(post);
+	            
+//	            CompletableFuture <List <MediaUrlDetails>>  mediaUrl= s3StorageClient.uploadFilesToS3(body.getMediaDetails(), "Posts");
+//	            
+//	            if(null != mediaUrl && null != mediaUrl.get() ) {
+//	            	
+//	            	List <MediaUrlDetails> updateUrl= mediaUrl.get();
+//	            	savedPost.setMediaDetails(updateUrl);
+//	            	
+//	            	savedPost = postRepository.save(savedPost);
+//	            }
 	            
 //	            if(null != body.getMediaDetails() && !body.getMediaDetails().isEmpty()) {
 //	            	
@@ -97,7 +99,7 @@ public class PostService {
 //                });
 //	            }
 	            
-	            return "Post created successfully";
+	            return savedPost;
 	        } catch (Exception e) {
 	            // Handle exceptions, e.g., log error
 	            return "Error creating post: " + e.getMessage();
@@ -141,7 +143,8 @@ public class PostService {
 	    public String deletePosts(String userId, String postId) {
 	    	
 	    	PostCollection post = postRepository.findById(postId).orElse(null);
-	         if (post == null) {
+	        
+	    	if (post == null) {
 	             return "Post not found";
 	         }
 
@@ -154,7 +157,7 @@ public class PostService {
 	         return "Post deleted successfully";
 	    }
 
-	    public String updatePosts(String userId, String postId, PostsBody body) {
+	    public Object updatePosts(String userId, String postId, PostsBody body) {
 	    	    try {
 	    	        // Fetch the existing post
 	    	        PostCollection post = postRepository.findById(postId)
@@ -188,8 +191,8 @@ public class PostService {
 	    	        post.setUpdatedAt(formattedDateTime); // Update the updatedAt field
 
 	    	        // Save the updated post
-	    	        postRepository.save(post);
-	    	        return "Post updated successfully";
+	    	        
+	    	        return postRepository.save(post);
 	    	    } catch (Exception e) {
 	    	        // Handle exceptions, e.g., log error
 	    	        return "Error updating post: " + e.getMessage();

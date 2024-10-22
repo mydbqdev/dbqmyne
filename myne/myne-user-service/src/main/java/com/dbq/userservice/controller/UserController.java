@@ -2,6 +2,7 @@ package com.dbq.userservice.controller;
 
 import com.dbq.userservice.dto.AuthUserDto;
 import com.dbq.userservice.dto.UserDto;
+import com.dbq.userservice.model.User;
 import com.dbq.userservice.request.RegisterRequest;
 import com.dbq.userservice.request.UserUpdateRequest;
 import com.dbq.userservice.service.UserService;
@@ -44,8 +45,8 @@ public class UserController {
    
 
     @GetMapping("/getUserByUserEmail/{userEmail}")
-    public ResponseEntity<AuthUserDto> getUserByUserEmail(@PathVariable String userEmail) {
-        return ResponseEntity.ok(modelMapper.map(userService.getUserByUserEmail(userEmail), AuthUserDto.class));
+    public ResponseEntity<User> getUserByUserEmail(@PathVariable String userEmail) {
+        return ResponseEntity.ok(modelMapper.map(userService.getUserByUserEmail(userEmail), User.class));
     }
 
     @PutMapping("/update")

@@ -97,12 +97,12 @@ public interface PostsApi {
         
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
     @RequestMapping(value = "/posts/{userId}/{postId}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
+//        produces = { "application/json" }, 
+//        consumes = { "application/json" }, 
         method = RequestMethod.PUT)
     ResponseEntity<Object> updatePosts(@Parameter(in = ParameterIn.PATH, description = "The ID of the user updating the post.", required=true, schema=@Schema()) @PathVariable("userId") String userId
 , @Parameter(in = ParameterIn.PATH, description = "The ID of the post to update", required=true, schema=@Schema()) @PathVariable("postId") String postId
-, @Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to update, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @Valid @RequestBody PostsBody body
+, @Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to update, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @Valid @ModelAttribute PostsBody body
 );
 
     @Operation(summary = "Like a post", description = "Allows a user to like a specific post.", tags={ "Posts Controller" })
@@ -114,7 +114,7 @@ public interface PostsApi {
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
         
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
-    @RequestMapping(value = "/post/{userId}/{postId}/like",
+    @RequestMapping(value = "/posts/{userId}/{postId}/like",
         produces = { "application/json" }, 
         method = RequestMethod.POST)
     ResponseEntity<Object> likePost(@Parameter(in = ParameterIn.PATH, description = "The ID of the user updating the post.", required=true, schema=@Schema()) @PathVariable("userId") String userId

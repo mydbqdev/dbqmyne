@@ -39,8 +39,9 @@ public interface AdsApi {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
  //   @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/ads",
-    produces = { "application/json" }, 
-    consumes = { "application/json" }, 
+      produces = { "application/json" }, 
+      consumes = {"multipart/form-data"},
+//    consumes = { "application/json" }, 
     method = RequestMethod.POST)
     ResponseEntity<Object> adsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @ModelAttribute AdsBody body
 );

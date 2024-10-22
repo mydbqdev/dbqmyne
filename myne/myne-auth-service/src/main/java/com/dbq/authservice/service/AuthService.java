@@ -1,6 +1,7 @@
 package com.dbq.authservice.service;
 
 import com.dbq.authservice.client.UserServiceClient;
+import com.dbq.authservice.db.repository.UserRepository;
 import com.dbq.authservice.dto.RegisterDto;
 import com.dbq.authservice.dto.TokenDto;
 import com.dbq.authservice.exc.WrongCredentialsException;
@@ -21,8 +22,13 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserServiceClient userServiceClient;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     public TokenDto login(LoginRequest request) {
+    	
+    	if(!userRepository.existsByUserEmail(request.getUserEmail()))
+    	 throw new WrongCredentialsException("Wrong user Email");
+    	
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUserEmail(), request.getPassword()));
         if (authenticate.isAuthenticated())
             return TokenDto

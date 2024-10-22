@@ -22,10 +22,10 @@ public class AdsService {
   private final AdsRepository adsRepository;
  
 	 
-  public String createAdss(AdsBody model) {
+  public AdsCollection createAdss(AdsBody model) {
 	  
 	 AdsCollection adsCollection = new AdsCollection(); 
-	 List<MediaUrlDetails> mediaPathDetails = new ArrayList<MediaUrlDetails>();
+	 List<MediaUrlDetails> mediaUrlDetails = new ArrayList<MediaUrlDetails>();
 	 
 	 LocalDateTime currentDateTime = LocalDateTime.now();
 
@@ -45,14 +45,12 @@ public class AdsService {
 		 mediaDetails.setContentType(media.getContentType());
 		 mediaDetails.setType(media.getType());
 		 mediaDetails.setUrl("");	 
-		
+		 
+		 mediaUrlDetails.add(mediaDetails);
 	}
-	 adsCollection.setMediaDetails(mediaPathDetails);
-
-	 adsRepository.save(adsCollection);
-	  
+	 adsCollection.setMediaDetails(mediaUrlDetails);
       
-	 return "Advertisement created successfully";
+	 return adsRepository.save(adsCollection);
 
   }
 	 
