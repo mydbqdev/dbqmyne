@@ -24,7 +24,7 @@ export class SignupComponent implements OnInit {
 	doSignup() {
 		this.submitted=true;	    
 		if (this.email !== '' && this.email !== null && this.password !== '' && this.password !== null) {
-			const user: User = { empEmail: this.email.toLowerCase(), empPassword: this.password };
+			const user: User = { userEmail: this.email.toLowerCase(), password: this.password };
             this.submitted=false;
 		}
 	}

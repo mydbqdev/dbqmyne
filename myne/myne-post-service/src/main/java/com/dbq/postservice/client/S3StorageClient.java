@@ -25,7 +25,7 @@ public interface S3StorageClient {
     @DeleteMapping("/delete/{id}")
     ResponseEntity<Void> deleteImageFromFileSystem(@PathVariable String id);
     
-    @PostMapping("/upload/{bucketName}/{contentType}")
+    @PostMapping("/uploadNew/{bucketName}")
 	CompletableFuture<List<MediaUrlDetails>> uploadFilesToS3(
 	        @RequestBody List<MediaDetailsForRequest> body,
 	        @PathVariable String bucketName) ;
