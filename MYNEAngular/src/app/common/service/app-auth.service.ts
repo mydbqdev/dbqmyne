@@ -29,7 +29,7 @@ export class AppAuthService extends AuthService{
 
 
     setSessionStore(res: ResponseStore):void{
-        sessionStorage.setItem('user', res.empEmail);
+        sessionStorage.setItem('user', res.userEmail);
         sessionStorage.setItem('token', 'Bearer ' + res.token);
     }
 
@@ -44,14 +44,15 @@ export class AppAuthService extends AuthService{
     }
 
     public getAuthUser(user:User) : Observable<any>{
-        const url1=this.basePath +'signin';
-        let loginUser : User ={empEmail:user.empEmail,empPassword:this.encryptDecryptHelper.encrypt(user.empPassword)};
-
+        console.log("user>>>"+user)
+        const url1=this.basePath +'auth/login';
+      //  let loginUser : User ={userEmail:user.userEmail,password:this.encryptDecryptHelper.encrypt(user.password)};
+        let loginUser : User ={userEmail:user.userEmail,password:user.password};
         /* above line(line number :58) will be remove once we will implement decrypt password functionality in backend using request header.
            below line (line number : 61) will be uncommented.
         */
-        //let loginUser : User ={empEmail:user.empEmail};
-        let encrypt=this.encryptDecryptHelper.encrypt(user.empPassword);
+        //let loginUser : User ={userEmail:user.userEmail};password
+        let encrypt=this.encryptDecryptHelper.encrypt(user.password);
         return this.httpclient.post<User>(
             url1,
             loginUser,
@@ -83,13 +84,13 @@ export class AppAuthService extends AuthService{
          this.checkLoginUserOnServer().subscribe(
              (result)=>{
                 this.sessionSnapshot = result;
-                this.sessionSnapshot.username = result.empEmail;
+                this.sessionSnapshot.username = result.userEmail;
                 this.sessionSnapshot.token = result.token;
-                this.userService.setUsername(result.empEmail);
+                this.userService.setUsername(result.userEmail);
                 this.userService.setUserinfo(result);
                 this.userService.setDbquser(true);
 
-                let resp: ResponseStore={empEmail:result.empEmail,token:result.token};
+                let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
                 this.setSessionStore(resp);
                 if(!this.sessionSnapshot.username){
                     this.router.navigateByUrl('/signin');
@@ -126,13 +127,13 @@ export class AppAuthService extends AuthService{
         this.checkLoginUserOnServer().subscribe(
             (result)=>{
                this.sessionSnapshot = result;
-               this.sessionSnapshot.username = result.empEmail;
+               this.sessionSnapshot.username = result.userEmail;
                this.sessionSnapshot.token = result.token;
-               this.userService.setUsername(result.empEmail);
+               this.userService.setUsername(result.userEmail);
                this.userService.setUserinfo(result);
                this.userService.setDbquser(true);
 
-               let resp: ResponseStore={empEmail:result.empEmail,token:result.token};
+               let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
                this.setSessionStore(resp);
             },
             (err) =>{

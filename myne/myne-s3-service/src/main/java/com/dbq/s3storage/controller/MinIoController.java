@@ -102,7 +102,7 @@ public class MinIoController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping("/upload/{bucketName}/{contentType}")
+	@PostMapping("/uploadNew/{bucketName}")
 	public CompletableFuture<List<MediaUrlDetails>> uploadFilesToS3(
 	        @RequestBody List<MediaDetailsForRequest> body,
 	        @PathVariable String bucketName) {

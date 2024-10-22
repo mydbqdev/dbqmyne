@@ -27,7 +27,7 @@ export class ForgotPasswordComponent implements OnInit {
 	doSignin() {
 		this.submitted=true;    
 		if (this.email !== '' && this.email !== null) {		
-			const user: User = { empEmail: this.email.toLowerCase()};
+			const user: User = { userEmail: this.email.toLowerCase()};
             this.submitted=false;
 			
 		}
