@@ -1,5 +1,5 @@
 export interface Request {
-	empEmail: string;
-	empPassword: string;
+	userEmail: string;
+	password: string;
 	
 }

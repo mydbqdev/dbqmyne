@@ -1,5 +1,5 @@
 export interface ResponseStore {
-	empEmail: string;
+	userEmail: string;
 	token: string;
 	
 }
