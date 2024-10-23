@@ -78,13 +78,13 @@ public class ListingBody {
 	@JsonProperty("createdAt")
 	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private OffsetDateTime createdAt = null;
+	private String createdAt = null;
 
 	@JsonProperty("updatedAt")
 
 	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private OffsetDateTime updatedAt = null;
+	private String updatedAt = null;
 
 	@JsonProperty("pickupLocation")
 
@@ -97,10 +97,24 @@ public class ListingBody {
 	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
 	private String category = null;
+	
+	@JsonProperty("creatorId")
+
+	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
+	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
+	private String creatorId = null;
 
 
 	public String getCategory() {
 		return category;
+	}
+
+	public String getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(String creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public void setCategory(String category) {
@@ -323,7 +337,7 @@ public class ListingBody {
 		this.mediaPaths = mediaPaths;
 	}
 
-	public ListingBody createdAt(OffsetDateTime createdAt) {
+	public ListingBody createdAt(String createdAt) {
 
 		this.createdAt = createdAt;
 		return this;
@@ -338,15 +352,15 @@ public class ListingBody {
 	@Schema(example = "2024-10-15T12:34:56Z", description = "Creation timestamp")
 
 	@Valid
-	public OffsetDateTime getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(OffsetDateTime createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public ListingBody updatedAt(OffsetDateTime updatedAt) {
+	public ListingBody updatedAt(String updatedAt) {
 
 		this.updatedAt = updatedAt;
 		return this;
@@ -361,11 +375,11 @@ public class ListingBody {
 	@Schema(example = "2024-10-15T12:34:56Z", description = "Updated timestamp")
 
 	@Valid
-	public OffsetDateTime getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(OffsetDateTime updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
