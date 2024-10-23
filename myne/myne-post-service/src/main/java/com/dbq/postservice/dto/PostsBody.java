@@ -23,14 +23,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 //@NotUndefined
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-18T08:00:26.821343862Z[GMT]")
 
-
 public class PostsBody   {
 	
   @JsonProperty("zipCode")
+	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
+	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
+	private String zipCode = null;
 
+	@JsonProperty("userId")
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
-  private String zipCode = null; 
+	private String userId = null;
 	
   @JsonProperty("description")
 
@@ -44,18 +47,16 @@ public class PostsBody   {
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private String privacy = null;
 
-  @JsonProperty("mediaDetails")
-  @Valid
-  private List<MediaDetailsForRequest> mediaDetails = null;
-
-  public PostsBody zipCode(String zipCode) { 
+	public PostsBody zipCode(String userId, String zipCode) {
 
 	    this.zipCode = zipCode;
+		this.userId = userId;
 	    return this;
   }
   
   /**
    * The zip code of the user creating the post.
+	 * 
    * @return zipCode
    **/
   
@@ -64,7 +65,6 @@ public class PostsBody   {
   public String getZipCode() {  
 	return zipCode;
   }
-
 
   public void setZipCode(String zipCode) { 
 	this.zipCode = zipCode;
@@ -78,6 +78,7 @@ public class PostsBody   {
 
   /**
    * The content of the post.
+	 * 
    * @return description
    **/
   
@@ -86,8 +87,6 @@ public class PostsBody   {
   public String getDescription() {  
     return description;
   }
-
-
 
   public void setDescription(String description) { 
     this.description = description;
@@ -101,6 +100,7 @@ public class PostsBody   {
 
   /**
    * The privacy setting for the post.
+	 * 
    * @return privacy
    **/
   
@@ -110,43 +110,24 @@ public class PostsBody   {
     return privacy;
   }
 
-
-
   public void setPrivacy(String privacy) { 
     this.privacy = privacy;
   }
 
-  public PostsBody mediaDetails(List<MediaDetailsForRequest> mediaDetails) { 
-
-    this.mediaDetails = mediaDetails;
-    return this;
+	public String getUserId() {
+		return userId;
   }
 
-  public PostsBody addMediaDetailsItem(MediaDetailsForRequest mediaDetailsItem) {
-    if (this.mediaDetails == null) {
-      this.mediaDetails = new ArrayList<MediaDetailsForRequest>();
-    }
-    this.mediaDetails.add(mediaDetailsItem);
-    return this;
+	public void setUserId(String userId) {
+		this.userId = userId;
   }
 
   /**
    * Get mediaDetails
+	 * 
    * @return mediaDetails
    **/
   
-  @Schema(description = "")
-  @Valid
-  public List<MediaDetailsForRequest> getMediaDetails() {  
-    return mediaDetails;
-  }
-
-
-
-  public void setMediaDetails(List<MediaDetailsForRequest> mediaDetails) { 
-    this.mediaDetails = mediaDetails;
-  }
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -156,26 +137,27 @@ public class PostsBody   {
       return false;
     }
     PostsBody PostsBody = (PostsBody) o;
-    return Objects.equals(this.zipCode, PostsBody.zipCode) &&
-    	Objects.equals(this.description, PostsBody.description) &&
-        Objects.equals(this.privacy, PostsBody.privacy) &&
-        Objects.equals(this.mediaDetails, PostsBody.mediaDetails);
+		return Objects.equals(this.zipCode, PostsBody.zipCode)
+				&& Objects.equals(this.description, PostsBody.description)
+				&& Objects.equals(this.privacy, PostsBody.privacy)
+				&& Objects.equals(this.userId, PostsBody.userId);
+
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, privacy, mediaDetails);
+		return Objects.hash(description, privacy);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PostsBody {\n");
-    
+		sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    zipCode: ").append(toIndentedString(zipCode)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    privacy: ").append(toIndentedString(privacy)).append("\n");
-    sb.append("    mediaDetails: ").append(toIndentedString(mediaDetails)).append("\n");
+		
     sb.append("}");
     return sb.toString();
   }

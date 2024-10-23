@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.dto.ErrorResponse500;
 import com.dbq.postservice.dto.PostsBody;
@@ -42,12 +44,12 @@ public interface PostsApi {
 	        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
 	        
 	        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
-	    @RequestMapping(value = "/posts/{userId}/save",
-//	        produces = { "application/json" }, 
-//	        consumes = {"multipart/form-data"}, 
+	    @RequestMapping(value = "/posts/save",
+	        produces = { "application/json" }, 
+	        consumes = {"multipart/form-data"}, 
 	        method = RequestMethod.POST)
-	    ResponseEntity<Object> savePosts(@Parameter(in = ParameterIn.PATH, description = "The ID of the user creating the post.", required=true, schema=@Schema()) @PathVariable("userId") String userId
-	, @Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @Valid @ModelAttribute PostsBody body
+	    ResponseEntity<Object> savePosts(@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=true, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
+	    		@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @RequestParam("postInfo") @Valid String body
 	);
 
     @Operation(summary = "Get all posts", description = "Fetches all posts along with their details, including comments and media.", tags={ "Posts Controller" })

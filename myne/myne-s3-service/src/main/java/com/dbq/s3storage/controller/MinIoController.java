@@ -40,16 +40,12 @@ public class MinIoController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/upload/{bucketName}/{contentType}")
-	public ResponseEntity<String> uploadFileToS3(@RequestPart("file") MultipartFile file,
-			@PathVariable String bucketName, @PathVariable String contentType) {
-		try {
-			return ResponseEntity.ok().body(
-					minioService.uploadFile(bucketName, new BufferedInputStream(file.getInputStream()), contentType));
-		} catch (IOException e) {
-			throw GenericErrorResponse.builder().message("Unable to convert file to stream in upload file")
-					.httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+	@PostMapping(value="/upload/{bucketName}/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<MediaUrlDetails> uploadFile(@PathVariable String bucketName, @PathVariable String postId,
+			@RequestPart("file") MultipartFile file
+			) {
+		return ResponseEntity.ok().body(
+				minioService.uploadFile(bucketName,postId,file, file.getOriginalFilename()));
 
 	}
 
@@ -102,48 +98,48 @@ public class MinIoController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping("/uploadNew/{bucketName}")
-	public CompletableFuture<List<MediaUrlDetails>> uploadFilesToS3(
-	        @RequestBody List<MediaDetailsForRequest> body,
-	        @PathVariable String bucketName) {
-
-	    List<CompletableFuture<MediaUrlDetails>> futures = new ArrayList<>();
-
-	    try {
-	        for (MediaDetailsForRequest element : body) {
-	            // Asynchronously upload each file
-	            CompletableFuture<MediaUrlDetails> future = CompletableFuture.supplyAsync(() -> {
-	                MediaUrlDetails details = new MediaUrlDetails();
-	                try {
-	                    details.setContentType(element.getContentType());
-	                    details.setType(element.getType());
-	                    // Upload file and set URL
-	                    details.setUrl(minioService.uploadFile(
-	                        bucketName,
-	                        new BufferedInputStream(element.getUploadFile().getInputStream()),
-	                        element.getContentType())
-	                    );
-	                } catch (Exception e) {
-	                    // Handle exception (logging, etc.)
-	                    throw new RuntimeException("Error uploading file", e);
-	                }
-	                return details;
-	            });
-	            futures.add(future);
-	        }
-
-	        // Combine all futures and return the result when all are complete
-	        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-	                .thenApply(v -> futures.stream()
-	                        .map(CompletableFuture::join)  // Ensure each future completes
-	                        .collect(Collectors.toList()));
-
-	    } catch (Exception e) {
-	        throw GenericErrorResponse.builder()
-	                .message("Unable to upload files to S3")
-	                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .build();
-	    }
-	}
+//	@PostMapping("/uploadNew/{bucketName}")
+//	public CompletableFuture<List<MediaUrlDetails>> uploadFilesToS3(
+//	        @RequestBody List<MediaDetailsForRequest> body,
+//	        @PathVariable String bucketName) {
+//
+//	    List<CompletableFuture<MediaUrlDetails>> futures = new ArrayList<>();
+//
+//	    try {
+//	        for (MediaDetailsForRequest element : body) {
+//	            // Asynchronously upload each file
+//	            CompletableFuture<MediaUrlDetails> future = CompletableFuture.supplyAsync(() -> {
+//	                MediaUrlDetails details = new MediaUrlDetails();
+//	                try {
+//	                    details.setContentType(element.getContentType());
+//	                    details.setType(element.getType());
+//	                    // Upload file and set URL
+//	                    details.setUrl(minioService.uploadFile(
+//	                        bucketName,
+//	                        new BufferedInputStream(element.getUploadFile().getInputStream()),
+//	                        element.getContentType())
+//	                    );
+//	                } catch (Exception e) {
+//	                    // Handle exception (logging, etc.)
+//	                    throw new RuntimeException("Error uploading file", e);
+//	                }
+//	                return details;
+//	            });
+//	            futures.add(future);
+//	        }
+//
+//	        // Combine all futures and return the result when all are complete
+//	        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+//	                .thenApply(v -> futures.stream()
+//	                        .map(CompletableFuture::join)  // Ensure each future completes
+//	                        .collect(Collectors.toList()));
+//
+//	    } catch (Exception e) {
+//	        throw GenericErrorResponse.builder()
+//	                .message("Unable to upload files to S3")
+//	                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//	                .build();
+//	    }
+//	}
 
 }

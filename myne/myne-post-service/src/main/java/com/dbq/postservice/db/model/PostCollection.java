@@ -1,5 +1,6 @@
 package com.dbq.postservice.db.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -26,7 +27,7 @@ public class PostCollection {
 	private String zipCode ;
 	private String description ;
 	private String[] likdUserIds;
-	private List<MediaUrlDetails> mediaDetails ; 
+	private List<MediaUrlDetails> mediaDetails = new ArrayList<MediaUrlDetails>() ; 
 	private String createdAt ;
 	private String updatedAt ;
 }
