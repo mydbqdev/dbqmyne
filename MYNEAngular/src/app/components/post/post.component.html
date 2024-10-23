@@ -1,0 +1,257 @@
+<div id="header" style="top:0;height: 100px;position: fixed;z-index: 1;width: 100%;background-color: #fff;">
+  <div class="d-flex">
+     <div style="width: 225px;border-right: 1px solid rgb(203, 203, 203);height: 100px;">
+      <div class="mt-1 ml-2 mr-2 mb-2" style="padding-left: 60px;">
+        <a href="index.html" class="logo">
+          <img src="assets/images/myne-logo-f.png" alt="logo">
+        </a>
+      </div>
+    </div>
+    <div style="border-right: 1px solid rgb(203, 203, 203);height: 100px;width: calc(100vw - 450px);">
+      <div class="container-fluid form-group" style="padding: 40px 15px 5px 15px;">
+        <div class="input-group">
+        <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;border-top-left-radius: 5px;border-bottom-left-radius: 5px;"><img src="assets/images/myne-smll-logo-f.png" alt="logo" style="height: 25px;"></span>
+        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"/>
+        </div>
+      </div>
+    </div>
+    <div class="ml-auto" style="width: 220px;height: 100px;">
+      <div class="d-flex" style="margin-top: 10px;">
+        <div class="m-2"><img src="assets/images/profile.PNG" style="width: 70px;" class="img-circle elevation-2"></div>
+        <div>
+           <div style="font-weight: 500;" class="ml-2 mt-3">Shesh</div>
+           <div class="fw-lighter ml-2">Small text</div>
+        </div>
+        <div>
+          <a class="dropdown-toggle no-arrow" href="#" role="button" id="dropdownMenuLink"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <i class="fas fa-ellipsis-h ml-2 mt-5"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="javascript:void(0)">Settings</a>
+              <a class="dropdown-item" href="javascript:void(0)" routerLink="/signin">Logout</a>
+          </div>
+        </div>
+     </div>
+      
+    </div>
+  </div>
+</div>
+<div style="top:100px;">
+  <div class="d-flex">
+     <div style="z-index: 1;position: fixed;width: 225px;border-right: 1px solid rgb(203, 203, 203);height: calc(100vh - 100px);top:100px;">
+      <div class="ml-4 mr-4 mt-2 mb-2">
+        <nav class="nav flex-column">
+          <a class="nav-link left-menu" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-lemon mr-2"></i>Discover</a>
+          <a class="nav-link left-menu active" routerLink="/listing"><i class="fas fa-tag mr-2"></i>For Sale</a>
+          <a class="nav-link left-menu" routerLink="/listing"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-bell mr-1"></i> Notifications</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-comment mr-1"></i> Chats</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="fas fa-users mr-1"></i> Groups</a>
+          <a class="nav-link left-menu" routerLink="/under-construction"><i class="fas fa-user-friends mr-2"></i>Neighbors</a>
+          </nav>
+      </div>
+      <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
+        <button type="button" class="btn btn-info border-0" style="border-radius: 20px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+      </div>
+    </div>
+    <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 450px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
+      <div class="row">
+        <div class="col-sm-12"> 
+            <div>
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link top-menu" href="#">All</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link top-menu active" href="#">Posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link top-menu" href="#">Businesses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link top-menu" href="#">For Sale</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link top-menu" href="#">For Free</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link top-menu" href="#">Events</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link top-menu" href="#">Neighbors</a>
+                  </li>
+              </ul>
+            </div>
+            <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
+        </div>
+      </div>
+           
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div class="d-flex">
+                       <div><div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div></div>
+                       <div class="ml-auto"></div>
+                    </div>
+                    
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
+                      <div class="d-flex">
+                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                        <div class="ml-auto" style="width: 120px;padding-left: 10px;">
+                         <img src="assets/images/myne-logo.svg" alt="logo">
+                        </div>
+                       </div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div class="d-flex">
+                      <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
+                      <div class="ml-auto"></div>
+                   </div>
+                   
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+                      <div class="d-flex">
+                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                        <div class="ml-auto">
+                        </div>
+                       </div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
+                      <div class="d-flex">
+                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                        <div class="ml-auto"></div>
+                       </div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col-sm-12">
+          <div style="border-bottom: 1px solid rgb(203, 203, 203)">
+              <div class="row" style="margin:20px 20px 5px 20px;">
+                  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div class="col-sm-11">
+                    <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
+                      <div class="d-flex">
+                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                        <div class="ml-auto">
+                        </div>
+                       </div>
+                    </div>
+                    <div class="d-flex">
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    <div class="ml-auto" style="width: 220px;height: 100px;">
+        <div class="m-2">
+          <div  style="margin-top: 120px;"><img src="assets/images/right-top.PNG" class="img-fluid"/></div>
+        </div>
+        <div class="m-2">
+          <div><a routerLink="/home"><img src="assets/images/right-top-2.PNG" class="img-fluid"/></a></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!--modal for create-->
+<div class="modal fade" id="newPost" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content" >
+		  <div>
+		  <button type="button" class="close mr-2" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewSave>
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		   </div>
+		   <div class="modal-body" style="margin-top: -5px;">
+			<div class="row mb-3">
+			  <div class="col-sm-1"><img src="assets/images/NotAvailable.jpg" style="width: 35px;" class="img-circle elevation-2"></div>			 
+			  <div class="col-sm-11">
+          <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
+            <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
+            <div id="imgSec2" class="image-preview mb-3" *ngIf="previewUrl2" [innerHtml]="data2"></div>
+            <div id="emoSec2"></div>
+          </div>
+        <div class="m-1 d-flex">
+          <div>
+            <select class="form-control form-control-sm border-0">
+              <option>Anywhere</option>
+              <option>Only Friends</option>
+              <option>Groups</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+                 <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
+                  <div class="d-flex mt-1">
+                        <div>
+                          <label>
+                            <i class="far fa-image mr-2 link3"  title="Upload Photo"></i>
+                            <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChanged($event,2)">
+                          </label>
+                          <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
+                          <a  routerLink="/signup" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/signup" class="link-2"><i class="far fa-calendar mr-2"></i></a>
+                        </div>
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" >Post</button></div>
+                  </div>
+			  </div>
+			</div>
+		   </div>		   
+		</div>
+	</div>
+  </div>

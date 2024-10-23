@@ -16,7 +16,7 @@ export class StartupComponent implements OnInit {
   constructor(private authService:AuthService,public router:Router,public route:ActivatedRoute) { }
 
   ngOnInit() {
-  //  this.authService.checkLoginUser();
+  this.authService.checkLoginUser();
   }
 
   @Output()

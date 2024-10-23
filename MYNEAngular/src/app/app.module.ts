@@ -34,9 +34,9 @@ import { HomeComponent } from './components/home/home.component';
 import { RightPanelComponent } from './components/right-panel/right-panel.component';
 import { ListingComponent } from './listing/listing/listing.component';
 import { ListingLeftPanelComponent } from './listing/listing-left-panel/listing-left-panel.component';
-import { Home1Component } from './components/home1/home1.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
+import { PostComponent } from './components/post/post.component';
 
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
@@ -57,7 +57,7 @@ const appRoutes: Routes = [
     RightPanelComponent,
     ListingComponent,
     ListingLeftPanelComponent,
-    Home1Component,
+    PostComponent,
     UnderConstructionComponent,
     ForgotPasswordComponent
   ],
@@ -87,7 +87,7 @@ const appRoutes: Routes = [
     {provide:AppService,useClass:AppService},
     {provide:UserService,useClass:UserService},
     {provide:BASE_PATH,useValue:environment.basePath},
-  //  {provide:defMenuEnable,useValue:environment.defMenuEnable},
+    {provide:defMenuEnable,useValue:environment.defMenuEnable},
     ConfirmationDialogService,AlertDialogService,
     Title,Meta
   ],
