@@ -2,26 +2,28 @@ package com.dbq.postservice.service;
 
 
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.client.S3StorageClient;
-import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.db.model.PostCollection;
 import com.dbq.postservice.db.repository.AdsRepository;
 import com.dbq.postservice.db.repository.PostsRepository;
-import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.dto.MediaDetailsForRequest;
 import com.dbq.postservice.dto.MediaUrlDetails;
 import com.dbq.postservice.dto.PostsBody;
@@ -42,13 +44,13 @@ public class PostService {
 	 
 
 	 
-	    public Object createPosts(String userId, PostsBody body) {
+	    public Object createPosts(MultipartFile[] files, PostsBody body) {
 	    	
 	    	   PostCollection savedPost = new PostCollection();
 	        try {
 	        	
 	            PostCollection post = new PostCollection();
-	            post.setUserId(userId);
+	            post.setUserId(body.getUserId());
 	            post.setZipCode(body.getZipCode());
 	            post.setDescription(body.getDescription());
 	            post.setLikdUserIds(new String[]{});
@@ -59,55 +61,23 @@ public class PostService {
 	            String formattedDateTime = currentDateTime.format(formatter);
 	            post.setCreatedAt(formattedDateTime);
 	            post.setUpdatedAt("");
-	            List<MediaUrlDetails>  mediaUrlDetails = new ArrayList<>();
-	            
-	            if(null != body.getMediaDetails() ) {
-	            	
-	            for (MediaDetailsForRequest bodyMedia : body.getMediaDetails()) {
-	            	 
-	            	MediaUrlDetails entyMedia = new MediaUrlDetails();
-	            	
-	            	entyMedia.setContentType(bodyMedia.getContentType());
-	            	entyMedia.setType(bodyMedia.getType());
-	            	entyMedia.setUrl("");
-	            	
-	               // fileUploadService.uploadFileAsync(userId, zipCode, formattedDateTime, null);
-	            	
-	            	mediaUrlDetails.add(entyMedia);
-				}
-	            }
-	            
-	            post.setMediaDetails(mediaUrlDetails);
 	            
 	            savedPost = postRepository.save(post);
+	            String postId =savedPost.getPostId();
+	            List<MediaUrlDetails> list = new ArrayList<MediaUrlDetails>();
+	            Arrays.asList(files).stream().forEach(file -> {
+	                 ResponseEntity<MediaUrlDetails> respEntity = s3StorageClient.uploadFile("myne-post-photos",postId,file);
+	                 list.add(respEntity.getBody());
+	              });
+	            for(MediaUrlDetails mud: list)
+	            	savedPost.getMediaDetails().add(mud);
 	            
-//	            CompletableFuture <List <MediaUrlDetails>>  mediaUrl= s3StorageClient.uploadFilesToS3(body.getMediaDetails(), "Posts");
-//	            
-//	            if(null != mediaUrl && null != mediaUrl.get() ) {
-//	            	
-//	            	List <MediaUrlDetails> updateUrl= mediaUrl.get();
-//	            	savedPost.setMediaDetails(updateUrl);
-//	            	
-//	            	savedPost = postRepository.save(savedPost);
-//	            }
 	            
-//	            if(null != body.getMediaDetails() && !body.getMediaDetails().isEmpty()) {
-//	            	
-//	            CompletableFuture.runAsync(() -> {
-//                    try {
-//                    	List<MediaUrlDetails> media = null;//userService.uploadImageToS3(body.getMediaDetails());
-//                    	savedPost.setMediaDetails(media);
-//                        
-//                        postRepository.save(post);
-//                    } catch (Exception e) {
-//                        // Handle exception (logging, etc.)
-//                    }
-//                });
-//	            }
 	            
 	            return savedPost;
 	        } catch (Exception e) {
 	            // Handle exceptions, e.g., log error
+	        	
 	            return "Error creating post: " + e.getMessage();
 	        }
 	    }
@@ -121,7 +91,7 @@ public class PostService {
 	        	
 	        	List<PostCollection> allPosts = postRepository.findAll();
 	        	int count = allPosts.size();
-	        	pageSize=pageSize>0?pageSize-1:pageSize;
+	        	
 				
 				int num =pageIndex>count?0:pageIndex;
 			
@@ -147,27 +117,7 @@ public class PostService {
 	        		list.add(responce);
 				}
 	        	
-	        	List<AdsCollection> ads= adsRepository.findAll();
-	        	PostsResponse adsres = new PostsResponse();
-	    		if(null !=ads && ads.size()>0) {
-	    			   AdsCollection randomAd = ads.stream()
-	                           .skip(new Random().nextInt(ads.size()))
-	                           .findFirst()
-	                           .orElse(null);
-	    		if(null !=randomAd) {
-	    			adsres.setDescription(randomAd.getDescription());
-	    			adsres.createdAt(randomAd.getCreatedAt());
-	    			adsres.setMediaDetails(randomAd.getMediaDetails());
-	    			adsres.adsHyperLink(randomAd.getHyperLink());
 	    			
-	    		}
-	    			   
-	    		}
-	    		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt())) {
-	    			list.add(adsres);
-	    			}
-	        	
-	        	Collections.shuffle(list);
 	         
 	            return list; 
 	        
@@ -205,17 +155,17 @@ public class PostService {
 	    	        post.setDescription(body.getDescription());
 
 	    	        // Update media details if provided
-	    	        if (body.getMediaDetails() != null) {
-	    	            List<MediaUrlDetails> mediaUrlDetails = new ArrayList<>();
-	    	            for (MediaDetailsForRequest bodyMedia : body.getMediaDetails()) {
-	    	                MediaUrlDetails entyMedia = new MediaUrlDetails();
-	    	                entyMedia.setContentType(bodyMedia.getContentType());
-	    	                entyMedia.setType(bodyMedia.getType());
-	    	                entyMedia.setUrl(""); // You can set the URL if needed
-	    	                mediaUrlDetails.add(entyMedia);
-	    	            }
-	    	            post.setMediaDetails(mediaUrlDetails);
-	    	        }
+//	    	        if (body.getMediaDetails() != null) {
+//	    	            List<MediaUrlDetails> mediaUrlDetails = new ArrayList<>();
+//	    	            for (MediaDetailsForRequest bodyMedia : body.getMediaDetails()) {
+//	    	                MediaUrlDetails entyMedia = new MediaUrlDetails();
+//	    	                entyMedia.setContentType(bodyMedia.getContentType());
+//	    	                entyMedia.setType(bodyMedia.getType());
+//	    	                entyMedia.setUrl(""); // You can set the URL if needed
+//	    	                mediaUrlDetails.add(entyMedia);
+//	    	            }
+//	    	            post.setMediaDetails(mediaUrlDetails);
+//	    	        }
 
 	    	        // Update timestamps
 	    	        LocalDateTime currentDateTime = LocalDateTime.now();

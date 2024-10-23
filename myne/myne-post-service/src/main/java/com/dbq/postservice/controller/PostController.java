@@ -25,6 +25,10 @@ import com.dbq.postservice.dto.PostsBody;
 import com.dbq.postservice.dto.PostsResponse;
 import com.dbq.postservice.interfeces.PostsApi;
 import com.dbq.postservice.service.PostService;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,17 +37,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostController implements PostsApi {
 	  private static final Logger log = LoggerFactory.getLogger(PostController.class);
-	
+	  private Gson gson = new GsonBuilder().create();
+//				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
     private final PostService postService;
     private final ModelMapper modelMapper;
     
     
+    @PostMapping(value = "/posts1/{userId}/save")
+    public ResponseEntity<Object> savePosts1(@PathVariable String userId,@RequestBody PostsBody body) {
+        
+        try {
+        	System.out.println("><><>>>>>>>>>>");
+            // Handle media uploads
+//            if (body.getMediaDetails() != null) {
+//                for (MediaDetailsForRequest media : body.getMediaDetails()) {
+//                    MultipartFile file = media.getUploadFile();
+//                    if (file != null && !file.isEmpty()) {
+//                        // Logic to upload the file (e.g., to S3 or your file storage)
+//                    }
+//                }
+//            }
+
+            // Logic to save the post
+            // ...
+//            savePosts(userId,body);
+            return ResponseEntity.ok("Post created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error creating post: " + e.getMessage());
+        }
+    }
+
+    
+    
 	@Override
-	public ResponseEntity<Object> savePosts(String userId,PostsBody body) {
+	public ResponseEntity<Object> savePosts(MultipartFile[] files, String body) {
 
 	    try {
-	    	
-	    	return new ResponseEntity<Object>(postService.createPosts(userId,body), HttpStatus.OK) {};
+	    	PostsBody pbody = gson.fromJson(body,PostsBody.class);
+	    	return new ResponseEntity<Object>(postService.createPosts(files,pbody), HttpStatus.OK) {};
 	    	
 	    } catch (Exception e) {
 	        log.error("Couldn't serialize response for content type application/json", e);
@@ -119,6 +151,18 @@ public class PostController implements PostsApi {
 	    }
 	   }
   	
+//    @PostMapping("/save")
+//    public ResponseEntity<UserDto> save(@Valid @RequestBody RegisterRequest request) {
+//        return ResponseEntity.ok(modelMapper.map(userService.saveUser(request), UserDto.class));
+//    }
+
+//    @GetMapping("/getAll")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    public ResponseEntity<List<UserDto>> getAll() {
+//        return ResponseEntity.ok(userService.getAll().stream()
+//                .map(user -> modelMapper.map(user, UserDto.class)).toList());
+//    }
+	
 
 
    

@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class MediaUrlDetails   {
   @JsonProperty("contentType")
-
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private String contentType = null;

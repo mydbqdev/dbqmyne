@@ -1,6 +1,7 @@
 package com.dbq.s3storage.service;
 
 import com.dbq.s3storage.exc.GenericErrorResponse;
+import com.dbq.s3storage.model.MediaUrlDetails;
 import com.dbq.s3storage.model.MimeTypes;
 
 import io.minio.BucketExistsArgs;
@@ -21,10 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.apache.commons.io.FilenameUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -36,27 +42,46 @@ public class MinIoService {
 	 @Value("${minio.url}")
 	 private String url;
 	 
-	 public String  uploadFile(String bucketName,InputStream inputStream, String mimeType) {
+	 public MediaUrlDetails  uploadFile(String bucketName,String postId,
+			 MultipartFile file, String fileName) {
 		 	String objectName="";
+		 	 String ext = FilenameUtils.getExtension(fileName);
+	         String mimeType = file.getContentType();
+	         InputStream inputStream=null;
 	        try {
 	            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
 	            if (!found) {
 	                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
 	            }
-	            objectName = UUID.randomUUID().toString() + MimeTypes.getDefaultExt(mimeType);
+	            inputStream = file.getInputStream();
+//	            byte[] buffer = new byte[inputStream.available()];
+//	            inputStream.read(buffer);
+	            
+	            objectName = postId + "_" + UUID.randomUUID().toString() + "." +  ext;
 	            minioClient.putObject(
 	                PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(
 	                        inputStream, inputStream.available(), -1)
 	                        .contentType(mimeType)
 	                        .build());
+	            
 	        } catch (Exception e) {
 	        	throw GenericErrorResponse.builder()
                 .message("Unable to upload file to S3")
                 .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();
+	        } finally
+	        {
+	        	if(inputStream!=null)
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+					}
 	        }
-	        System.out.println("objectName>>>>"+objectName);
-	        return objectName;
+	        MediaUrlDetails details = new MediaUrlDetails();
+	        details.setContentType(mimeType);
+	        details.setType(ext);
+	        details.setUrl("https://s3.dbqportal.com/" + bucketName + "/" + objectName);
+	        return details;
 	    }
 	 
 	 public Map<String,Object>  downloadFile(String bucketName,String id) {
@@ -89,7 +114,7 @@ public class MinIoService {
 	                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	                .build();
 	        	}
-	           
+	        	
 	           
 	        } catch (Exception e) {
 	        	throw GenericErrorResponse.builder()
