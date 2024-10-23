@@ -9,15 +9,18 @@ import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
 
 @Component({
-	selector: 'app-home1',
-	templateUrl: './home1.component.html',
-	styleUrls: ['./home1.component.css']
+	selector: 'app-post-search',
+	templateUrl: './post.component.html',
+	styleUrls: ['./post.component.css']
 })
-export class Home1Component implements OnInit, AfterViewInit {
+export class PostComponent implements OnInit, AfterViewInit {
 	public defHomeMenu: DefMenu;
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
+	fileData: File = null;
+		 previewUrl:any = null;
+		 previewUrl2:any = null;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
@@ -53,5 +56,45 @@ export class Home1Component implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
+	}
+
+	onFileChanged(event,id:number) {
+		this.previewUrl=false;
+		this.previewUrl2=false;
+		this.data="";
+		this.data2="";
+		//console.info("hrloo0");
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  this.preview(id);
+		  }
+		}
+	
+	}
+	data: any="";
+	data2: any="";
+	preview(id) {
+		// Show preview 
+		//console.info("hrloo");	
+		var mimeType = this.fileData.type;
+		if (mimeType.match(/image\/*/) == null) {
+		  return;
+		}
+		var reader = new FileReader();      
+		reader.readAsDataURL(this.fileData); 
+		reader.onload = (_event) => { 
+			if(id==1){
+				this.previewUrl2=false;
+				this.previewUrl = reader.result; 
+				this.data=this.data+"&nbsp;<img src='"+this.previewUrl+"' height='140px' width='120px'  class='elevation-2'/>";
+			}else{
+				this.previewUrl=false;
+				this.previewUrl2 = reader.result; 
+				this.data2=this.data2+"&nbsp;<img src='"+this.previewUrl2+"' height='140px' width='120px'  class='elevation-2'/>";
+			}
+		  //this.previewUrl = reader.result; 
+		  //console.info("hrloo:"+this.previewUrl);
+		}
 	}
 }

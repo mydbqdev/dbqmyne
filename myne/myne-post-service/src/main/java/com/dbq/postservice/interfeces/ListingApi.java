@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.dto.ListingBody;
 
@@ -36,13 +37,13 @@ public interface ListingApi {
 			@ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
 
 			@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
-	@RequestMapping(value = "/listings/{userId}/save",
-//        produces = { "application/json" }, 
-//        consumes = { "application/json" }, 
+	@RequestMapping(value = "/listings/save",
+            produces = { "application/json" }, 
+            consumes = {"multipart/form-data"}, 
 			method = RequestMethod.POST)
 	ResponseEntity<Object> listingsuserIdSavePost(
-			@Parameter(in = ParameterIn.PATH, description = "The ID of the user creating the listing.", required = true, schema = @Schema()) @PathVariable("userId") String userId,
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @ModelAttribute ListingBody body);
+			@Parameter(in = ParameterIn.PATH, description = "The ID of the user creating the listing.", required = true, schema = @Schema()) @RequestParam("files") MultipartFile[] files,
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @RequestParam("listingInfo") @Valid String body);
 
 	@Operation(summary = "Retrieve a specific listing by ID", description = "Retrieves the details of a listing based on the provided listing ID.", tags = {
 			"Listing Controller" })

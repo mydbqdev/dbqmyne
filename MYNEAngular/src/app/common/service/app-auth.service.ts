@@ -81,8 +81,8 @@ export class AppAuthService extends AuthService{
          var msg:string;
          this.sessionSnapshot =null;
          this.message ='';
-         this.checkLoginUserOnServer().subscribe(
-             (result)=>{
+         //this.checkLoginUserOnServer().subscribe(
+            /* (result)=>{
                 this.sessionSnapshot = result;
                 this.sessionSnapshot.username = result.userEmail;
                 this.sessionSnapshot.token = result.token;
@@ -91,15 +91,15 @@ export class AppAuthService extends AuthService{
                 this.userService.setDbquser(true);
 
                 let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
-                this.setSessionStore(resp);
-                if(!this.sessionSnapshot.username){
+                this.setSessionStore(resp);*/
+                if(sessionStorage.getItem('user')==null){
                     this.router.navigateByUrl('/signin');
-                }else if(result.firstTimePwd!=undefined && result.firstTimePwd!='Y'){
-                    this.router.navigateByUrl('/first-time-chng-pwd')              
+               // }else if(result.firstTimePwd!=undefined && result.firstTimePwd!='Y'){
+                //    this.router.navigateByUrl('/first-time-chng-pwd')              
                }else{
                     this.router.navigateByUrl('/home'); 
                }
-             },
+             /*},
              (err) =>{
                 if(err.error && err.error.message){
                     msg=err.error.message;
@@ -116,7 +116,7 @@ export class AppAuthService extends AuthService{
                     this.router.navigateByUrl('/signin');
                  }
              }
-         );
+         );*/
         
      }
 

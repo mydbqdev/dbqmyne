@@ -3,12 +3,15 @@ package com.dbq.postservice.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.client.S3StorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
@@ -32,7 +35,7 @@ public class ListingService {
 
 	private final ListingRepository listingRepository;
 
-	public Object createListing(String userId, ListingBody model) {
+	public Object createListing(MultipartFile[] files, ListingBody model) {
 		
 		ListingCollection savedCollection = new ListingCollection();
 		try {
@@ -41,7 +44,7 @@ public class ListingService {
 			String formattedDateTime = currentDateTime.format(formatter);
 
 			ListingCollection listingCollection = new ListingCollection();
-			listingCollection.setCreatorId(userId);
+			listingCollection.setCreatorId(model.getCreatorId());
 			listingCollection.setCreatedAt(formattedDateTime);
 			listingCollection.setUpdatedAt("");
 			listingCollection.setCondition(model.getCondition());
@@ -55,32 +58,19 @@ public class ListingService {
 			listingCollection.setTitle(model.getTitle());
 			listingCollection.setCategory(model.getCategory());
 			
-         List<MediaUrlDetails>  ediaUrlDetails = new ArrayList<>();
-         for (MediaDetailsForRequest bodyMedia : model.getMediaPaths()) {	 
-         	MediaUrlDetails entyMedia = new MediaUrlDetails();
-         	entyMedia.setContentType(bodyMedia.getContentType());
-        	entyMedia.setType(bodyMedia.getType());
-        	entyMedia.setUrl("");
-        	
-        	ediaUrlDetails.add(entyMedia);
-		 }
-		 listingCollection.setMediaPaths(ediaUrlDetails);
-		 
-		 
-		  savedCollection = listingRepository.save(listingCollection);
-//
-//			CompletableFuture<List<MediaUrlDetails>> mediaUrl = s3StorageClient.uploadFilesToS3(model.getMediaPaths(),
-//					"Listings");
-//
-//			if (null != mediaUrl && null != mediaUrl.get()) {
-//
-//				List<MediaUrlDetails> updateUrl = mediaUrl.get();
-//				savedList.setMediaPaths(updateUrl);
-//
-//				savedCollection =listingRepository.save(savedList);
-//			}
+			savedCollection = listingRepository.save(listingCollection);
+            String listingId =savedCollection.getListingId();
+            
+            List<MediaUrlDetails> list = new ArrayList<MediaUrlDetails>();
+            Arrays.asList(files).stream().forEach(file -> {
+                ResponseEntity<MediaUrlDetails> respEntity = s3StorageClient.uploadFile("myne-post-photos",listingId,file);
+                list.add(respEntity.getBody());
+             });
 			
-			return savedCollection;
+            for(MediaUrlDetails mud: list)
+            	savedCollection.getMediaPaths().add(mud);
+            
+            return savedCollection;
 		} catch (Exception e) {
 			// Handle exceptions, e.g., log error
 			return "Error creating Listing: " + e.getMessage();
@@ -179,6 +169,9 @@ public class ListingService {
 		int endIndex = Math.min(startIndex + pageSize, count);
 		
 		List<ListingCollection> paginatedListings = allListings.subList(startIndex, endIndex);
+		
+		List<String> userIds =paginatedListings.stream().map(d->d.getCreatorId()).toList();
+		
 		
 		for (ListingCollection listing : paginatedListings) {
 		ListingResponse response = new ListingResponse();

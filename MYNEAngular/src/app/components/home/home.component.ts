@@ -61,14 +61,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	onFileChanged(event,id:number) {
 		this.previewUrl=false;
 		this.previewUrl2=false;
+		this.data="";
+		this.data2="";
 		//console.info("hrloo0");
 		if(event.target.files.length>0){
-		  this.fileData = <File>event.target.files[0];
-		  console.info("hrloo0:"+this.fileData);
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
 		  this.preview(id);
+		  }
 		}
 	
 	}
+	data: any="";
+	data2: any="";
 	preview(id) {
 		// Show preview 
 		//console.info("hrloo");
@@ -80,12 +85,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		reader.readAsDataURL(this.fileData); 
 		reader.onload = (_event) => { 
 			if(id==1){
+		        this.previewUrl2=false;
 				this.previewUrl = reader.result; 
+				this.data=this.data+"&nbsp;<img src='"+this.previewUrl+"' height='140px' width='120px'  class='elevation-2'/>";
 			}else{
+				this.previewUrl=false;
 				this.previewUrl2 = reader.result; 
+				this.data2=this.data2+"&nbsp;<img src='"+this.previewUrl2+"' height='140px' width='120px'  class='elevation-2'/>";
 			}
 		  //this.previewUrl = reader.result; 
 		  //console.info("hrloo:"+this.previewUrl);
 		}
+	}
+
+	searchPost(){
+		this.router.navigateByUrl('/post-search');
 	}
 }

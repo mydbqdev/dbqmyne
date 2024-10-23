@@ -11,7 +11,7 @@
       <div class="container-fluid form-group" style="padding: 40px 15px 5px 15px;">
         <div class="input-group">
         <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;border-top-left-radius: 5px;border-bottom-left-radius: 5px;"><img src="assets/images/myne-smll-logo-f.png" alt="logo" style="height: 25px;"></span>
-        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"/>
+        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics" (keydown.enter)="searchPost()"/>
         </div>
       </div>
     </div>
@@ -92,12 +92,8 @@
               <div class="col-sm-11">
                   <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
                     <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
-                    <div id="imgSec"></div>
+                    <div id="imgSec" class="image-preview mb-3" *ngIf="previewUrl" [innerHtml]="data"></div>
                     <div id="emoSec"></div>
-                    <div class="image-preview mb-3" *ngIf="previewUrl">
-                      <img [src]="previewUrl" height="140px" width="120px"  class="elevation-2"/> &nbsp;
-                      <img [src]="previewUrl" height="140px" width="120px"  class="elevation-2"/>                 
-                     </div>
                   </div>
                   <div class="m-1 d-flex">
                     <div>
@@ -154,8 +150,8 @@
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
                      <!--start 2 photo list-->
                        <div class="d-flex" style="padding-top: 10px;">
-                        <div ><img src="assets/images/listing2.JPG" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" alt="logo"></div>
-                        <div class="ml-1"><img src="assets/images/listing3.JPG" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px;" alt="logo"></div>
+                        <div ><img src="assets/images/listing2.JPG" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" class="img-fluid" alt="logo"></div>
+                        <div class="ml-1"><img src="assets/images/listing3.JPG" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px;" class="img-fluid" alt="logo"></div>
                        </div>
                        <!--end 2 photo list-->
                     </div>
@@ -195,7 +191,7 @@
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
                      <!--start single photo -->
                      <div class="d-flex" style="padding-top: 10px;">
-                      <div><img src="assets/images/coast-6310250_1280.png" alt="logo"></div>
+                      <div><img src="assets/images/coast-6310250_1280.png" class="img-fluid" alt="logo"></div>
                      </div>
                      <!--end photo -->
                     </div>
@@ -240,10 +236,10 @@
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
                       <!--start 3 photo list-->
                       <div class="d-flex" style="padding-top: 10px;">
-                        <div><img src="assets/images/car-8647805_1280.png" alt="logo"></div>
+                        <div><img src="assets/images/car-8647805_1280.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
-                          <div><img src="assets/images/dashboard-3510327_1280.png" alt="logo"></div>
-                          <div class="mt-1"><img src="assets/images/speedometer-1249610_1280.png" alt="logo"></div>
+                          <div><img src="assets/images/dashboard-3510327_1280.png" class="img-fluid" alt="logo"></div>
+                          <div class="mt-1"><img src="assets/images/speedometer-1249610_1280.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
                        <!--end 3 photo list-->
@@ -270,15 +266,15 @@
                      <div style="padding-top: 10px;">
                        <!--start two row 4 photo list-->
                        <div class="d-flex" style="padding-top: 10px;">
-                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" alt="logo"></div>
+                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
-                          <div><img src="assets/images/pexels-katebranch-8634412.png" alt="logo"></div>
+                          <div><img src="assets/images/pexels-katebranch-8634412.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
                        <div class="d-flex mt-1">
-                        <div><img src="assets/images/Frame_3234257.png" alt="logo"></div>
+                        <div><img src="assets/images/Frame_3234257.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
-                          <div><img src="assets/images/Frame_32342572.png" alt="logo"></div>
+                          <div><img src="assets/images/Frame_32342572.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
                       <!--end two row 4 photo list-->
@@ -307,15 +303,15 @@
                      <div style="padding-top: 10px;">
                       <!--start two row more than 4 photo list-->
                        <div class="d-flex" style="padding-top: 10px;">
-                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" alt="logo"></div>
+                        <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
-                          <div><img src="assets/images/pexels-katebranch-8634412.png" alt="logo"></div>
+                          <div><img src="assets/images/pexels-katebranch-8634412.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
                        <div class="d-flex mt-1">
-                        <div><img src="assets/images/Frame_3234257.png" alt="logo"></div>
+                        <div><img src="assets/images/Frame_3234257.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
-                          <div><img src="assets/images/Frame_32342572.png" alt="logo"></div>
+                          <div><img src="assets/images/Frame_32342572.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
                        <!--end two row more than 4 photo list-->
@@ -357,12 +353,8 @@
 			  <div class="col-sm-11">
           <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
             <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
-            <div id="imgSec"></div>
-            <div id="emoSec"></div>
-            <div class="image-preview mb-3" *ngIf="previewUrl2">
-              <img [src]="previewUrl2" height="140px" width="120px"  class="elevation-2"/> &nbsp;
-              <img [src]="previewUrl2" height="140px" width="120px"  class="elevation-2"/>                 
-             </div>
+            <div id="imgSec2" class="image-preview mb-3" *ngIf="previewUrl2" [innerHtml]="data2"></div>
+            <div id="emoSec2"></div>
           </div>
         <div class="m-1 d-flex">
           <div>
