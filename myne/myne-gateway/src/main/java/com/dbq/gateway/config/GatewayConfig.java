@@ -18,18 +18,18 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("user-service", r -> r.path("/v1/user/**")
+                .route("myne-user-service", r -> r.path("/v1/user/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://myne-user-service"))
 
-                .route("auth-service", r -> r.path("/v1/auth/**")
+                .route("myne-auth-service", r -> r.path("/v1/auth/**")
                         .uri("lb://myne-auth-service"))
                 
-                .route("s3-service", r -> r.path("/v1/s3-storage/**")
+                .route("myne-s3-service", r -> r.path("/v1/s3-storage/**")
                 		.filters(f -> f.filter(filter))
                         .uri("lb://myne-s3-service"))
                 
-                .route("s3-service", r -> r.path("/v1/post/**")
+                .route("myne-post-service", r -> r.path("/v1/post/**")
                 		.filters(f -> f.filter(filter))
                         .uri("lb://myne-post-service"))
                 
