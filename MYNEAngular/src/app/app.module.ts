@@ -87,7 +87,7 @@ const appRoutes: Routes = [
     {provide:AppService,useClass:AppService},
     {provide:UserService,useClass:UserService},
     {provide:BASE_PATH,useValue:environment.basePath},
-  //  {provide:defMenuEnable,useValue:environment.defMenuEnable},
+    {provide:defMenuEnable,useValue:environment.defMenuEnable},
     ConfirmationDialogService,AlertDialogService,
     Title,Meta
   ],
