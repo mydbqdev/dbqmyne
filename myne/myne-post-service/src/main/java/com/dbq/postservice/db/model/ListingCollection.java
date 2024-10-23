@@ -1,5 +1,6 @@
 package com.dbq.postservice.db.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -33,7 +34,7 @@ public class ListingCollection {
 	private String condition;
 	private boolean isDiscount;
 	private double discountAmount;
-	private List<MediaUrlDetails> mediaPaths;
+	private List<MediaUrlDetails> mediaPaths = new ArrayList<MediaUrlDetails>() ;
 	private String createdAt;
 	private String updatedAt;
 	private String pickupLocation;
