@@ -41,6 +41,70 @@ public class MinIoService {
 	 
 	 @Value("${minio.url}")
 	 private String url;
+	 @Value("${minio.posts.files.bucket.name}")
+	 private String bucketFiles;
+	 @Value("${minio.posts.video.bucket.name}")
+	 private String bucketVideo;
+	 @Value("${minio.posts.photo.bucket.name}")
+	 private String bucketPhotos;
+	 
+	 public MediaUrlDetails uploadFile(String postId, MultipartFile file) {
+		 	String objectName="";
+		 	 String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+		 	 
+		 	 String bucketName=bucketFiles;
+		 	 String mimeType = file.getContentType();
+		 	 String key = mimeType.split("/")[0];
+		 	 
+		 	switch (key) {
+			case "image":
+				bucketName=bucketPhotos;
+				break;
+			case "video":
+				bucketName=bucketVideo;
+				break;
+			default:
+				bucketName=bucketFiles;
+				break;
+			}
+		 	 
+	         
+	         InputStream inputStream=null;
+	        try {
+	            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+	            if (!found) {
+	                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+	            }
+	            inputStream = file.getInputStream();
+//	            byte[] buffer = new byte[inputStream.available()];
+//	            inputStream.read(buffer);
+	            
+	            objectName = postId + "_" + UUID.randomUUID().toString() + "." +  ext;
+	            minioClient.putObject(
+	                PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(
+	                        inputStream, inputStream.available(), -1)
+	                        .contentType(mimeType)
+	                        .build());
+	            
+	        } catch (Exception e) {
+	        	throw GenericErrorResponse.builder()
+                .message("Unable to upload file to S3")
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                .build();
+	        } finally
+	        {
+	        	if(inputStream!=null)
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+					}
+	        }
+	        MediaUrlDetails details = new MediaUrlDetails();
+	        details.setContentType(mimeType);
+	        details.setType(ext);
+	        details.setUrl(url+"/" + bucketName + "/" + objectName);
+	        return details;
+	    }
 	 
 	 public MediaUrlDetails  uploadFile(String bucketName,String postId,
 			 MultipartFile file, String fileName) {

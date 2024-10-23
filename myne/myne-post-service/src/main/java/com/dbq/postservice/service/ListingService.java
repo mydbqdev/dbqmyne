@@ -3,39 +3,39 @@ package com.dbq.postservice.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.client.S3StorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.db.model.ListingCollection;
+import com.dbq.postservice.db.repository.AdsRepository;
 import com.dbq.postservice.db.repository.ListingRepository;
 import com.dbq.postservice.dto.ListingBody;
 import com.dbq.postservice.dto.ListingResponse;
-import com.dbq.postservice.dto.MediaDetailsForRequest;
 import com.dbq.postservice.dto.MediaUrlDetails;
-import com.dbq.postservice.db.repository.AdsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ListingService {
-	@Autowired
-	private FileUploadService fileUploadService;
+	 private static final Logger log = LoggerFactory.getLogger(ListingService.class);
+	
 	private final S3StorageClient s3StorageClient;
 	private final AdsRepository adsRepository;
 
 	private final ListingRepository listingRepository;
 
-	public Object createListing(MultipartFile[] files, ListingBody model) {
+	public String createListing(MultipartFile[] files, ListingBody model) {
 		
 		ListingCollection savedCollection = new ListingCollection();
 		try {
@@ -61,22 +61,43 @@ public class ListingService {
 			savedCollection = listingRepository.save(listingCollection);
             String listingId =savedCollection.getListingId();
             
-            List<MediaUrlDetails> list = new ArrayList<MediaUrlDetails>();
-            Arrays.asList(files).stream().forEach(file -> {
-                ResponseEntity<MediaUrlDetails> respEntity = s3StorageClient.uploadFile("myne-post-photos",listingId,file);
-                list.add(respEntity.getBody());
-             });
-			
-            for(MediaUrlDetails mud: list)
-            	savedCollection.getMediaPaths().add(mud);
+            uploadFilesAsync(files, listingId, savedCollection);
             
-            return savedCollection;
+            return "Listing has been created successfully";
 		} catch (Exception e) {
 			// Handle exceptions, e.g., log error
 			return "Error creating Listing: " + e.getMessage();
 		}
 	}
 
+    @Async
+    public void uploadFilesAsync(MultipartFile[] files, String postId, ListingCollection savedListing) {
+        List<MediaUrlDetails> list = new ArrayList<>();
+        for (MultipartFile file : files) {
+        	
+        	  if (file == null || file.isEmpty()) {
+        		  log.error("File is null or empty: Skipping.");
+                  continue; 
+              }
+        	  
+            try {
+                ResponseEntity<MediaUrlDetails> respEntity = s3StorageClient.uploadFile(postId, file);
+                if (respEntity.getBody() != null) {
+                    list.add(respEntity.getBody());
+                }
+            } catch (Exception e) {
+                System.err.println("Error uploading file: " + e.getMessage());
+            }
+        }
+        
+        synchronized (savedListing) {
+            
+        	savedListing.setMediaPaths(list);
+          
+         listingRepository.save(savedListing);
+        }
+    }
+	
 	public String deleteListings(String userId, String listingId) {
 
 		ListingCollection list = listingRepository.findById(listingId).orElse(null);
@@ -111,19 +132,6 @@ public class ListingService {
 			post.setDiscount(body.getIsDiscount());
 			post.setDiscountAmount(body.getDiscountAmount());
 			post.setPickupLocation(body.getPickupLocation());
-
-			// Update media details if provided
-			if (body.getMediaPaths() != null) {
-				List<MediaUrlDetails> mediaUrlDetails = new ArrayList<>();
-				for (MediaDetailsForRequest bodyMedia : body.getMediaPaths()) {
-					MediaUrlDetails entyMedia = new MediaUrlDetails();
-					entyMedia.setContentType(bodyMedia.getContentType());
-					entyMedia.setType(bodyMedia.getType());
-					entyMedia.setUrl(""); // You can set the URL if needed
-					mediaUrlDetails.add(entyMedia);
-				}
-				post.setMediaPaths(mediaUrlDetails);
-			}
 
 			// Update timestamps
 			LocalDateTime currentDateTime = LocalDateTime.now();

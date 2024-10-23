@@ -43,45 +43,23 @@ public class PostController implements PostsApi {
     private final ModelMapper modelMapper;
     
     
-    @PostMapping(value = "/posts1/{userId}/save")
-    public ResponseEntity<Object> savePosts1(@PathVariable String userId,@RequestBody PostsBody body) {
-        
-        try {
-        	System.out.println("><><>>>>>>>>>>");
-            // Handle media uploads
-//            if (body.getMediaDetails() != null) {
-//                for (MediaDetailsForRequest media : body.getMediaDetails()) {
-//                    MultipartFile file = media.getUploadFile();
-//                    if (file != null && !file.isEmpty()) {
-//                        // Logic to upload the file (e.g., to S3 or your file storage)
-//                    }
-//                }
-//            }
-
-            // Logic to save the post
-            // ...
-//            savePosts(userId,body);
-            return ResponseEntity.ok("Post created successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Error creating post: " + e.getMessage());
-        }
-    }
-
-    
-    
 	@Override
 	public ResponseEntity<Object> savePosts(MultipartFile[] files, String body) {
 
-	    try {
+	try {
 	    	PostsBody pbody = gson.fromJson(body,PostsBody.class);
 	    	return new ResponseEntity<Object>(postService.createPosts(files,pbody), HttpStatus.OK) {};
-	    	
-	    } catch (Exception e) {
-	        log.error("Couldn't serialize response for content type application/json", e);
-	        return  new ResponseEntity<Object>(e,HttpStatus.BAD_REQUEST);
 
-	    }
+    } catch (IllegalArgumentException e) { 
+        log.error("Bad Request: Invalid arguments provided", e);
+        return new ResponseEntity<>("Invalid input: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (UnsupportedOperationException e) { 
+        log.error("Not Implemented: This operation is not supported", e);
+        return new ResponseEntity<>("This operation is not supported", HttpStatus.NOT_IMPLEMENTED);
+    } catch (Exception e) { 
+        log.error("An unexpected error occurred", e);
+        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 	}
 	@Override
 	public ResponseEntity<Object> getPosts(@NotNull @Valid String filterType, @Valid Integer pageIndex,
@@ -120,11 +98,13 @@ public class PostController implements PostsApi {
 	  }
 	
 	@Override
-	public ResponseEntity<Object> updatePosts(String userId, String postId, @Valid PostsBody body) {
+	public ResponseEntity<Object> updatePosts(String userId, String postId, MultipartFile[] files, @Valid String body) {
+	//public ResponseEntity<Object> updatePosts(String userId, String postId, @Valid PostsBody body) {
 		ResponseEntity<Object> entity =null;
 
 	    try {
-			entity = new ResponseEntity<Object>(postService.updatePosts(userId,postId,body) , HttpStatus.OK) {};
+	    	PostsBody pbody = gson.fromJson(body,PostsBody.class);
+			entity = new ResponseEntity<Object>(postService.updatePosts(userId,postId,pbody,files) , HttpStatus.OK) {};
 	    	return entity ;
 	    } catch (Exception e) {
 	        log.error("Couldn't serialize response for content type application/json", e);
@@ -150,19 +130,6 @@ public class PostController implements PostsApi {
 
 	    }
 	   }
-  	
-//    @PostMapping("/save")
-//    public ResponseEntity<UserDto> save(@Valid @RequestBody RegisterRequest request) {
-//        return ResponseEntity.ok(modelMapper.map(userService.saveUser(request), UserDto.class));
-//    }
-
-//    @GetMapping("/getAll")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public ResponseEntity<List<UserDto>> getAll() {
-//        return ResponseEntity.ok(userService.getAll().stream()
-//                .map(user -> modelMapper.map(user, UserDto.class)).toList());
-//    }
-	
 
 
    

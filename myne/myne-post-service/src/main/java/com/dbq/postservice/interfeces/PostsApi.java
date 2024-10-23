@@ -99,14 +99,16 @@ public interface PostsApi {
         
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
     @RequestMapping(value = "/posts/{userId}/{postId}",
-//        produces = { "application/json" }, 
-//        consumes = { "application/json" }, 
+        produces = { "application/json" }, 
+         consumes = {"multipart/form-data"}, 
         method = RequestMethod.PUT)
     ResponseEntity<Object> updatePosts(@Parameter(in = ParameterIn.PATH, description = "The ID of the user updating the post.", required=true, schema=@Schema()) @PathVariable("userId") String userId
-, @Parameter(in = ParameterIn.PATH, description = "The ID of the post to update", required=true, schema=@Schema()) @PathVariable("postId") String postId
-, @Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to update, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @Valid @ModelAttribute PostsBody body
+, @Parameter(in = ParameterIn.PATH, description = "The ID of the post to update", required=true, schema=@Schema()) @PathVariable("postId") String postId,
+@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=true, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
+@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @RequestParam("postInfo") @Valid String body
 );
 
+    
     @Operation(summary = "Like a post", description = "Allows a user to like a specific post.", tags={ "Posts Controller" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Successfully liked the post", content = @Content(mediaType = "application/json")),
