@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.dbq.postservice.client.S3StorageClient;
+import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.db.model.PostCollection;
+import com.dbq.postservice.db.repository.AdsRepository;
 import com.dbq.postservice.db.repository.PostsRepository;
+import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.dto.MediaDetailsForRequest;
 import com.dbq.postservice.dto.MediaUrlDetails;
 import com.dbq.postservice.dto.PostsBody;
@@ -32,6 +37,7 @@ public class PostService {
 	 private PostsRepository postRepository; 
 	 private FileUploadService fileUploadService ;
 	 private final S3StorageClient s3StorageClient;
+	 private final AdsRepository adsRepository;
 	// private UserRepository userRepository;
 	 
 
@@ -115,7 +121,7 @@ public class PostService {
 	        	
 	        	List<PostCollection> allPosts = postRepository.findAll();
 	        	int count = allPosts.size();
-	        	
+	        	pageSize=pageSize>0?pageSize-1:pageSize;
 				
 				int num =pageIndex>count?0:pageIndex;
 			
@@ -141,7 +147,27 @@ public class PostService {
 	        		list.add(responce);
 				}
 	        	
+	        	List<AdsCollection> ads= adsRepository.findAll();
+	        	PostsResponse adsres = new PostsResponse();
+	    		if(null !=ads && ads.size()>0) {
+	    			   AdsCollection randomAd = ads.stream()
+	                           .skip(new Random().nextInt(ads.size()))
+	                           .findFirst()
+	                           .orElse(null);
+	    		if(null !=randomAd) {
+	    			adsres.setDescription(randomAd.getDescription());
+	    			adsres.createdAt(randomAd.getCreatedAt());
+	    			adsres.setMediaDetails(randomAd.getMediaDetails());
+	    			adsres.adsHyperLink(randomAd.getHyperLink());
+	    			
+	    		}
+	    			   
+	    		}
+	    		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt())) {
+	    			list.add(adsres);
+	    			}
 	        	
+	        	Collections.shuffle(list);
 	         
 	            return list; 
 	        

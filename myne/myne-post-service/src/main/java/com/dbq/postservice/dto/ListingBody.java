@@ -22,23 +22,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-18T05:09:37.000195453Z[GMT]")
 
 public class ListingBody {
-	@JsonProperty("listingId")
-
-	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
-	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private String listingId = null;
-
-	@JsonProperty("creatorId")
-
-	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
-	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private String creatorId = null;
-
-	@JsonProperty("creatorName")
-
-	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
-	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private String creatorName = null;
 
 	@JsonProperty("zipCode")
 
@@ -115,33 +98,6 @@ public class ListingBody {
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
 	private String category = null;
 
-	public ListingBody listingId(String listingId) {
-
-		this.listingId = listingId;
-		return this;
-	}
-
-	/**
-	 * Unique identifier for the listing
-	 * 
-	 * @return listingId
-	 **/
-
-	@Schema(example = "listing_id_1", description = "Unique identifier for the listing")
-
-	public String getListingId() {
-		return listingId;
-	}
-
-	public void setListingId(String listingId) {
-		this.listingId = listingId;
-	}
-
-	public ListingBody creatorId(String creatorId) {
-
-		this.creatorId = creatorId;
-		return this;
-	}
 
 	public String getCategory() {
 		return category;
@@ -157,44 +113,6 @@ public class ListingBody {
 
 	public Boolean getIsDiscount() {
 		return isDiscount;
-	}
-
-	/**
-	 * ID of the user who created the listing
-	 * 
-	 * @return creatorId
-	 **/
-
-	@Schema(example = "43", description = "ID of the user who created the listing")
-
-	public String getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(String creatorId) {
-		this.creatorId = creatorId;
-	}
-
-	public ListingBody creatorName(String creatorName) {
-
-		this.creatorName = creatorName;
-		return this;
-	}
-
-	/**
-	 * Name of the user who created the listing
-	 * 
-	 * @return creatorName
-	 **/
-
-	@Schema(example = "madhan", description = "Name of the user who created the listing")
-
-	public String getCreatorName() {
-		return creatorName;
-	}
-
-	public void setCreatorName(String creatorName) {
-		this.creatorName = creatorName;
 	}
 
 	public ListingBody zipCode(String zipCode) {
@@ -482,10 +400,7 @@ public class ListingBody {
 			return false;
 		}
 		ListingBody ListingBody = (ListingBody) o;
-		return Objects.equals(this.listingId, ListingBody.listingId)
-				&& Objects.equals(this.creatorId, ListingBody.creatorId)
-				&& Objects.equals(this.creatorName, ListingBody.creatorName)
-				&& Objects.equals(this.zipCode, ListingBody.zipCode) && Objects.equals(this.title, ListingBody.title)
+		return Objects.equals(this.zipCode, ListingBody.zipCode) && Objects.equals(this.title, ListingBody.title)
 				&& Objects.equals(this.description, ListingBody.description)
 				&& Objects.equals(this.isFree, ListingBody.isFree) && Objects.equals(this.price, ListingBody.price)
 				&& Objects.equals(this.condition, ListingBody.condition)
@@ -499,7 +414,7 @@ public class ListingBody {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(listingId, creatorId, creatorName, zipCode, title, description, isFree, price, condition,
+		return Objects.hash( zipCode, title, description, isFree, price, condition,
 				isDiscount, discountAmount, mediaPaths, createdAt, updatedAt, pickupLocation);
 	}
 
@@ -507,10 +422,7 @@ public class ListingBody {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("class ListingBody {\n");
-
-		sb.append("    listingId: ").append(toIndentedString(listingId)).append("\n");
-		sb.append("    creatorId: ").append(toIndentedString(creatorId)).append("\n");
-		sb.append("    creatorName: ").append(toIndentedString(creatorName)).append("\n");
+		
 		sb.append("    zipCode: ").append(toIndentedString(zipCode)).append("\n");
 		sb.append("    title: ").append(toIndentedString(title)).append("\n");
 		sb.append("    description: ").append(toIndentedString(description)).append("\n");

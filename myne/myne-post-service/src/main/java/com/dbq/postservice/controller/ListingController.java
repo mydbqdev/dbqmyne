@@ -44,33 +44,9 @@ public class ListingController implements ListingApi {
 
 	private final HttpServletRequest request;
 
-	@PostMapping(value = "/Listing1/{userId}/save")
-	public ResponseEntity<Object> savePosts1(@PathVariable String userId, @RequestBody ListingBody body) {
-
-		try {
-			System.out.println("><><>>>>>>>>>>");
-			// Handle media uploads
-			if (body.getMediaPaths() != null) {
-				for (MediaDetailsForRequest media : body.getMediaPaths()) {
-					MultipartFile file = media.getUploadFile();
-					if (file != null && !file.isEmpty()) {
-						// Logic to upload the file (e.g., to S3 or your file storage)
-					}
-				}
-			}
-
-			// Logic to save the post
-			// ...
-			listingsuserIdSavePost(userId, body);
-			return ResponseEntity.ok("Post created successfully");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error creating post: " + e.getMessage());
-		}
-	}
 
 	@Override
-	public ResponseEntity<Object> listingsuserIdSavePost(String userId, @Valid ListingBody body) {
+	public ResponseEntity<Object> listingsuserIdSavePost(String userId, ListingBody body) {
 
 		ResponseEntity<Object> entity = null;
 
@@ -120,15 +96,11 @@ public class ListingController implements ListingApi {
 
 	public ResponseEntity<Object> updatelistingsUserIdListingIdPut(String userId, String listingId,
 			@Valid ListingBody body) {
-		ResponseEntity<Object> entity = null;
 
 		try {
-
-			String message = listingService.updateListings(userId, listingId, body);
-			String listData = "{\"status\":\"" + message + "\"}";
-			entity = new ResponseEntity<Object>(listData, HttpStatus.OK) {
-			};
-			return entity;
+			
+			return new ResponseEntity<Object>(listingService.updateListings(userId, listingId, body), HttpStatus.OK) {};
+			
 		} catch (Exception e) {
 			log.error("Couldn't serialize response for content type application/json", e);
 			return new ResponseEntity<Object>(e, HttpStatus.BAD_REQUEST);

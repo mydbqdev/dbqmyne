@@ -38,33 +38,6 @@ public class PostController implements PostsApi {
     private final ModelMapper modelMapper;
     
     
-    @PostMapping(value = "/posts1/{userId}/save")
-    public ResponseEntity<Object> savePosts1(@PathVariable String userId,@RequestBody PostsBody body) {
-        
-        try {
-        	System.out.println("><><>>>>>>>>>>");
-            // Handle media uploads
-            if (body.getMediaDetails() != null) {
-                for (MediaDetailsForRequest media : body.getMediaDetails()) {
-                    MultipartFile file = media.getUploadFile();
-                    if (file != null && !file.isEmpty()) {
-                        // Logic to upload the file (e.g., to S3 or your file storage)
-                    }
-                }
-            }
-
-            // Logic to save the post
-            // ...
-            savePosts(userId,body);
-            return ResponseEntity.ok("Post created successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Error creating post: " + e.getMessage());
-        }
-    }
-
-    
-    
 	@Override
 	public ResponseEntity<Object> savePosts(String userId,PostsBody body) {
 
@@ -145,19 +118,7 @@ public class PostController implements PostsApi {
 
 	    }
 	   }
-  
-//    @PostMapping("/save")
-//    public ResponseEntity<UserDto> save(@Valid @RequestBody RegisterRequest request) {
-//        return ResponseEntity.ok(modelMapper.map(userService.saveUser(request), UserDto.class));
-//    }
-
-//    @GetMapping("/getAll")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public ResponseEntity<List<UserDto>> getAll() {
-//        return ResponseEntity.ok(userService.getAll().stream()
-//                .map(user -> modelMapper.map(user, UserDto.class)).toList());
-//    }
-	
+  	
 
 
    

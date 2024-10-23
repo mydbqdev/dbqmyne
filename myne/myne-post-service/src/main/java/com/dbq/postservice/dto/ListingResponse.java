@@ -72,7 +72,7 @@ public class ListingResponse   {
 
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
-  private Float price = null;
+  private double price = 0;
 
   @JsonProperty("condition")
 
@@ -90,7 +90,7 @@ public class ListingResponse   {
 
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
-  private BigDecimal discountAmount = null;
+  private double discountAmount = 0;
 
   @JsonProperty("mediaPaths")
   @Valid
@@ -99,7 +99,7 @@ public class ListingResponse   {
 
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
-  private OffsetDateTime createdAt = null;
+  private String createdAt = null;
 
   @JsonProperty("pickupLocation")
 
@@ -107,7 +107,26 @@ public class ListingResponse   {
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private String pickupLocation = null;
 
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)
+  private String adsHyperLink ;
+  
+  public ListingResponse adsHyperLink(String adsHyperLink) { 
 
+	    this.adsHyperLink = adsHyperLink;
+	    return this;
+	  }
+
+  public String getAdsHyperLink() {  
+    return adsHyperLink;
+  }
+
+
+
+  public void setAdsHyperLink(String adsHyperLink) { 
+    this.adsHyperLink = adsHyperLink;
+  }
+  
   public ListingResponse listingId(String listingId) { 
 
     this.listingId = listingId;
@@ -269,7 +288,7 @@ public class ListingResponse   {
     this.isFree = isFree;
   }
 
-  public ListingResponse price(Float price) { 
+  public ListingResponse price(double price) { 
 
     this.price = price;
     return this;
@@ -282,13 +301,13 @@ public class ListingResponse   {
   
   @Schema(example = "100", description = "Price of the item")
   
-  public Float getPrice() {  
+  public double getPrice() {  
     return price;
   }
 
 
 
-  public void setPrice(Float price) { 
+  public void setPrice(double price) { 
     this.price = price;
   }
 
@@ -338,7 +357,7 @@ public class ListingResponse   {
     this.isDiscount = isDiscount;
   }
 
-  public ListingResponse discountAmount(BigDecimal discountAmount) { 
+  public ListingResponse discountAmount(double discountAmount) { 
 
     this.discountAmount = discountAmount;
     return this;
@@ -352,13 +371,13 @@ public class ListingResponse   {
   @Schema(example = "30", description = "Amount of the discount")
   
 @Valid
-  public BigDecimal getDiscountAmount() {  
+  public double getDiscountAmount() {  
     return discountAmount;
   }
 
 
 
-  public void setDiscountAmount(BigDecimal discountAmount) { 
+  public void setDiscountAmount(double discountAmount) { 
     this.discountAmount = discountAmount;
   }
 
@@ -393,7 +412,7 @@ public class ListingResponse   {
     this.mediaPaths = mediaPaths;
   }
 
-  public ListingResponse createdAt(OffsetDateTime createdAt) { 
+  public ListingResponse createdAt(String createdAt) { 
 
     this.createdAt = createdAt;
     return this;
@@ -407,13 +426,13 @@ public class ListingResponse   {
   @Schema(example = "2024-10-15T12:34:56Z", description = "Creation timestamp")
   
 @Valid
-  public OffsetDateTime getCreatedAt() {  
+  public String getCreatedAt() {  
     return createdAt;
   }
 
 
 
-  public void setCreatedAt(OffsetDateTime createdAt) { 
+  public void setCreatedAt(String createdAt) { 
     this.createdAt = createdAt;
   }
 
@@ -462,12 +481,13 @@ public class ListingResponse   {
         Objects.equals(this.discountAmount, ListingResponse.discountAmount) &&
         Objects.equals(this.mediaPaths, ListingResponse.mediaPaths) &&
         Objects.equals(this.createdAt, ListingResponse.createdAt) &&
-        Objects.equals(this.pickupLocation, ListingResponse.pickupLocation);
+        Objects.equals(this.pickupLocation, ListingResponse.pickupLocation)&&
+        Objects.equals(this.adsHyperLink, ListingResponse.adsHyperLink);
   }
-
+  
   @Override
   public int hashCode() {
-    return Objects.hash(listingId, creatorId, creatorName, zipCode, title, description, isFree, price, condition, isDiscount, discountAmount, mediaPaths, createdAt, pickupLocation);
+    return Objects.hash(listingId, creatorId, creatorName, zipCode, title, description, isFree, price, condition, isDiscount, discountAmount, mediaPaths, createdAt, pickupLocation,adsHyperLink);
   }
 
   @Override
@@ -489,10 +509,11 @@ public class ListingResponse   {
     sb.append("    mediaPaths: ").append(toIndentedString(mediaPaths)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    pickupLocation: ").append(toIndentedString(pickupLocation)).append("\n");
+    sb.append("    adsHyperLink: ").append(toIndentedString(adsHyperLink)).append("\n");
     sb.append("}");
     return sb.toString();
   }
-
+  
   /**
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).

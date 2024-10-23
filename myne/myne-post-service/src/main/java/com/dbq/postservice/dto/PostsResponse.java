@@ -92,6 +92,27 @@ public class PostsResponse   {
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private String updatedAt = null;
+  
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)
+  private String adsHyperLink ;
+  
+  public PostsResponse adsHyperLink(String adsHyperLink) { 
+
+	    this.adsHyperLink = adsHyperLink;
+	    return this;
+	  }
+
+  public String getAdsHyperLink() {  
+    return adsHyperLink;
+  }
+
+
+
+  public void setAdsHyperLink(String adsHyperLink) { 
+    this.adsHyperLink = adsHyperLink;
+  }
 
 
   public PostsResponse postId(String postId) { 
@@ -400,12 +421,13 @@ public class PostsResponse   {
         Objects.equals(this.commentsCount, PostsResponse.commentsCount) &&
         Objects.equals(this.mediaDetails, PostsResponse.mediaDetails) &&
         Objects.equals(this.createdAt, PostsResponse.createdAt) &&
-        Objects.equals(this.updatedAt, PostsResponse.updatedAt);
+        Objects.equals(this.updatedAt, PostsResponse.updatedAt)&&
+        Objects.equals(this.adsHyperLink, PostsResponse.adsHyperLink);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(postId, userId, creatorName, zipCode, description, privacy, likeCount, isLiked, commentsCount, mediaDetails, createdAt, updatedAt);
+    return Objects.hash(postId, userId, creatorName, zipCode, description, privacy, likeCount, isLiked, commentsCount, mediaDetails, createdAt, updatedAt,adsHyperLink);
   }
 
   @Override
@@ -425,10 +447,11 @@ public class PostsResponse   {
     sb.append("    mediaDetails: ").append(toIndentedString(mediaDetails)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    adsHyperLink: ").append(toIndentedString(adsHyperLink)).append("\n");
     sb.append("}");
     return sb.toString();
   }
-
+  
   /**
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
