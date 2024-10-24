@@ -1,5 +1,7 @@
 package com.dbq.postservice.db.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -10,8 +12,12 @@ import com.dbq.postservice.db.model.PostCollection;
 public interface PostsRepository  extends MongoRepository<PostCollection,String>{
 	
 	 void deleteById(String postId);
-	
-	 @Query("{ 'zipCode': ?0, 'description': { $regex: ?1, $options: 'i' }}")
-	    Page<PostCollection> findPosts(String zipCode, String searchTerm, Pageable pageable);
-
+	 
+	  Page<PostCollection> findAll(Pageable pageable);
+	 
+	  List<PostCollection> findAllByOrderByCreatedAtDesc(Pageable pageable);
+	  
+	  @Query(value= "{zipCode : ?0}")  
+	  List<PostCollection> getPostsNearBy(String zipCode, Pageable pageable);
+	 
 }

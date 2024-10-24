@@ -13,11 +13,13 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Pageable;
 
 import com.dbq.postservice.client.S3StorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
@@ -26,6 +28,7 @@ import com.dbq.postservice.db.repository.AdsRepository;
 import com.dbq.postservice.db.repository.PostsRepository;
 import com.dbq.postservice.dto.MediaUrlDetails;
 import com.dbq.postservice.dto.PostsBody;
+import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.PostsResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -97,66 +100,88 @@ public class PostService {
 	        }
 	    }
 	    
-	    public List<PostsResponse> getPosts(String filterType, Integer pageIndex, Integer pageSize, String zipCode, String searchTerm) {
+	    public List<PostsResponse> getPosts(PostsFilterDto postsFilter) {
 	    	
-	    	List<PostsResponse> list = new ArrayList<>();
+	    	List<PostsResponse> list = new ArrayList<PostsResponse>();
+	    	List<PostCollection> posts = new ArrayList<PostCollection>();
 	    	
-	        	PageRequest pageable = PageRequest.of(pageIndex, pageSize);
-	        //	Page<PostCollection> posts = postRepository.findPosts(zipCode, searchTerm, pageable);
-	        	
-	        	List<PostCollection> allPosts = postRepository.findAll();
-	        	int count = allPosts.size();
-	        	
-				
-				int num =pageIndex>count?0:pageIndex;
+	    	Pageable pageable = PageRequest.of(postsFilter.getPageIndex(), postsFilter.getPageSize());
+	    	
+	    	switch (postsFilter.getFilterType()) {
 			
-				List<PostCollection> posts =  allPosts.subList(num, pageSize+num >count?count: pageSize+num) ;
-	        	
-	        	for (PostCollection postCollection : posts) {
-	        		
-	        		PostsResponse responce = new PostsResponse();
-	        		
-	        		responce.setUserId(postCollection.getUserId());
-	        		responce.setZipCode(postCollection.getZipCode());
-	        		responce.setPostId(postCollection.getPostId());
-	        		responce.setCreatorName(postCollection.getUserId());
-	        		responce.setDescription(postCollection.getDescription());
-	        	
-	        		responce.setLikeCount(postCollection.getLikdUserIds() != null ? postCollection.getLikdUserIds().length : 0);
-	        		responce.setIsLiked(postCollection.getLikdUserIds() != null && Arrays.stream(postCollection.getLikdUserIds())
-	        		                          .anyMatch(userId -> userId.equals(postCollection.getUserId())));
-	        		responce.setCommentsCount(0);
-	        		responce.setCreatedAt(postCollection.getCreatedAt());
-	        		responce.setUpdatedAt(postCollection.getUpdatedAt());
-	        		responce.setMediaDetails(postCollection.getMediaDetails());
-	        		
-	        		list.add(responce);
-				}
-	        	List<AdsCollection> ads= adsRepository.findAll();
-	        	PostsResponse adsres = new PostsResponse();
-	    		if(null !=ads && ads.size()>0) {
-	    			   AdsCollection randomAd = ads.stream()
-	                           .skip(new Random().nextInt(ads.size()))
-	                           .findFirst()
-	                           .orElse(null);
-	    		if(null !=randomAd) {
-	    			adsres.setDescription(randomAd.getDescription());
-	    			adsres.createdAt(randomAd.getCreatedAt());
-	    			adsres.setMediaDetails(randomAd.getMediaDetails());
-	    			adsres.adsHyperLink(randomAd.getHyperLink());
-	    			
-	    			}
-	    		}
-	    		
-	    		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt())) 
-	    			list.add(adsres);
-	    			
-	        	
-	        	Collections.shuffle(list);
-	         
-	            return list; 
-	        
+	    	case "forYou":
+	    		Page<PostCollection> page  = postRepository.findAll(pageable) ;	
+	    		posts = page.getContent();
+				break;
+//			case "myPost":
+//				 posts = postRepository.getPostsMyPost(pageIndex,pageSize,zipCode,) ;		
+//				break;
+			case "nearBy":
+				 posts = postRepository.getPostsNearBy(postsFilter.getZipCode(),pageable) ;		
+				break;
+			case "recent":
+				 posts = postRepository.findAllByOrderByCreatedAtDesc(pageable) ;		
+				break;
+			default:
+				
+	    		posts = postRepository.findAll(pageable).getContent();		
+				break;
+			}
+	    	
+	    	list=getPostsAds(posts);
+
+            return list; 
 	    }
+	    
+	    public 	List<PostsResponse> getPostsAds(List<PostCollection> posts) {
+	    	List<PostsResponse> list = new ArrayList<>();
+        	
+        	for (PostCollection postCollection : posts) {
+        		
+        		PostsResponse responce = new PostsResponse();
+        		
+        		responce.setUserId(postCollection.getUserId());
+        		responce.setZipCode(postCollection.getZipCode());
+        		responce.setPostId(postCollection.getPostId());
+        		responce.setCreatorName(postCollection.getUserId());
+        		responce.setDescription(postCollection.getDescription());
+        	
+        		responce.setLikeCount(postCollection.getLikdUserIds() != null ? postCollection.getLikdUserIds().length : 0);
+        		responce.setIsLiked(postCollection.getLikdUserIds() != null && Arrays.stream(postCollection.getLikdUserIds())
+        		                          .anyMatch(userId -> userId.equals(postCollection.getUserId())));
+        		responce.setCommentsCount(0);
+        		responce.setCreatedAt(postCollection.getCreatedAt());
+        		responce.setUpdatedAt(postCollection.getUpdatedAt());
+        		responce.setMediaDetails(postCollection.getMediaDetails());
+        		
+        		list.add(responce);
+			}
+        	
+        	List<AdsCollection> ads= adsRepository.findAll();
+        	PostsResponse adsres = new PostsResponse();
+    		if(null !=ads && ads.size()>0) {
+    			   AdsCollection randomAd = ads.stream()
+                           .skip(new Random().nextInt(ads.size()))
+                           .findFirst()
+                           .orElse(null);
+    		if(null !=randomAd) {
+    			adsres.setDescription(randomAd.getDescription());
+    			adsres.createdAt(randomAd.getCreatedAt());
+    			adsres.setMediaDetails(randomAd.getMediaDetails());
+    			adsres.adsHyperLink(randomAd.getHyperLink());
+    			
+    			}
+    		}
+    		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt())) 
+    			list.add(adsres);
+        	
+        	Collections.shuffle(list);
+         
+            return list; 
+        
+	    	
+	    }
+	    
 
 	    public String deletePosts(String userId, String postId) {
 	    	
