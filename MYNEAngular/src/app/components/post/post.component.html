@@ -106,9 +106,13 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div class="d-flex">
                         <div>{{postSearchResultDt.description}}</div>
-                        <div class="ml-auto" style="width: 120px;padding-left: 10px;">
-                         <img src="assets/images/myne-logo.svg" alt="logo">
+                        <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length>0" >
+                         <img [src]="postSearchResultDt.mediaDetails[0].url" style="width: 190px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
+                        
                         </div>
+                        <div class="ml-auto" *ngIf= "postSearchResultDt.mediaDetails.length == 0" >
+                         
+                         </div>
                        </div>
                     </div>
                     <div class="d-flex">

@@ -10,6 +10,19 @@ export class PostSearchResult {
     createdAt:string;
     updatedAt:string;
     mediaDetails:MediaDetails[];
+
+    //listing objects
+
+    category:string;
+    title:string;
+    creatorId:string;
+    free:boolean;
+    price:number;
+    condition:string;
+    discount:boolean;
+    discountAmount:number;
+    pickupLocation:string;
+    mediaPaths:MediaDetails[];
 }
 
 export class MediaDetails {

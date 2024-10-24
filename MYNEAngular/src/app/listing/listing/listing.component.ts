@@ -28,6 +28,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	//public rolesArray: string[] = [];
 	public postSearchResult:PostSearchResult[]=[];
 	searchRequest:SearchRequest=new SearchRequest();
+	listingResult:PostSearchResult[]=[];
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -59,8 +60,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		this.dataService.getIsSale.subscribe(
 			isS=>this.isSaleSelect=isS
 		);
+		
 	}
 	ngAfterViewInit() {
+		this.searchListing();
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
@@ -117,6 +120,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		   this.postSearchResult = Object.assign([],data);
 		 }
 		 this.spinner.hide();
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){
@@ -144,7 +149,50 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
 		 }
 	   });
-		 this.dataService.setPostSearchResult(this.postSearchResult);
-		 this.router.navigateByUrl('/post-search');
+		 
+	 }
+	 searchListing(){
+	
+		// api post searrch
+	
+		this.searchRequest.listingType=this.isSaleSelect?"forSale":"forFree";
+		this.searchRequest.filterType="all";
+		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageSize=20;
+		this.searchRequest.zipCode="123456";
+		this.appService.getSaleResultList(this.searchRequest).subscribe((data: any) => {
+		 if(data.length >0){
+		   this.listingResult = Object.assign([],data);
+		 }
+		 console.log("this.listingResult ",this.listingResult );
+		 this.spinner.hide();
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		 
 	 }
 }

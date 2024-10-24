@@ -48,6 +48,11 @@ export class PostComponent implements OnInit, AfterViewInit {
 				this.router.navigated = false;
 			}
 		});
+		this.dataService.$postSearchResult.subscribe(dt=>{
+			this.postSearchResultDt=dt;
+			console.log("this.postSearchResultDt<>< ngOnInit",this.postSearchResultDt)
+			}
+		);
 	}
 
 	ngOnDestroy() {
@@ -63,9 +68,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 			dt=>this.searchText=dt
 		);
 
-		this.dataService.$postSearchResult.subscribe(
-			dt=>this.postSearchResultDt=dt
-		);
+	
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -117,13 +120,17 @@ export class PostComponent implements OnInit, AfterViewInit {
 	   // api post searrch
 	   this.searchRequest.filterType="recent";
 		this.searchRequest.pageIndex=0;
-		this.searchRequest.pageSize=10;
+		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode="123456";
 	   this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
+		console.log("data",data);
 		if(data.length >0){
 		  this.postSearchResult = Object.assign([],data);
 		}
+		console.log("this.postSearchResult>>",this.postSearchResult); 
 		this.spinner.hide();
+		this.dataService.setPostSearchResult(this.postSearchResult);
+		this.router.navigateByUrl('/post-search');
 	  },error =>{
 		this.spinner.hide();
 		if(error.status==403){
@@ -151,7 +158,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		  if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
 		}
 	  });
-	    this.dataService.setPostSearchResult(this.postSearchResult);
-		this.router.navigateByUrl('/post-search');
+	    
 	}
 }

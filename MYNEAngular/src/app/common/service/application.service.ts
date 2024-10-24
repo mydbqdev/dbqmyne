@@ -35,6 +35,18 @@ export class AppService{
             }
         );
     }
+    public getSaleResultList(searchRequest:SearchRequest) : Observable<any>{
+        const url1=this.basePath +'post/getlistings';
+        return this.httpclient.post<any>(
+            url1,
+            searchRequest,
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
     
 
     private errorHandler(error:HttpErrorResponse){

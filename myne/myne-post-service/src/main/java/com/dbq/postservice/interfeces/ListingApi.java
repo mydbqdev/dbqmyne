@@ -137,7 +137,7 @@ public interface ListingApi {
     @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
 @RequestMapping(value = "/listings/search",
     produces = { "application/json" },
-    method = RequestMethod.GET)
+	method = {RequestMethod.GET,RequestMethod.POST})
 ResponseEntity<?> searchListings(
     @Parameter(in = ParameterIn.QUERY, description = "The title to search for listings.", required = true, schema = @Schema()) @RequestParam String title);
 

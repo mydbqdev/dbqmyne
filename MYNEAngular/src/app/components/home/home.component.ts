@@ -162,13 +162,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		// api post searrch
 		this.searchRequest.filterType="recent";
 		this.searchRequest.pageIndex=0;
-		this.searchRequest.pageSize=10;
+		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode="123456";
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
 		   this.postSearchResult = Object.assign([],data);
 		 }
 		 this.spinner.hide();
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){
@@ -196,8 +198,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
 		 }
 	   });
-		 this.dataService.setPostSearchResult(this.postSearchResult);
-		 this.router.navigateByUrl('/post-search');
+		
 	 }
 
 	delete(id:number){

@@ -117,6 +117,8 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		   this.postSearchResult = Object.assign([],data);
 		 }
 		 this.spinner.hide();
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){
@@ -144,7 +146,6 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
 		 }
 	   });
-		 this.dataService.setPostSearchResult(this.postSearchResult);
-		 this.router.navigateByUrl('/post-search');
+		 
 	 }
 }
