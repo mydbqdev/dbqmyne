@@ -5,30 +5,24 @@ package com.dbq.postservice.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dbq.postservice.dto.MediaDetailsForRequest;
 import com.dbq.postservice.dto.PostsBody;
+import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.PostsResponse;
 import com.dbq.postservice.interfeces.PostsApi;
 import com.dbq.postservice.service.PostService;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/v1/post")
 @RequiredArgsConstructor
 public class PostController implements PostsApi {
+	
 	  private static final Logger log = LoggerFactory.getLogger(PostController.class);
 	  private Gson gson = new GsonBuilder().create();
 //				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
@@ -61,15 +56,15 @@ public class PostController implements PostsApi {
         return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 	}
+	
 	@Override
-	public ResponseEntity<Object> getPosts(@NotNull @Valid String filterType, @Valid Integer pageIndex,
-			@Valid Integer pageSize, @Valid String zipCode, @Valid String searchTerm) {
+	public ResponseEntity<Object> getPosts(@RequestBody PostsFilterDto postsFilter) {
 		ResponseEntity<Object> entity =null;
 
 	    try {
 	    	
-	    	List<PostsResponse> posts = postService.getPosts(filterType,pageIndex,pageSize,zipCode,searchTerm) ;
-	    
+	    	List<PostsResponse> posts = postService.getPosts(postsFilter);
+	   
 			entity = new ResponseEntity<Object>(posts, HttpStatus.OK) {};
 	    	return entity ;
 	    } catch (Exception e) {
