@@ -326,3 +326,58 @@ a.nav-link.top-menu:hover{
     border-bottom: 0;
     border-left: .3em solid transparent;
 }
+
+.profile-top{
+    width: 70px;
+    height:70px;
+    background-color: rgb(41, 131, 173);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    padding: 25% 30%;
+    color: #fff;
+}
+
+.profile-2{
+    width: 55px;
+    height:55px;
+    background-color: rgb(41, 131, 173);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 10px;
+    color: #fff;
+}
+
+.profile-list-1{
+    width: 55px;
+    height:55px;
+    background-color: rgb(23, 185, 185);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 10px;
+    color: #fff;
+}
+
+.profile-list-2{
+    width: 55px;
+    height:55px;
+    background-color: rgb(23, 107, 185);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 10px;
+    color: #fff;
+}
+
+.profile-list-3{
+    width: 55px;
+    height:55px;
+    background-color: rgb(190, 10, 160);
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    padding-top: 10px;
+    color: #fff;
+}

@@ -17,7 +17,7 @@
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
       <div class="d-flex" style="margin-top: 10px;">
-        <div class="m-2"><img src="assets/images/profile.PNG" style="width: 70px;" class="img-circle elevation-2"></div>
+        <div class="m-2"><div class="profile-top img-circle elevation-2">S</div></div>
         <div>
            <div style="font-weight: 500;" class="ml-2 mt-3">Shesh</div>
            <div class="fw-lighter ml-2">Small text</div>
@@ -65,13 +65,13 @@
           <div>
             <ul class="nav">
               <li class="nav-item">
-                <a class="nav-link top-menu active" href="#">All Listings</a>
+                <a class="nav-link top-menu active" routerLink="/listing" (click)="isSalSelect(true);">All Listings</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link top-menu" href="#">Your listings</a>
+                <a class="nav-link top-menu" routerLink="/listing" (click)="isSalSelect(true);">Your listings</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link top-menu" href="#">Saved listings</a>
+                <a class="nav-link top-menu" routerLink="/listing" (click)="isSalSelect(true);">Saved listings</a>
               </li>
             </ul>
           </div>
