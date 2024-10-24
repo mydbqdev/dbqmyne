@@ -6,7 +6,28 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/common/service/user.service';
 import { AuthService } from 'src/app/common/service/auth.service';
 import { DataService } from 'src/app/common/service/data.service';
+//import { tap, switchMap, scan } from 'rxjs/dist/types/operators';
+import {BehaviorSubject,Observable} from 'rxjs';
 
+export interface DummyJsonResponse {
+	products: Product[];
+	total: number;
+	skip: number;
+	limit: number;
+  }
+  
+  export interface Product {
+	id: string;
+	title: string;
+	price: number;
+	thumbnail: string;
+  }
+  
+  export interface ProductsPaginator {
+	items: Product[];
+	page: number;
+	hasMorePages: boolean;
+  }
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
@@ -19,6 +40,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	fileData: File = null;
 		 previewUrl:any = null;
 		 previewUrl2:any = null;
+
+     public paginator$: Observable<ProductsPaginator>;
+     public loading$ = new BehaviorSubject(true);
+     private page$ = new BehaviorSubject(1);
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
@@ -39,6 +64,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 				this.router.navigated = false;
 			}
 		});
+		//this.paginator$ = this.loadProducts$();
 	}
 
 	ngOnDestroy() {
@@ -97,6 +123,37 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	searchPost(){
 		this.router.navigateByUrl('/post-search');
 	}
+	loadMoreProducts(paginator: ProductsPaginator){
+		console.info("scrolling down");
+		//if (!paginator.hasMorePages) {
+		//	return;
+		//  }
+		//  this.page$.next(paginator.page + 1);
+	}
+
+    /*private loadProducts$(): Observable<ProductsPaginator> {
+		return this.page$.pipe(
+		  tap(() => this.loading$.next(true)),
+		   switchMap((page) => this.api.getProducts$(page)),
+		  scan(this.updatePaginator, {items: [], page: 0, hasMorePages: true} as ProductsPaginator),
+		  tap(() => this.loading$.next(false)),
+		);
+	  }
+	
+	  private updatePaginator(accumulator: ProductsPaginator, value: ProductsPaginator): ProductsPaginator {
+		if (value.page === 1) {
+		  return value;
+		}
+	
+		accumulator.items.push(...value.items);
+		accumulator.page = value.page;
+		accumulator.hasMorePages = value.hasMorePages;
+	
+		return accumulator;
+	  }*/
+
+
+
 	delete(id:number){
 		alert("delete");
 	}

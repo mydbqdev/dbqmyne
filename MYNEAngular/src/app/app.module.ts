@@ -38,7 +38,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
 import { PostComponent } from './components/post/post.component';
 import { ListingDetailsComponent } from './listing/listing-details/listing-details.component';
-
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
 ];
@@ -75,6 +75,7 @@ const appRoutes: Routes = [
     NgbModule,
     MaterialModule,
     MainPipe,
+    InfiniteScrollModule,
     NgxSpinnerModule.forRoot(),
     NgIdleKeepaliveModule.forRoot(),
     DragDropModule,

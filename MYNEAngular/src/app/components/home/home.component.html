@@ -126,7 +126,13 @@
             </div>  
           </div>
         </div>
-      </div>      
+      </div>  
+      <div *ngIf="paginator$ | async as paginator"
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        (scrolled)="loadMoreProducts(paginator)"
+      ></div>    
       <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
@@ -329,6 +335,7 @@
           </div>
         </div>
       </div>
+      <p class="text-center my-3" *ngIf="loading$ | async">Loading...</p>
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
         <div class="m-2">
