@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/common/service/user.service';
-import { DefMenu } from 'src/app/common/shared/def-menu';
-import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
+import { DataService } from 'src/app/common/service/data.service';
 
 @Component({
 	selector: 'app-home',
@@ -14,7 +13,6 @@ import { AuthService } from 'src/app/common/service/auth.service';
 	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-	public defHomeMenu: DefMenu;
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
@@ -24,8 +22,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
-	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
-		private spinner: NgxSpinnerService, private authService:AuthService) {
+	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
+		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
@@ -87,7 +85,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 			if(id==1){
 		        this.previewUrl2=false;
 				this.previewUrl = reader.result; 
-				this.data=this.data+"&nbsp;<img src='"+this.previewUrl+"' height='140px' width='120px'  class='elevation-2'/>";
+				this.data=this.data+"&nbsp;<img src='"+this.previewUrl+"' height='140px' width='120px'  class='elevation-2'/> <button type='button' class='close' style='margin-top:-70px;cursor:pointer;'  (click)='delete(0)' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 			}else{
 				this.previewUrl=false;
 				this.previewUrl2 = reader.result; 
@@ -97,8 +95,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		  //console.info("hrloo:"+this.previewUrl);
 		}
 	}
-
+    isSaleSelect(iss:boolean){
+      this.dataService.setIsSale(iss);
+	}
 	searchPost(){
 		this.router.navigateByUrl('/post-search');
+	}
+	delete(id:number){
+		alert("delete");
 	}
 }

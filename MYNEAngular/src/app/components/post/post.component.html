@@ -11,7 +11,7 @@
       <div class="container-fluid form-group" style="padding: 40px 15px 5px 15px;">
         <div class="input-group">
         <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;border-top-left-radius: 5px;border-bottom-left-radius: 5px;"><img src="assets/images/myne-smll-logo-f.png" alt="logo" style="height: 25px;"></span>
-        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"/>
+        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"  (keydown.enter)="searchPost()"/>
         </div>
       </div>
     </div>
@@ -44,8 +44,8 @@
         <nav class="nav flex-column">
           <a class="nav-link left-menu" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-lemon mr-2"></i>Discover</a>
-          <a class="nav-link left-menu active" routerLink="/listing"><i class="fas fa-tag mr-2"></i>For Sale</a>
-          <a class="nav-link left-menu" routerLink="/listing"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
+          <a class="nav-link left-menu active" routerLink="/listing" (click)="isSaleSelect(true);"><i class="fas fa-tag mr-2"></i>For Sale</a>
+          <a class="nav-link left-menu" routerLink="/listing" (click)="isSaleSelect(false);"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-bell mr-1"></i> Notifications</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-comment mr-1"></i> Chats</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="fas fa-users mr-1"></i> Groups</a>
