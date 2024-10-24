@@ -61,9 +61,9 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		this.dataService.getIsSale.subscribe(
 			isS=>this.isSaleSelect=isS
 		);
-		this.route.params.subscribe(s => {
-			console.log(s["id"]);
+		this.route.params.subscribe(s => {		
 			this.listingId=s["id"];
+			this.searchListingDet()
 		  });	  
 	}
 	ngAfterViewInit() {

@@ -53,7 +53,9 @@ public interface ListingApi {
 			@ApiResponse(responseCode = "404", description = "Listing not found", content = @Content(mediaType = "application/json")),
 
 			@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
-	@RequestMapping(value = "/getlisting/{listing_id}", produces = { "application/json" }, method = RequestMethod.GET)
+	@RequestMapping(value = "/getlisting/{listing_id}",
+	produces = { "application/json" },
+	 method = {RequestMethod.GET,RequestMethod.POST})
 	ResponseEntity<Object> getlistingListingIdGet(
 			@Parameter(in = ParameterIn.PATH, description = "The unique ID of the listing to retrieve.", required = true, schema = @Schema()) @PathVariable("listing_id") String listingId);
 

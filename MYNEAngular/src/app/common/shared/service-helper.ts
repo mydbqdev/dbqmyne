@@ -9,6 +9,14 @@ export class ServiceHelper{
 
         return headers;
     }
+    public static filesHeaders(){
+        let headers:HttpHeaders = new HttpHeaders({
+            'Accept':'application/json',
+            'Content-Type':'multipart/form-data'
+        });
+
+        return headers;
+    }
 
     public static buildImportHeaders(){
         let headers:HttpHeaders = new HttpHeaders({

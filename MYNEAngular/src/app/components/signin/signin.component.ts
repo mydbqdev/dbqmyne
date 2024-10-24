@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/common/service/auth.service';
 import { User } from 'src/app/common/shared/user';
 import { ResponseStore } from 'src/app/common/models/response.model';
 import { DataService } from 'src/app/common/service/data.service';
+import { SignupDetails } from 'src/app/common/shared/signup-details';
 
 
 @Component({
@@ -52,10 +53,19 @@ export class SigninComponent implements OnInit {
 		//	this.error = 'Username or Password is required';
 		//}
 	}
+
 	loadInitialData(){
 	
 		this.authService.getUserSignupDetails(this.username.toLowerCase()).subscribe((data) => {
-		this.dataService.setUserDetails(data);
+		
+			let user:SignupDetails = new SignupDetails() ;
+			user.userId= data.id !=undefined?data.id:"";
+			user.userEmail= data.userEmail !=undefined?data.userEmail:"";
+			user.userFirstName= data.userFirstName !=undefined?data.userFirstName:"";
+			user.userLastName= data.userLastName !=undefined?data.userLastName:"";
+			user.zipCode= data.zipCode !=undefined?data.zipCode:"";
+
+			this.dataService.setUserDetails(user);
 
 		},error =>{
 		  if(error.status==403){

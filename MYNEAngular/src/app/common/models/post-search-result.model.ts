@@ -9,7 +9,7 @@ export class PostSearchResult {
     commentsCount:number;
     createdAt:string;
     updatedAt:string;
-    mediaDetails:MediaDetails[];
+    mediaDetails:MediaDetails[]=[];
 
     //listing objects
     listingId:string;
@@ -22,7 +22,7 @@ export class PostSearchResult {
     discount:boolean;
     discountAmount:number;
     pickupLocation:string;
-    mediaPaths:MediaDetails[];
+    mediaPaths:MediaDetails[]=[];
 }
 
 export class MediaDetails {

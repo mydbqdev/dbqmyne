@@ -94,16 +94,16 @@
               <div class="col-sm-1"><div class="img-circle elevation-2 profile-2">S</div></div>
               <div class="col-sm-11">
                   <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
-                    <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;"></textarea>
+                    <textarea class="form-control" placeholder="What's on your mind?" style="border:0px solid;" [(ngModel)]="postRequestModel.description" ></textarea>
                     <div id="imgSec" class="image-preview mb-3" *ngIf="previewUrl" [innerHtml]="data"></div>
                     <div id="emoSec"></div>
                   </div>
                   <div class="m-1 d-flex">
                     <div>
-                      <select class="form-control form-control-sm border-0">
-                        <option>Anywhere</option>
-                        <option>Only Friends</option>
-                        <option>Groups</option>
+                      <select class="form-control form-control-sm border-0" [(ngModel)]="postRequestModel.privacy">
+                        <option value="Anywhere" >Anywhere</option>
+                        <option value="Only Friends">Only Friends</option>
+                        <option value="Groups">Groups</option>
                       </select>
                     </div>
                     <div></div>
@@ -120,7 +120,7 @@
                           <a  routerLink="/home" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  routerLink="/home" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" >Post</button></div>
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost()" >Post</button></div>
                   </div>
               </div>
             </div>  

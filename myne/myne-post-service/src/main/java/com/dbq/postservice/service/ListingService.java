@@ -236,7 +236,10 @@ public class ListingService {
 	
     public List<ListingResponse> getListings(List<ListingCollection> listings) {
 		List<ListingResponse> list = new ArrayList<>();
+		
 					
+	//	List<String> userIds=listings.
+				
 		for (ListingCollection listing : listings) {
 			
 		ListingResponse response = new ListingResponse();

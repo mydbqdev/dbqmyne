@@ -23,6 +23,19 @@ export class AppService{
 
     }
 
+    public createPost(data:any) : Observable<any>{
+        const url1=this.basePath +'post/posts/save';
+        return this.httpclient.post<any>(
+            url1,
+            data,
+            {
+                headers:ServiceHelper.filesHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
+
     public getPostSearchResult(searchRequest:SearchRequest) : Observable<any>{
         const url1=this.basePath +'post/getPosts';
         return this.httpclient.post<any>(
@@ -50,7 +63,7 @@ export class AppService{
 
     
     public getListSearchResultDet(searchRequestId:string) : Observable<any>{
-        const url1=this.basePath +'/v1/post/getlisting/'+searchRequestId;
+        const url1=this.basePath +'post/getlisting/'+searchRequestId;
         return this.httpclient.post<any>(
             url1,
             '',
@@ -61,6 +74,7 @@ export class AppService{
             }
         );
     }
+
 
     private errorHandler(error:HttpErrorResponse){
         return of(error.message || "server error");

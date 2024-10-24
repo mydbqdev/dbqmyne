@@ -112,6 +112,7 @@
         <div>
           <div class="card-deck">
             <div class="card" style="cursor: pointer;" *ngFor="let listingRes of listingResult;">
+             <div *ngIf="listingRes.listingId">
               <a routerLink="/listing-det/{{listingRes.listingId}}" style="color: #000;">
                 <div *ngIf= "listingRes.mediaPaths.length>0" >
                     <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
@@ -125,6 +126,21 @@
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
               </a>
+            </div>
+
+            <div *ngIf="!listingRes.listingId">
+                <div *ngIf= "listingRes.mediaPaths.length>0" >
+                    <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
+                    <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
+                          <video id="myVideo1" controls="true" loop="true" width="300" height="200" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
+                    </div>
+                </div>
+              <div class="card-body" style="padding:0px;">
+                <div style="font-weight: 400;">{{listingRes.description}}</div>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+
             </div>
           </div>
         </div>

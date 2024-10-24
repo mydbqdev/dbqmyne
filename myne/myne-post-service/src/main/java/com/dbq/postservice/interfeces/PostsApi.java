@@ -47,7 +47,7 @@ public interface PostsApi {
 	        produces = { "application/json" }, 
 	        consumes = {"multipart/form-data"}, 
 	        method = RequestMethod.POST)
-	    ResponseEntity<Object> savePosts(@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=true, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
+	    ResponseEntity<Object> savePosts(@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=false, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
 	    		@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @RequestParam("postInfo") @Valid String body
 	);
 

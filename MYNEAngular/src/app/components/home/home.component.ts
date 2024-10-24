@@ -12,6 +12,8 @@ import { SearchRequest } from 'src/app/common/models/search-request.model';
 import { AppService } from 'src/app/common/service/application.service';
 import { NotificationService } from 'src/app/common/shared/message/notification.service';
 import { PostSearchResult } from 'src/app/common/models/post-search-result.model';
+import { PostRequestModel } from 'src/app/common/models/post-request.model';
+import { SignupDetails } from 'src/app/common/shared/signup-details';
 
 export interface DummyJsonResponse {
 	products: Product[];
@@ -44,15 +46,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	fileData: File = null;
 		 previewUrl:any = null;
 		 previewUrl2:any = null;
-
+    files:File[]=[];
      public paginator$: Observable<ProductsPaginator>;
      public loading$ = new BehaviorSubject(true);
 	 private page$ = new BehaviorSubject(1);
 	 public postSearchResult:PostSearchResult[]=[];
 	 searchRequest:SearchRequest=new SearchRequest();
+	 postRequestModel:PostRequestModel=new PostRequestModel();
+
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
-
+	userInfo:SignupDetails=new SignupDetails();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -82,6 +86,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		}
+		)
+	 this.postRequestModel.privacy= 'Anywhere';
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -89,6 +98,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 
 	onFileChanged(event,id:number) {
+		this.files=[];
 		this.previewUrl=false;
 		this.previewUrl2=false;
 		this.data="";
@@ -103,6 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 	data: any="";
 	data2: any="";
+	
 	preview(id) {
 		// Show preview 
 		var mimeType = this.fileData.type;
@@ -111,6 +122,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		}
 		var reader = new FileReader();      
 		reader.readAsDataURL(this.fileData); 
+		this.files.push(this.fileData);
 		reader.onload = (_event) => { 
 			if(id==1){
 		        this.previewUrl2=false;
@@ -204,4 +216,59 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	delete(id:number){
 		alert("delete");
 	}
+	
+	createPost(){
+		this.postRequestModel.userId=this.userInfo.userId;
+		this.postRequestModel.zipCode=this.userInfo.zipCode;
+
+		let postInfo=JSON.stringify(this.postRequestModel)
+		
+		const formData =  new  FormData();   
+		for  (var i =  0; i <  this.files.length; i++)  { 
+			formData.append("files",  this.files[i]);  
+		 } 
+		 if(this.files.length==0){
+	
+			formData.append("files",{} as File);
+			
+
+		 }
+		 formData.append('postInfo', postInfo );
+		
+		this.appService.createPost(formData).subscribe((data: any) => {
+		 if(data.length >0){
+		   this.postSearchResult = Object.assign([],data);
+		 }
+		 this.spinner.hide();
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		
+	 }
 }
