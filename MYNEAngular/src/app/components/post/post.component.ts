@@ -8,6 +8,10 @@ import { DefMenu } from 'src/app/common/shared/def-menu';
 import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
 import { DataService } from 'src/app/common/service/data.service';
+import { AppService } from 'src/app/common/service/application.service';
+import { NotificationService } from 'src/app/common/shared/message/notification.service';
+import { SearchRequest } from 'src/app/common/models/search-request.model';
+import { PostSearchResult } from 'src/app/common/models/post-search-result.model';
 @Component({
 	selector: 'app-post-search',
 	templateUrl: './post.component.html',
@@ -21,11 +25,14 @@ export class PostComponent implements OnInit, AfterViewInit {
 	fileData: File = null;
 		 previewUrl:any = null;
 		 previewUrl2:any = null;
+	public postSearchResult:PostSearchResult[]=[];	
+	public postSearchResultDt:PostSearchResult[]=[];
+	searchText:string="";	 
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
-
+	searchRequest:SearchRequest=new SearchRequest();
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
-		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
+		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
@@ -52,6 +59,13 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.dataService.$topSearch.subscribe(
+			dt=>this.searchText=dt
+		);
+
+		this.dataService.$postSearchResult.subscribe(
+			dt=>this.postSearchResultDt=dt
+		);
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -97,7 +111,47 @@ export class PostComponent implements OnInit, AfterViewInit {
 	isSaleSelect(iss:boolean){
 		this.dataService.setIsSale(iss);
 	  }
-	searchPost(){
+	searchPost(event){
+       console.info("serch :"+event.target.value);
+	   this.dataService.setTopSearch(event.target.value);
+	   // api post searrch
+	   this.searchRequest.filterType="recent";
+		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageSize=10;
+		this.searchRequest.zipCode="123456";
+	   this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
+		if(data.length >0){
+		  this.postSearchResult = Object.assign([],data);
+		}
+		this.spinner.hide();
+	  },error =>{
+		this.spinner.hide();
+		if(error.status==403){
+		  this.router.navigate(['/forbidden']);
+		}else  if (error.error && error.error.message) {
+		  this.errorMsg =error.error.message;
+		  console.log("Error:"+this.errorMsg);
+		  this.notifyService.showError(this.errorMsg, "");
+		  this.spinner.hide();
+		} else {
+		  this.spinner.hide();
+		  if(error.status==500 && error.statusText=="Internal Server Error"){
+			this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		  }else{
+			let str;
+			  if(error.status==400){
+			  str=error.error;
+			  }else{
+				str=error.message;
+				str=str.substring(str.indexOf(":")+1);
+			  }
+			  console.log("Error:"+str);
+			  this.errorMsg=str;
+		  }
+		  if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		}
+	  });
+	    this.dataService.setPostSearchResult(this.postSearchResult);
 		this.router.navigateByUrl('/post-search');
 	}
 }

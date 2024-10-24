@@ -11,7 +11,7 @@
       <div class="container-fluid form-group" style="padding: 40px 15px 5px 15px;">
         <div class="input-group">
         <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;border-top-left-radius: 5px;border-bottom-left-radius: 5px;"><img src="assets/images/myne-smll-logo-f.png" alt="logo" style="height: 25px;"></span>
-        <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"  (keydown.enter)="searchPost()"/>
+        <input type="text" class="form-control" [(ngModel)]="searchText" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;border-top-right-radius: 5px;border-bottom-right-radius: 5px;" placeholder="Search for electronics"  (keydown.enter)="searchPost($event)"/>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
             <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
         </div>
       </div>
-           
+      <div *ngFor="let postSearchResultDt of postSearchResultDt">     
       <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
@@ -98,21 +98,21 @@
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">M</div></div>
                   <div class="col-sm-11">
                     <div class="d-flex">
-                       <div><div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div></div>
+                       <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">{{postSearchResultDt.createdAt}}</span></div></div>
                        <div class="ml-auto"></div>
                     </div>
                     
-                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore,{{postSearchResultDt.zipCode}}</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div class="d-flex">
-                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
+                        <div>{{postSearchResultDt.description}}</div>
                         <div class="ml-auto" style="width: 120px;padding-left: 10px;">
                          <img src="assets/images/myne-logo.svg" alt="logo">
                         </div>
                        </div>
                     </div>
                     <div class="d-flex">
-                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
+                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
                     </div>
                   </div>
@@ -120,6 +120,8 @@
           </div>
         </div>
       </div> 
+      </div>
+
       <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">

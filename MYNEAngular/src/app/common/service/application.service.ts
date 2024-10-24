@@ -5,6 +5,8 @@ import { BASE_PATH } from '../shared/variables';
 import { Observable, of} from 'rxjs';
 import { Router } from '@angular/router';
 import { AESEncryptDecryptHelper } from '../shared/AESEncryptDecryptHelper';
+import { ServiceHelper } from '../shared/service-helper';
+import { SearchRequest } from '../models/search-request.model';
 @Injectable({
     providedIn:'root'
 })
@@ -21,6 +23,18 @@ export class AppService{
 
     }
 
+    public getPostSearchResult(searchRequest:SearchRequest) : Observable<any>{
+        const url1=this.basePath +'post/getPosts';
+        return this.httpclient.post<any>(
+            url1,
+            searchRequest,
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
     
 
     private errorHandler(error:HttpErrorResponse){

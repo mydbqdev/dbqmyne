@@ -6,6 +6,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/common/service/user.service';
 import { AuthService } from 'src/app/common/service/auth.service';
 import { DataService } from 'src/app/common/service/data.service';
+import { SearchRequest } from 'src/app/common/models/search-request.model';
+import { AppService } from 'src/app/common/service/application.service';
+import { NotificationService } from 'src/app/common/shared/message/notification.service';
+import { PostSearchResult } from 'src/app/common/models/post-search-result.model';
 
 @Component({
 	selector: 'app-listing',
@@ -22,9 +26,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	isSaleSelect:boolean=true;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
-
+	public postSearchResult:PostSearchResult[]=[];
+	searchRequest:SearchRequest=new SearchRequest();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
-		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
+		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
@@ -99,7 +104,47 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	isSalSelect(iss:boolean){
 		this.dataService.setIsSale(iss);
 	  }
-	searchPost(){
-		this.router.navigateByUrl('/post-search');
-	}
+	  searchPost(event){
+		console.info("serch :"+event.target.value);
+		this.dataService.setTopSearch(event.target.value);
+		// api post searrch
+		this.searchRequest.filterType="recent";
+		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageSize=10;
+		this.searchRequest.zipCode="123456";
+		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
+		 if(data.length >0){
+		   this.postSearchResult = Object.assign([],data);
+		 }
+		 this.spinner.hide();
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
+	 }
 }
