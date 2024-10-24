@@ -2,18 +2,15 @@ package com.dbq.postservice.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,12 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dbq.postservice.db.model.ListingCollection;
 import com.dbq.postservice.dto.ListingBody;
 import com.dbq.postservice.dto.ListingResponse;
-import com.dbq.postservice.dto.MediaDetailsForRequest;
 import com.dbq.postservice.interfeces.ListingApi;
 import com.dbq.postservice.service.ListingService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import lombok.RequiredArgsConstructor;
+
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-18T08:00:26.821343862Z[GMT]")
 @RestController
@@ -34,31 +32,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ListingController implements ListingApi {
 
-	@Autowired
-	private ListingService listingService;
-	@Autowired
-
-	private static final Logger log = LoggerFactory.getLogger(AdsApiController.class);
-
-	private final ObjectMapper objectMapper;
-
-	private final HttpServletRequest request;
+	private static final Logger log = LoggerFactory.getLogger(ListingController.class);
+    private Gson gson = new GsonBuilder().create();
+   
+	private final ListingService listingService;
+    private final ModelMapper modelMapper;
 
 
 	@Override
-	public ResponseEntity<Object> listingsuserIdSavePost(String userId, ListingBody body) {
-
-		ResponseEntity<Object> entity = null;
+	public ResponseEntity<Object> listingsuserIdSavePost(MultipartFile[] files, String body) {
 
 		try {
-			
-			entity = new ResponseEntity<Object>(listingService.createListing(userId, body), HttpStatus.OK) {
-			};
-			return entity;
+			ListingBody pbody = gson.fromJson(body,ListingBody.class);		
+			return new ResponseEntity<Object>(listingService.createListing(files, pbody), HttpStatus.OK) {};
 		} catch (Exception e) {
 			log.error("Couldn't serialize response for content type application/json", e);
 			return new ResponseEntity<Object>(e, HttpStatus.BAD_REQUEST);
-
 		}
 
 	}

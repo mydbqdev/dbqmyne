@@ -34,6 +34,9 @@ public interface S3StorageClient {
     
     @GetMapping("/download/{bucketName}/{id}")
     ResponseEntity<Void> downloadFile(@PathVariable  String bucketName,@PathVariable  String id);
- 
+    
+    @PostMapping(value = "/upload/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<MediaUrlDetails> uploadFile(@PathVariable String postId,@RequestPart("file") MultipartFile file);
+
     
 }
