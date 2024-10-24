@@ -41,7 +41,7 @@ public class UserService {
     	 if(userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
     		
     		 
-    		 String listData = "{\"message\":\"User already exists with the provided email address" + "\"}";
+    		 String listData = "{\"error\":\"User already exists with the provided email address" + "\"}";
     		 
     		 return  new ResponseEntity<Object>(listData,HttpStatus.BAD_REQUEST);
     	}else {

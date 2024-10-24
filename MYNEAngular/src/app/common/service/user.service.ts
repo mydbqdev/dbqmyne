@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserInfo } from '../shared/model/userinfo.service';
+import { SignupDetails } from '../shared/signup-details';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class UserService {
   }
   public username :string;
   public dbquser:boolean;
-  public userinfo:UserInfo;
+  //public userinfo:UserInfo;
+  public userinfo:SignupDetails;
 
   getDbquser(){
       return this.dbquser;
@@ -32,7 +34,7 @@ export class UserService {
       return this.userinfo;
   }
 
-  setUserinfo(_userinfo:UserInfo){
+  setUserinfo(_userinfo:SignupDetails){
       this.userinfo=_userinfo;
   }
   

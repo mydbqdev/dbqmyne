@@ -11,6 +11,7 @@ import { AESEncryptDecryptHelper } from '../shared/AESEncryptDecryptHelper';
 import { User } from '../shared/user';
 import { UserService } from './user.service';
 import { ResponseStore } from '../models/response.model';
+import { SignupDetails } from '../shared/signup-details';
 
 @Injectable()
 export class AppAuthService extends AuthService{
@@ -63,6 +64,19 @@ export class AppAuthService extends AuthService{
             }
         );
     }
+    public signupUser(user:SignupDetails) : Observable<any>{
+        const url1=this.basePath +'auth/register';
+        return this.httpclient.post<any>(
+            url1,
+            user,
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
+    
 
      public checkLoginUserOnServer() : Observable<ApplicationSession>{
          const url1=this.basePath +'checkLoginUser';
@@ -76,6 +90,8 @@ export class AppAuthService extends AuthService{
              }
          );
      }
+  
+     
 
      public checkLoginUser() : void{
          var msg:string;
@@ -120,6 +136,42 @@ export class AppAuthService extends AuthService{
         
      }
 
+     public getUserDetails() : void{
+        var msg:string;
+        this.sessionSnapshot =null;
+        this.message ='';
+        this.checkLoginUserOnServer().subscribe(
+            (result)=>{
+               this.sessionSnapshot = result;
+               this.sessionSnapshot.username = result.userEmail;
+               this.sessionSnapshot.token = result.token;
+               this.userService.setUsername(result.userEmail);
+              // this.userService.setUserinfo(result);
+               this.userService.setDbquser(true);
+
+               let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
+               this.setSessionStore(resp);
+            },
+            (err) =>{
+               if(err.error && err.error.message){
+                   msg=err.error.message;
+               }else{
+               msg='An error occured while processing your request.Please contact your Help Desk.';
+               }
+               this.message=msg;
+               this.router.navigateByUrl('/signin');
+            },
+            () =>{
+                if(!this.sessionSnapshot){
+                   msg='An error occured while processing your request.Please contact your Help Desk.';
+                   this.message=msg;
+                   this.router.navigateByUrl('/signin');
+                }
+            }
+        );
+       
+    }
+
      public checkLoginUserVlidaate() : void{
         var msg:string;
         this.sessionSnapshot =null;
@@ -130,7 +182,7 @@ export class AppAuthService extends AuthService{
                this.sessionSnapshot.username = result.userEmail;
                this.sessionSnapshot.token = result.token;
                this.userService.setUsername(result.userEmail);
-               this.userService.setUserinfo(result);
+              // this.userService.setUserinfo(result);
                this.userService.setDbquser(true);
 
                let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
@@ -197,8 +249,19 @@ export class AppAuthService extends AuthService{
         );
        
     }
-    
-    
+
+    public getUserSignupDetails(data:any) : Observable<any>{
+        const url1=this.basePath +'user/getUserByUserEmail?userEmail='+data;
+        return this.httpclient.post<any>(
+            url1,
+            "",
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
     private errorHandler(error:HttpErrorResponse){
         return of(error.message || "server error");
         

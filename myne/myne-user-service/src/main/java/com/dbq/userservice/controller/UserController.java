@@ -43,9 +43,8 @@ public class UserController {
     }
 
    
-
-    @GetMapping("/getUserByUserEmail/{userEmail}")
-    public ResponseEntity<User> getUserByUserEmail(@PathVariable String userEmail) {
+    @RequestMapping(value = "/getUserByUserEmail", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<User> getUserByUserEmail(@RequestParam String userEmail) {
         return ResponseEntity.ok(modelMapper.map(userService.getUserByUserEmail(userEmail), User.class));
     }
 

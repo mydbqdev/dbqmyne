@@ -2,6 +2,7 @@ import { Observable, of} from 'rxjs';
 import { ResponseStore } from '../models/response.model';
 import { ApplicationSession } from '../shared/model/application-session';
 import { User } from '../shared/user';
+import { SignupDetails } from '../shared/signup-details';
 /*
 @Injectable({
 	providedIn: 'root'
@@ -55,7 +56,9 @@ export abstract class AuthService {
     public getAuthUser(user:User) : Observable<any>{
         return of(true);
     }
-    
+    public getUserSignupDetails(data:any) : Observable<any>{
+        return of(true);
+    }
      public checkLoginUser() : void{
 	 }
 	 public checkLoginUserVlidaate() :void{}
@@ -63,6 +66,8 @@ export abstract class AuthService {
      public checkLogout() : void{
 	}
 	setSessionStore(res: ResponseStore):void{}
-
+	public signupUser(user:SignupDetails) : Observable<any>{
+        return of(true);
+    }
 	
 }
