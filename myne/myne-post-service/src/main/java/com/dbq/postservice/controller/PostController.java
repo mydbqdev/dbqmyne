@@ -94,7 +94,6 @@ public class PostController implements PostsApi {
 	
 	@Override
 	public ResponseEntity<Object> updatePosts(String userId, String postId, MultipartFile[] files, @Valid String body) {
-	//public ResponseEntity<Object> updatePosts(String userId, String postId, @Valid PostsBody body) {
 		ResponseEntity<Object> entity =null;
 
 	    try {
