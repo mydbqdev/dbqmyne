@@ -125,6 +125,17 @@ public class PostController implements PostsApi {
 	    }
 	   }
 
+	public ResponseEntity<List<PostsResponse>> searchPosts(@RequestBody PostsFilterDto postsFilter) {
+        try {
+            List<PostsResponse> response = postService.getPostsbysearch(postsFilter);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+	
 
    
 }

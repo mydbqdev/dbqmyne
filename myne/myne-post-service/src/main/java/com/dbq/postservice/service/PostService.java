@@ -9,17 +9,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.data.domain.Pageable;
 
 import com.dbq.postservice.client.S3StorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
@@ -99,6 +100,40 @@ public class PostService {
 	            postRepository.save(savedPost);
 	        }
 	    }
+	    
+	    
+	    
+	    
+	    public List<PostsResponse> getPostsbysearch(PostsFilterDto postsFilter) {
+	        List<PostsResponse> list = new ArrayList<>();
+	        List<PostCollection> posts = new ArrayList<>();
+
+	        Pageable pageable = PageRequest.of(postsFilter.getPageIndex(), postsFilter.getPageSize());
+
+	        switch (postsFilter.getFilterType()) {
+	            case "posts":
+	            	if (postsFilter.getSearchContent() == null || postsFilter.getSearchContent().trim().isEmpty()) {
+	       			 
+	    	            throw new IllegalArgumentException("Search term cannot be null or empty");
+	    	            
+	    	        }
+	    		 String titlefinal = Pattern.quote(postsFilter.getSearchContent().trim());
+	    		 
+	                posts = postRepository.findByPostsbytitle(titlefinal, pageable);
+	                break;
+	            default:
+	                posts = postRepository.findAll(pageable).getContent();
+	                break;
+	        }
+
+	        // Check if posts are not empty before processing
+	        if (!posts.isEmpty()) {
+	            list = getPostsAds(posts);
+	        }
+
+	        return list;
+	    }
+	    
 	    
 	    public List<PostsResponse> getPosts(PostsFilterDto postsFilter) {
 	    	

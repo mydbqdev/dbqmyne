@@ -41,11 +41,11 @@ public class ListingBody {
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
 	private String description = null;
 
-	@JsonProperty("isFree")
+	@JsonProperty("free")
 
 	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private Boolean isFree = null;
+	private Boolean free = null;
 
 	@JsonProperty("price")
 
@@ -59,11 +59,11 @@ public class ListingBody {
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
 	private String condition = null;
 
-	@JsonProperty("isDiscount")
+	@JsonProperty("discount")
 
 	@JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
 	@JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
-	private Boolean isDiscount = null;
+	private Boolean discount = null;
 
 	@JsonProperty("discountAmount")
 
@@ -121,12 +121,12 @@ public class ListingBody {
 		this.category = category;
 	}
 
-	public Boolean getIsFree() {
-		return isFree;
+	public Boolean getFree() {
+		return free;
 	}
 
-	public Boolean getIsDiscount() {
-		return isDiscount;
+	public Boolean getDiscount() {
+		return discount;
 	}
 
 	public ListingBody zipCode(String zipCode) {
@@ -195,9 +195,9 @@ public class ListingBody {
 		this.description = description;
 	}
 
-	public ListingBody isFree(Boolean isFree) {
+	public ListingBody free(Boolean free) {
 
-		this.isFree = isFree;
+		this.free = free;
 		return this;
 	}
 
@@ -209,12 +209,12 @@ public class ListingBody {
 
 	@Schema(example = "false", description = "Indicates if the item is free")
 
-	public Boolean isIsFree() {
-		return isFree;
+	public Boolean isfree() {
+		return free;
 	}
 
-	public void setIsFree(Boolean isFree) {
-		this.isFree = isFree;
+	public void setfree(Boolean isFree) {
+		this.free = isFree;
 	}
 
 	public ListingBody price(Float price) {
@@ -261,9 +261,9 @@ public class ListingBody {
 		this.condition = condition;
 	}
 
-	public ListingBody isDiscount(Boolean isDiscount) {
+	public ListingBody discount(Boolean discount) {
 
-		this.isDiscount = isDiscount;
+		this.discount = discount;
 		return this;
 	}
 
@@ -275,12 +275,12 @@ public class ListingBody {
 
 	@Schema(example = "true", description = "Indicates if there is a discount")
 
-	public Boolean isIsDiscount() {
-		return isDiscount;
+	public Boolean isdiscount() {
+		return discount;
 	}
 
-	public void setIsDiscount(Boolean isDiscount) {
-		this.isDiscount = isDiscount;
+	public void setciscount(Boolean discount) {
+		this.discount = discount;
 	}
 
 	public ListingBody discountAmount(Double discountAmount) {
@@ -416,9 +416,9 @@ public class ListingBody {
 		ListingBody ListingBody = (ListingBody) o;
 		return Objects.equals(this.zipCode, ListingBody.zipCode) && Objects.equals(this.title, ListingBody.title)
 				&& Objects.equals(this.description, ListingBody.description)
-				&& Objects.equals(this.isFree, ListingBody.isFree) && Objects.equals(this.price, ListingBody.price)
+				&& Objects.equals(this.free, ListingBody.free) && Objects.equals(this.price, ListingBody.price)
 				&& Objects.equals(this.condition, ListingBody.condition)
-				&& Objects.equals(this.isDiscount, ListingBody.isDiscount)
+				&& Objects.equals(this.discount, ListingBody.discount)
 				&& Objects.equals(this.discountAmount, ListingBody.discountAmount)
 				&& Objects.equals(this.mediaPaths, ListingBody.mediaPaths)
 				&& Objects.equals(this.createdAt, ListingBody.createdAt)
@@ -428,8 +428,8 @@ public class ListingBody {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash( zipCode, title, description, isFree, price, condition,
-				isDiscount, discountAmount, mediaPaths, createdAt, updatedAt, pickupLocation);
+		return Objects.hash( zipCode, title, description, free, price, condition,
+				discount, discountAmount, mediaPaths, createdAt, updatedAt, pickupLocation);
 	}
 
 	@Override
@@ -440,10 +440,10 @@ public class ListingBody {
 		sb.append("    zipCode: ").append(toIndentedString(zipCode)).append("\n");
 		sb.append("    title: ").append(toIndentedString(title)).append("\n");
 		sb.append("    description: ").append(toIndentedString(description)).append("\n");
-		sb.append("    isFree: ").append(toIndentedString(isFree)).append("\n");
+		sb.append("    isFree: ").append(toIndentedString(free)).append("\n");
 		sb.append("    price: ").append(toIndentedString(price)).append("\n");
 		sb.append("    condition: ").append(toIndentedString(condition)).append("\n");
-		sb.append("    isDiscount: ").append(toIndentedString(isDiscount)).append("\n");
+		sb.append("    isDiscount: ").append(toIndentedString(discount)).append("\n");
 		sb.append("    discountAmount: ").append(toIndentedString(discountAmount)).append("\n");
 		sb.append("    mediaPaths: ").append(toIndentedString(mediaPaths)).append("\n");
 		sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
