@@ -37,6 +37,11 @@ public class PostsFilterDto {
     @JsonSetter(nulls = Nulls.FAIL)
     private String zipCode = null;
 
+    @JsonProperty("searchContent")
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonSetter(nulls = Nulls.FAIL)
+    private String searchContent = null;
+
     public PostsFilterDto filterType(String filterType) {
         this.filterType = filterType;
         return this;
@@ -93,6 +98,20 @@ public class PostsFilterDto {
         this.zipCode = zipCode;
     }
 
+    public PostsFilterDto searchContent(String searchContent) {
+        this.searchContent = searchContent;
+        return this;
+    }
+
+    @Schema(example = "example search", description = "Content to search within posts.")
+    public String getSearchContent() {
+        return searchContent;
+    }
+
+    public void setSearchContent(String searchContent) {
+        this.searchContent = searchContent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,12 +120,13 @@ public class PostsFilterDto {
         return Objects.equals(filterType, that.filterType) &&
                Objects.equals(pageIndex, that.pageIndex) &&
                Objects.equals(pageSize, that.pageSize) &&
-               Objects.equals(zipCode, that.zipCode);
+               Objects.equals(zipCode, that.zipCode) &&
+               Objects.equals(searchContent, that.searchContent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filterType, pageIndex, pageSize, zipCode);
+        return Objects.hash(filterType, pageIndex, pageSize, zipCode, searchContent);
     }
 
     @Override
@@ -117,6 +137,7 @@ public class PostsFilterDto {
         sb.append("    pageIndex: ").append(toIndentedString(pageIndex)).append("\n");
         sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
         sb.append("    zipCode: ").append(toIndentedString(zipCode)).append("\n");
+        sb.append("    searchContent: ").append(toIndentedString(searchContent)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import com.dbq.postservice.db.model.ListingCollection;
 import com.dbq.postservice.db.repository.AdsRepository;
 import com.dbq.postservice.db.repository.ListingRepository;
 import com.dbq.postservice.dto.ListingBody;
+import com.dbq.postservice.dto.ListingFilterDto;
 import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.dto.MediaUrlDetails;
 
@@ -50,9 +54,9 @@ public class ListingService {
 			listingCollection.setCondition(model.getCondition());
 			listingCollection.setZipCode(model.getZipCode());
 			listingCollection.setDescription(model.getDescription());
-			listingCollection.setDiscount(model.isIsDiscount());
+			listingCollection.setDiscount(model.getDiscount());
 			listingCollection.setDiscountAmount(model.getDiscountAmount());
-			listingCollection.setFree(model.isIsFree());
+			listingCollection.setFree(model.getFree());
 			listingCollection.setPickupLocation(model.getPickupLocation());
 			listingCollection.setPrice(model.getPrice());
 			listingCollection.setTitle(model.getTitle());
@@ -127,9 +131,9 @@ public class ListingService {
 
 			// Update the post's fields
 			post.setDescription(body.getDescription());
-			post.setFree(body.getIsFree());
+			post.setFree(body.getFree());
 			post.setPrice(body.getPrice());
-			post.setDiscount(body.getIsDiscount());
+			post.setDiscount(body.getDiscount());
 			post.setDiscountAmount(body.getDiscountAmount());
 			post.setPickupLocation(body.getPickupLocation());
 
@@ -152,53 +156,107 @@ public class ListingService {
 		return listingRepository.findByListingId(listingId);
 	}
 
-//	public List<ListingResponse> getListings(String filterType, String category, Boolean isFree, Boolean isDiscount,
-//			Integer pageIndex, Integer pageSize, String searchTerm) {
-//		List<ListingResponse> listings = listingRepository.findListings(category, isFree, isDiscount, searchTerm);
-//		return listings;
-//	}
 	
-	public List<ListingResponse> getListings(String filterType, String category, Boolean isFree, Boolean isDiscount,
-            Integer pageIndex, Integer pageSize, String searchTerm) {
-		List<ListingResponse> listings = new ArrayList<>();
+	public List<ListingCollection> getListingsbysearchterm(String title) {
 		
-	//	List<ListingCollection> allListings = listingRepository.findListings(category, isFree, isDiscount, searchTerm);
+		 if (title == null || title.trim().isEmpty()) {
+			 
+	            throw new IllegalArgumentException("Search term cannot be null or empty");
+	            
+	        }
+		 String titlefinal = Pattern.quote(title.trim());
+		 
+	    List<ListingCollection> listings = listingRepository.findByListingtitle(titlefinal);
+	         
+	    return listings;
+	}
+	
+	
+	public List<ListingCollection>  getListingsbyforfree(String title) {
+		 if (title == null || title.trim().isEmpty()) {
+			 
+	            throw new IllegalArgumentException("Search term cannot be null or empty");
+	            
+	        }
+		 String titlefinal = Pattern.quote(title.trim());
+		 
+		List<ListingCollection> listings = listingRepository.findByListingtitle(titlefinal);
 		
-		List<ListingCollection> allListings = listingRepository.findAll();
-		int count = allListings.size();
-		pageSize = pageSize > 0 ? pageSize-1 : 0;
-		
-		int startIndex = pageIndex * pageSize;
-		
-		if (startIndex >= count) {
 		return listings;
+		  
+	}
+	
+    public List<ListingResponse> getListings(ListingFilterDto listingFilter) {
+    	
+    	List<ListingResponse> list = new ArrayList<ListingResponse>();
+    	List<ListingCollection> posts = new ArrayList<ListingCollection>();
+    	
+    	Pageable pageable = PageRequest.of(listingFilter.getPageIndex(), listingFilter.getPageSize());
+    	
+    	switch (listingFilter.getListingType()) {
+	
+    	case "forFree":
+    		
+    		if("yourlistings".equals(listingFilter.getFilterType()) && !"".equals(listingFilter.getUserId()) && null!=listingFilter.getUserId()   ){
+    			
+                posts = listingRepository.findFreeListingsByUserId(listingFilter.getUserId(), pageable);
+    		}else 
+   			 posts = listingRepository.findAllFreeListings(pageable) ;		
+    		break;
+    		
+		case "forSale":
+				
+			if("yourlistings".equals(listingFilter.getFilterType()) && !"".equals(listingFilter.getUserId()) && null!=listingFilter.getUserId()   ){
+    			
+                posts = listingRepository.findNotFreeListingsByUserId(listingFilter.getUserId(), pageable);
+
+    		}else 			
+			 posts = listingRepository.findAllNotFreeListings(pageable);		
+			break;
+			
+		case "discount":
+			if("yourlistings".equals(listingFilter.getFilterType()) && !"".equals(listingFilter.getUserId()) && null!=listingFilter.getUserId()   ){
+    			
+                posts = listingRepository.findDiscountedListingsByUserId(listingFilter.getUserId(), pageable);
+
+    		}else 			
+			 posts = listingRepository.findAllNotFreeListings(pageable);		
+			break;
+			
+		default:
+			
+    		posts = listingRepository.findAll(pageable).getContent();		
+			break;
 		}
-		
-		int endIndex = Math.min(startIndex + pageSize, count);
-		
-		List<ListingCollection> paginatedListings = allListings.subList(startIndex, endIndex);
-		
-		List<String> userIds =paginatedListings.stream().map(d->d.getCreatorId()).toList();
-		
-		
-		for (ListingCollection listing : paginatedListings) {
+    	
+    	list=getListings(posts);
+
+        return list; 
+    }
+	
+    public List<ListingResponse> getListings(List<ListingCollection> listings) {
+		List<ListingResponse> list = new ArrayList<>();
+					
+		for (ListingCollection listing : listings) {
+			
 		ListingResponse response = new ListingResponse();
+		
 		response.setListingId(listing.getListingId());
 		response.setCreatorId(listing.getCreatorId());
 		response.setCreatorName(listing.getCreatorName());
 		response.setZipCode(listing.getZipCode());
 		response.setTitle(listing.getTitle());
 		response.setDescription(listing.getDescription());
-		response.setIsFree(listing.isFree());
+		response.setFree(listing.isFree());
 		response.setPrice(listing.getPrice());
 		response.setCondition(listing.getCondition());
-		response.setIsDiscount(listing.isDiscount());
+		response.setdiscount(listing.isDiscount());
 		response.setDiscountAmount(listing.getDiscountAmount());
 		response.setMediaPaths(listing.getMediaPaths());
 		response.setCreatedAt(listing.getCreatedAt());
 		response.setPickupLocation(listing.getPickupLocation());
 		
-		listings.add(response);
+		list.add(response);
 		}
 		
 		List<AdsCollection> ads= adsRepository.findAll();
@@ -218,11 +276,10 @@ public class ListingService {
 			   
 		}
 		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt()))
-			listings.add(adsres);
+			list.add(adsres);
 		
-		Collections.shuffle(listings);
+		Collections.shuffle(list);
 		
-		return listings; 
+		return list; 
 		}
-
 }

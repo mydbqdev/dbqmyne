@@ -5,8 +5,9 @@
  */
 package com.dbq.postservice.interfeces;
 
+import java.util.List;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -95,7 +96,7 @@ public interface PostsApi {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
     @RequestMapping(value = "/posts/{userId}/{postId}",
         produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
+        		 method = {RequestMethod.DELETE,RequestMethod.POST})
     ResponseEntity<Object> deletePosts(@Parameter(in = ParameterIn.PATH, description = "Allows a user to delete an existing listing .", required=true, schema=@Schema()) @PathVariable("userId") String userId
 , @Parameter(in = ParameterIn.PATH, description = "The ID of the post to delete", required=true, schema=@Schema()) @PathVariable("postId") String postId
 );
@@ -113,7 +114,7 @@ public interface PostsApi {
     @RequestMapping(value = "/posts/{userId}/{postId}",
         produces = { "application/json" }, 
          consumes = {"multipart/form-data"}, 
-        method = RequestMethod.PUT)
+        		 method = {RequestMethod.PUT,RequestMethod.POST})
     ResponseEntity<Object> updatePosts(@Parameter(in = ParameterIn.PATH, description = "The ID of the user updating the post.", required=true, schema=@Schema()) @PathVariable("userId") String userId
 , @Parameter(in = ParameterIn.PATH, description = "The ID of the post to update", required=true, schema=@Schema()) @PathVariable("postId") String postId,
 @Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=true, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
@@ -137,6 +138,20 @@ public interface PostsApi {
 , @Parameter(in = ParameterIn.PATH, description = "The ID of the post to update", required=true, schema=@Schema()) @PathVariable("postId") String postId
 );
  
+    @Operation(summary = "Search for posts", 
+            description = "Retrieves posts based on the provided filter criteria.", 
+            tags = { "Post Controller" })
+ @ApiResponses(value = {
+     @ApiResponse(responseCode = "200", description = "Posts retrieved successfully", content = @Content(mediaType = "application/json")),
+     @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
+     @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
+ @RequestMapping(value = "/posts/search", 
+                 produces = { "application/json" }, 
+                 method = {RequestMethod.GET,RequestMethod.POST})
+ ResponseEntity<List<PostsResponse>> searchPosts(
+     @Parameter(description = "Filter criteria for retrieving posts.", required = true, schema = @Schema(implementation = PostsFilterDto.class)) 
+     @RequestBody PostsFilterDto postsFilter);
+
 
 }
 

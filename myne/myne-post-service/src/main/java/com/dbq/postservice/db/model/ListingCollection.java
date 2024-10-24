@@ -29,10 +29,10 @@ public class ListingCollection {
 	private String zipCode;
 	private String title;
 	private String description;
-	private boolean isFree;
+	private boolean free;
 	private double price;
 	private String condition;
-	private boolean isDiscount;
+	private boolean discount;
 	private double discountAmount;
 	private List<MediaUrlDetails> mediaPaths = new ArrayList<MediaUrlDetails>() ;
 	private String createdAt;

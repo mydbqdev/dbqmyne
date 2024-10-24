@@ -3,7 +3,6 @@ package com.dbq.postservice.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -11,12 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.db.model.ListingCollection;
 import com.dbq.postservice.dto.ListingBody;
+import com.dbq.postservice.dto.ListingFilterDto;
 import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.interfeces.ListingApi;
 import com.dbq.postservice.service.ListingService;
@@ -96,15 +98,12 @@ public class ListingController implements ListingApi {
 		}
 	}
 
-	public ResponseEntity<Object> getlistingsGet(@NotNull @Valid String filterType, @Valid String category,
-			@Valid Boolean isFree, @Valid Boolean isDiscount, @Valid Integer pageIndex, @Valid Integer pageSize,
-			@Valid String searchTerm) {
-
+	public ResponseEntity<Object> getlistingsGet(@RequestBody ListingFilterDto listingFilter) {
 		ResponseEntity<Object> entity = null;
 
 		try {
-			List<ListingResponse> posts = listingService.getListings(filterType, category, isFree, isDiscount,
-					pageIndex, pageSize, searchTerm);
+			List<ListingResponse> posts = listingService.getListings(listingFilter);
+			
 			entity = new ResponseEntity<Object>(posts, HttpStatus.OK) {
 			};
 			return entity;
@@ -114,5 +113,30 @@ public class ListingController implements ListingApi {
 		}
 
 	}
+	
+	
+	@Override
+	public ResponseEntity<?> searchListings(@RequestParam String title) {
+	    try {
+	        List<ListingCollection> listings = listingService.getListingsbysearchterm(title);
+	        return ResponseEntity.ok(listings);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest().body(e.getMessage());
+	    }
+	}
+	
+
+	@Override
+	public ResponseEntity<?> searchListingsbyforfree(@RequestParam String title) {
+	    try {
+	        List<ListingCollection> listings = listingService.getListingsbysearchterm(title);
+	        return ResponseEntity.ok(listings);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.badRequest().body(e.getMessage());
+	    }
+	}
+	
+	    
+
 
 }
