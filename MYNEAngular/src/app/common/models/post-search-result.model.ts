@@ -12,7 +12,7 @@ export class PostSearchResult {
     mediaDetails:MediaDetails[];
 
     //listing objects
-
+    listingId:string;
     category:string;
     title:string;
     creatorId:string;

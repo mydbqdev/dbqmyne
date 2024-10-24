@@ -29,6 +29,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	public postSearchResult:PostSearchResult[]=[];
 	searchRequest:SearchRequest=new SearchRequest();
 	listingResult:PostSearchResult[]=[];
+	listingResultList:PostSearchResult[]=[];
+	listingResultPrint:any[]=[];
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -165,6 +167,14 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		   this.listingResult = Object.assign([],data);
 		 }
 		 console.log("this.listingResult ",this.listingResult );
+		 for(var i=0;i<this.listingResult.length;i=i+4){
+			this.listingResultList=[];
+            for(var j=0;j<i;j++){
+				this.listingResultList.push(this.listingResult[j]);
+			}
+			this.listingResultPrint.push(this.listingResultList);
+		 }
+		 console.log("this.listingResultPrint ",this.listingResultPrint );
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();

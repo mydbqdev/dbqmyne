@@ -108,7 +108,9 @@
                         <div>{{postSearchResultDt.description}}</div>
                         <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length>0" >
                          <img [src]="postSearchResultDt.mediaDetails[0].url" style="width: 190px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
-                        
+                         <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
+                          <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                        </div>
                         </div>
                         <div class="ml-auto" *ngIf= "postSearchResultDt.mediaDetails.length == 0" >
                          

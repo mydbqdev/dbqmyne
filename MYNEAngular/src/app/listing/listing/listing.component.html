@@ -107,46 +107,21 @@
       </div>
      </div>
 
-      <div  style="padding:10px 22px;">
+     <!-- start row list-->
+      <div  style="padding:10px 22px;" *ngFor="let listingResult of listingResultPrint">
         <div>
           <div class="card-deck">
-            <div class="card" style="cursor: pointer;">
-              <a routerLink="/listing-det/1" style="color: #000;">
-              <img class="card-img-top" src="assets/images/listing1.JPG" alt="Card image cap">
+            <div class="card" style="cursor: pointer;" *ngFor="let listingRes of listingResult;">
+              <a routerLink="/listing-det/{{listingRes.listingId}}" style="color: #000;">
+                <div *ngIf= "listingRes.mediaPaths.length>0" >
+                    <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
+                    <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
+                          <video id="myVideo1" controls="true" loop="true" width="300" height="200" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
+                    </div>
+                </div>
               <div class="card-body" style="padding:0px;">
-                <div style="font-weight: 500;" *ngIf="isSaleSelect">12$</div>
-                <div style="font-weight: 500;">Wooden Chair</div>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-              </div>
-              </a>
-            </div>
-            <div class="card" style="cursor: pointer;">
-              <a routerLink="/listing-det/2" style="color: #000;">
-              <img class="card-img-top" src="assets/images/listing2.JPG" alt="Card image cap">
-              <div class="card-body" style="padding:0px;">
-                <div style="font-weight: 500;" *ngIf="isSaleSelect">12$</div>
-                <div style="font-weight: 500;">Wooden Chair</div>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-              </div>
-              </a>
-            </div>
-            <div class="card" style="cursor: pointer;">
-              <a routerLink="/listing-det/1" style="color: #000;">
-              <img class="card-img-top" src="assets/images/listing3.JPG" alt="Card image cap">
-              <div class="card-body" style="padding:0px;">
-                <div style="font-weight: 500;" *ngIf="isSaleSelect">12$</div>
-                <div style="font-weight: 500;">Wooden Chair</div>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-              </div>
-              </a>
-            </div>
-
-            <div class="card" style="cursor: pointer;">
-              <a routerLink="/listing-det/1" style="color: #000;">
-              <img class="card-img-top" src="assets/images/listing3.JPG" alt="Card image cap">
-              <div class="card-body" style="padding:0px;">
-                <div style="font-weight: 500;" *ngIf="isSaleSelect">12$</div>
-                <div style="font-weight: 500;">Wooden Chair</div>
+                <div style="font-weight: 500;" *ngIf="isSaleSelect">{{listingRes.price}}$</div>
+                <div style="font-weight: 500;">{{listingRes.title}}</div>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
               </a>
@@ -154,7 +129,7 @@
           </div>
         </div>
       </div> 
-
+      <!-- end row list-->
       <div   style="padding:10px 22px;">
         <div >
           <div class="card-deck">

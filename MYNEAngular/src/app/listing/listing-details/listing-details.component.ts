@@ -24,9 +24,11 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	previewUrl:any = null;
 	previewUrl2:any = null;
 	isSaleSelect:boolean=true;
+	listingId:string;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 	public postSearchResult:PostSearchResult[]=[];
+	public searchResultDet:PostSearchResult=new PostSearchResult();
 	searchRequest:SearchRequest=new SearchRequest();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
@@ -59,6 +61,10 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		this.dataService.getIsSale.subscribe(
 			isS=>this.isSaleSelect=isS
 		);
+		this.route.params.subscribe(s => {
+			console.log(s["id"]);
+			this.listingId=s["id"];
+		  });	  
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -119,6 +125,41 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		 this.spinner.hide();
 		 this.dataService.setPostSearchResult(this.postSearchResult);
 		 this.router.navigateByUrl('/post-search');
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		 
+	 }
+
+
+	 searchListingDet(){
+		this.appService.getListSearchResultDet(this.listingId).subscribe((data: any) => {
+		   this.searchResultDet =data;
+		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){

@@ -81,26 +81,29 @@
       <div  style="padding:10px 22px;">
         <div>
           <div class="card-deck">
-            <div class="card">
-              <img class="card-img-top" src="assets/images/listing1.JPG" alt="Card image cap">
+            <div class="card" *ngIf= "searchResultDet.mediaPaths.length>0">
+                <img [src]="searchResultDet.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="searchResultDet.mediaPaths[0].contentType.includes('image')">
+                <div class="video-wrapper"  *ngIf="searchResultDet.mediaPaths[0].contentType.includes('video')">                           
+                      <video id="myVideo1" controls="true" loop="true" width="300" height="200" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="searchResultDet.mediaPaths[0].url | safe" [type]="searchResultDet.mediaPaths[0].contentType"> </video> 
+                </div>
             </div>
             <div class="card">
               <div class="card-body" style="padding:0px;">
                 <div class="d-flex">
-                  <div style="font-weight: 500;font-size: 22px;">Wooden Chair</div>
+                  <div style="font-weight: 500;font-size: 22px;">{{searchResultDet.title}}</div>
                   <div class="ml-auto">
                     <i class="far fa-bookmark ml-2"></i> 
                     <i class="fas fa-ellipsis-h ml-2 mr-2 text-gray-400"></i>
                   </div>
                 </div>
                 
-                <div style="font-weight: 500;" class="mb-4" *ngIf="isSaleSelect">12$</div>
+                <div style="font-weight: 500;" class="mb-4" *ngIf="isSaleSelect">{{searchResultDet.price}}$</div>
                 <div class="d-flex">
                   <div style="width: 75px;"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
                   <div>
-                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span></div>
+                    <div style="font-size: 17px;font-weight: 600;"><span>{{searchResultDet.creatorName}}.</span></div>
                     <p class="card-text"><small class="text-muted">EC,Bangalore ,0.2km</small></p>
-                    <div class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry..<small class="text-muted ml-2">more</small></div>
+                    <div class="card-text">{{searchResultDet.description}}..<small class="text-muted ml-2">more</small></div>
                   </div>
                 </div>
                 <div class="card-text" style="text-align: end;"><small class="text-muted">Last updated 3 mins ago</small></div>

@@ -47,7 +47,20 @@ export class AppService{
             }
         );
     }
+
     
+    public getListSearchResultDet(searchRequestId:string) : Observable<any>{
+        const url1=this.basePath +'/v1/post/getlisting/'+searchRequestId;
+        return this.httpclient.post<any>(
+            url1,
+            '',
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
 
     private errorHandler(error:HttpErrorResponse){
         return of(error.message || "server error");
