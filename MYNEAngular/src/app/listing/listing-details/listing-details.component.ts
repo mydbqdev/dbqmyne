@@ -4,27 +4,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/common/service/user.service';
-import { DefMenu } from 'src/app/common/shared/def-menu';
-import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
 import { DataService } from 'src/app/common/service/data.service';
+
 @Component({
-	selector: 'app-post-search',
-	templateUrl: './post.component.html',
-	styleUrls: ['./post.component.css']
+	selector: 'app-listing-details',
+	templateUrl: './listing-details.component.html',
+	styleUrls: ['./listing-details.component.css']
 })
-export class PostComponent implements OnInit, AfterViewInit {
-	public defHomeMenu: DefMenu;
+export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
 	fileData: File = null;
-		 previewUrl:any = null;
-		 previewUrl2:any = null;
+	previewUrl:any = null;
+	previewUrl2:any = null;
+	isSaleSelect:boolean=true;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
-	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
+	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
@@ -52,12 +51,16 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.dataService.getIsSale.subscribe(
+			isS=>this.isSaleSelect=isS
+		);
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
 
+	
 	onFileChanged(event,id:number) {
 		this.previewUrl=false;
 		this.previewUrl2=false;
@@ -93,8 +96,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
-
-	isSaleSelect(iss:boolean){
+	isSalSelect(iss:boolean){
 		this.dataService.setIsSale(iss);
 	  }
 	searchPost(){

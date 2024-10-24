@@ -9,6 +9,7 @@ import { ListingComponent } from './listing/listing/listing.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
 import { PostComponent } from './components/post/post.component';
+import { ListingDetailsComponent } from './listing/listing-details/listing-details.component';
 
 const routes: Routes = [
 	{path:'',redirectTo:'/startup',pathMatch:'full'},
@@ -19,6 +20,7 @@ const routes: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'post-search', component: PostComponent },
 	{ path: 'listing', component: ListingComponent },
+	{ path: 'listing-det/:id', component:ListingDetailsComponent},
 	{
 		path: 'forbidden', component: ForbiddenComponent
 	},

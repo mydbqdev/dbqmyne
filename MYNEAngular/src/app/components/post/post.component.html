@@ -44,7 +44,7 @@
         <nav class="nav flex-column">
           <a class="nav-link left-menu" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-lemon mr-2"></i>Discover</a>
-          <a class="nav-link left-menu active" routerLink="/listing" (click)="isSaleSelect(true);"><i class="fas fa-tag mr-2"></i>For Sale</a>
+          <a class="nav-link left-menu" routerLink="/listing" (click)="isSaleSelect(true);"><i class="fas fa-tag mr-2"></i>For Sale</a>
           <a class="nav-link left-menu" routerLink="/listing" (click)="isSaleSelect(false);"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-bell mr-1"></i> Notifications</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-comment mr-1"></i> Chats</a>
@@ -53,7 +53,10 @@
           </nav>
       </div>
       <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
-        <button type="button" class="btn btn-info border-0" style="border-radius: 20px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+          <button type="button" class="btn btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+          <div class="mt-4">
+          <button type="button" class="btn btn-outline-warning" style="border-radius: 5px !important;width: 145px;">Post Ad</button>
+          </div>
       </div>
     </div>
     <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 450px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
@@ -62,25 +65,25 @@
             <div>
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link top-menu" href="#">All</a>
+                  <a class="nav-link top-menu" routerLink="/post">All</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link top-menu active" href="#">Posts</a>
+                  <a class="nav-link top-menu active" routerLink="/post">Posts</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link top-menu" href="#">Businesses</a>
+                  <a class="nav-link top-menu" routerLink="/post">Businesses</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link top-menu" href="#">For Sale</a>
+                    <a class="nav-link top-menu" routerLink="/listing" (click)="isSaleSelect(true);">For Sale</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link top-menu" href="#">For Free</a>
+                    <a class="nav-link top-menu" routerLink="/listing" (click)="isSaleSelect(false);">For Free</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link top-menu" href="#">Events</a>
+                    <a class="nav-link top-menu" routerLink="/post">Events</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link top-menu" href="#">Neighbors</a>
+                    <a class="nav-link top-menu" routerLink="/post">Neighbors</a>
                   </li>
               </ul>
             </div>

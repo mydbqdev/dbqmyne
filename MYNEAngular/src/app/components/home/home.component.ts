@@ -61,7 +61,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.previewUrl2=false;
 		this.data="";
 		this.data2="";
-		//console.info("hrloo0");
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
 		  this.fileData=<File>event.target.files[i];
@@ -74,7 +73,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	data2: any="";
 	preview(id) {
 		// Show preview 
-		//console.info("hrloo");
 		var mimeType = this.fileData.type;
 		if (mimeType.match(/image\/*/) == null) {
 		  return;
@@ -91,8 +89,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 				this.previewUrl2 = reader.result; 
 				this.data2=this.data2+"&nbsp;<img src='"+this.previewUrl2+"' height='140px' width='120px'  class='elevation-2'/>";
 			}
-		  //this.previewUrl = reader.result; 
-		  //console.info("hrloo:"+this.previewUrl);
 		}
 	}
     isSaleSelect(iss:boolean){

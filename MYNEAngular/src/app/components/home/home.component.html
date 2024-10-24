@@ -42,9 +42,9 @@
      <div style="z-index: 1;position: fixed;width: 225px;border-right: 1px solid rgb(203, 203, 203);height: calc(100vh - 100px);top:100px;">
       <div class="ml-4 mr-4 mt-2 mb-2">
         <nav class="nav flex-column">
-          <a class="nav-link left-menu" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
+          <a class="nav-link left-menu active" routerLink="/home"><i class="fas fa-home mr-2"></i>Home</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-lemon mr-2"></i>Discover</a>
-          <a class="nav-link left-menu active" routerLink="/listing" (click)="isSaleSelect(true);"><i class="fas fa-tag mr-2"></i>For Sale</a>
+          <a class="nav-link left-menu" routerLink="/listing" (click)="isSaleSelect(true);"><i class="fas fa-tag mr-2"></i>For Sale</a>
           <a class="nav-link left-menu" routerLink="/listing"  (click)="isSaleSelect(false);"><i class="fas fa-yin-yang mr-2"></i>For Free</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-bell mr-1"></i> Notifications</a>
           <a class="nav-link left-menu" routerLink="/under-construction"><i class="far fa-comment mr-1"></i> Chats</a>
@@ -53,7 +53,10 @@
           </nav>
       </div>
       <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
-        <button type="button" class="btn btn-info border-0" style="border-radius: 20px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+        <button type="button" class="btn btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+        <div class="mt-4">
+        <button type="button" class="btn btn-outline-warning" style="border-radius: 5px !important;width: 145px;">Post Ad</button>
+        </div>
       </div>
     </div>
     <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 450px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
@@ -62,22 +65,22 @@
             <div>
                 <ul class="nav">
                     <li class="nav-item">
-                      <a class="nav-link top-menu active" href="#">For you</a>
+                      <a class="nav-link top-menu active" routerLink="/home">For you</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link top-menu" href="#">Recent</a>
+                      <a class="nav-link top-menu" routerLink="/home">Recent</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link top-menu" href="#">Near by</a>
+                      <a class="nav-link top-menu" routerLink="/home">Near by</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link top-menu" href="#">Trending</a>
+                        <a class="nav-link top-menu" routerLink="/home">Trending</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link top-menu" href="#">Safety updates</a>
+                        <a class="nav-link top-menu" routerLink="/home">Safety updates</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link top-menu" href="#">Local businesses</a>
+                        <a class="nav-link top-menu" hrouterLink="/home">Local businesses</a>
                       </li>
                   </ul>
             </div>
@@ -112,10 +115,10 @@
                             <i class="far fa-image link3 mr-2"  title="Upload Photo"></i>
                             <input type="file" id="file" style="display: none" name="image" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="true" data-original-title="upload photos" (change)="onFileChanged($event,1)">
                           </label>
-                          <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
-                          <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
-                          <a  routerLink="/signup" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
-                          <a  routerLink="/signup" class="link-2"><i class="far fa-calendar mr-2"></i></a>
+                          <a  routerLink="/home" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/home" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
+                          <a  routerLink="/home" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  routerLink="/home" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
                         <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" >Post</button></div>
                   </div>
