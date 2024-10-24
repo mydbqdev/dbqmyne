@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/common/service/user.service';
-import { DefMenu } from 'src/app/common/shared/def-menu';
-import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
+import { DataService } from 'src/app/common/service/data.service';
 
 @Component({
 	selector: 'app-listing',
@@ -14,18 +13,18 @@ import { AuthService } from 'src/app/common/service/auth.service';
 	styleUrls: ['./listing.component.css']
 })
 export class ListingComponent implements OnInit, AfterViewInit {
-	public defHomeMenu: DefMenu;
 	public userNameSession: string = "";
 	errorMsg: any = "";
 	mySubscription: any;
 	fileData: File = null;
 	previewUrl:any = null;
 	previewUrl2:any = null;
+	isSaleSelect:boolean=true;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 
-	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
-		private spinner: NgxSpinnerService, private authService:AuthService) {
+	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
+		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
@@ -52,6 +51,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.dataService.getIsSale.subscribe(
+			isS=>this.isSaleSelect=isS
+		);
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -97,5 +99,11 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		  //this.previewUrl = reader.result; 
 		  //console.info("hrloo:"+this.previewUrl);
 		}
+	}
+	isSalSelect(iss:boolean){
+		this.dataService.setIsSale(iss);
+	  }
+	searchPost(){
+		this.router.navigateByUrl('/post-search');
 	}
 }

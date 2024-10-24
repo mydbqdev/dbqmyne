@@ -7,7 +7,7 @@ import { UserService } from 'src/app/common/service/user.service';
 import { DefMenu } from 'src/app/common/shared/def-menu';
 import { defMenuEnable } from 'src/app/common/shared/variables';
 import { AuthService } from 'src/app/common/service/auth.service';
-
+import { DataService } from 'src/app/common/service/data.service';
 @Component({
 	selector: 'app-post-search',
 	templateUrl: './post.component.html',
@@ -25,7 +25,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 	//public rolesArray: string[] = [];
 
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
-		private spinner: NgxSpinnerService, private authService:AuthService) {
+		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService) {
 		//this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
@@ -96,5 +96,12 @@ export class PostComponent implements OnInit, AfterViewInit {
 		  //this.previewUrl = reader.result; 
 		  //console.info("hrloo:"+this.previewUrl);
 		}
+	}
+
+	isSaleSelect(iss:boolean){
+		this.dataService.setIsSale(iss);
+	  }
+	searchPost(){
+		this.router.navigateByUrl('/post-search');
 	}
 }
