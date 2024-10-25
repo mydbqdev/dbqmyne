@@ -36,6 +36,19 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	files:File[]=[];
 	postRequestModel:PostRequestModel=new PostRequestModel();
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
+	 @ViewChild('closeButtonNewList') closeButtonNewList;
+	title: string = '';
+	description: string = '';
+	price: string = '';
+	category: string = '';
+	pickup: string = '';
+	submitted=false;
+
+	business: string = '';
+	adstitle: string = '';
+	adDescription: string = '';
+	submittedAd=false;
+
 	userInfo:SignupDetails=new SignupDetails();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
@@ -75,8 +88,43 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
-
+	onFileChangedImg(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
 	
+	}
+
+	onFileChangedLogo(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
+	onFileChangedPhoto(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
 	onFileChanged(event,id:number) {
 		this.previewUrl=false;
 		this.previewUrl2=false;
@@ -267,5 +315,13 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 }
 	   });
 		
+	 }
+
+	 newList(){
+		 this.submitted=true;
+	 }
+
+	 newAd(){
+		this.submittedAd=true; 
 	 }
 }

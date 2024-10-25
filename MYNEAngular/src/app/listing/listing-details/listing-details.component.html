@@ -20,10 +20,10 @@
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
       <div class="d-flex" style="margin-top: 10px;">
-        <div class="m-2"><div class="profile-top img-circle elevation-2">S</div></div>
+        <div class="m-2"><div class="profile-top img-circle elevation-2">{{userInfo.userFirstName?.charAt(0).toUpperCase()}}</div></div>
         <div>
-           <div style="font-weight: 500;" class="ml-2 mt-3">Shesh</div>
-           <div class="fw-lighter ml-2">Small text</div>
+           <div style="font-weight: 500;" class="ml-2 mt-3">{{userInfo.userFirstName}} {{userInfo.userLastName}}</div>
+           <div class="fw-lighter ml-2">{{userInfo.zipCode}}</div>
         </div>
         <div>
           <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
