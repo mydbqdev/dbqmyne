@@ -32,5 +32,6 @@
     <module>myne-user-service</module>
     <module>myne-post-service</module>
     <module>myne-s3-service</module>
+  <module>myne-notify-service</module>
   </modules>
 </project>
