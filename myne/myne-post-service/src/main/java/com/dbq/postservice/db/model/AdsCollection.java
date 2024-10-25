@@ -23,6 +23,8 @@ import lombok.Setter;
 public class AdsCollection {
 	@Id
 	private String id;
+	private String createrId;
+	private String title;
 	private String description;
 	private List<MediaUrlDetails> mediaDetails;
 	private String privacy ;

@@ -237,13 +237,42 @@ public class ListingService {
     }
 	
     public List<ListingResponse> getListingsAds(List<ListingCollection> listings) {
-		List<ListingResponse> list = new ArrayList<>();
 		
+    	List<ListingResponse> list = new ArrayList<>();
+    	String userName ="";
     	List<String>userIds= listings.stream().map(d->d.getCreatorId()).toList();
-
-   	    ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(userIds);
-   	 
-	    List<User>user =usersDetails.getBody();
+    	ListingResponse adsres = new ListingResponse();
+    	
+    	List<AdsCollection> ads= adsRepository.findAll();
+    	
+    	AdsCollection  randomAd = (null !=ads && ads.size()>0)? (ads.stream()
+                           .skip(new Random().nextInt(ads.size()))
+                           .findFirst()
+                           .orElse(null)):null;
+    	
+    	if(null !=randomAd && null !=randomAd.getCreaterId() )	 
+    	{userIds.add(randomAd.getCreaterId());}
+    		
+    	ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(userIds);
+    	   	 
+    	List<User>user =usersDetails.getBody();
+    			   
+    	if(null !=randomAd ) {
+    			
+    		   userName =user.stream()
+        			    .filter(d -> d.getId().equals(randomAd.getCreaterId()))
+        			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
+        			    .findFirst()  
+        			    .orElse("");
+    		   
+    			adsres.creatorName(userName);
+    			adsres.setDescription(randomAd.getDescription());
+    			adsres.createdAt(randomAd.getCreatedAt());
+    			adsres.setMediaPaths(randomAd.getMediaDetails());
+    			adsres.adsHyperLink(randomAd.getHyperLink());
+    			
+    			
+    	}
 
 									
 		for (ListingCollection listing : listings) {
@@ -264,7 +293,7 @@ public class ListingService {
 		response.setPickupLocation(listing.getPickupLocation());
 		response.setCreatorId(listing.getCreatorId());
 		
-		String userName = user.stream()
+		userName = user.stream()
 			    .filter(d -> d.getId().equals(listing.getCreatorId()))
 			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
 			    .findFirst()  
@@ -275,22 +304,7 @@ public class ListingService {
 		list.add(response);
 		}
 		
-		List<AdsCollection> ads= adsRepository.findAll();
-		ListingResponse adsres = new ListingResponse();
-		if(null !=ads && ads.size()>0) {
-			   AdsCollection randomAd = ads.stream()
-                       .skip(new Random().nextInt(ads.size()))
-                       .findFirst()
-                       .orElse(null);
-		if(null !=randomAd) {
-			adsres.setDescription(randomAd.getDescription());
-			adsres.createdAt(randomAd.getCreatedAt());
-			adsres.setMediaPaths(randomAd.getMediaDetails());
-			adsres.adsHyperLink(randomAd.getHyperLink());
-			
-		}
-			   
-		}
+		
 		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt()))
 			list.add(adsres);
 		
