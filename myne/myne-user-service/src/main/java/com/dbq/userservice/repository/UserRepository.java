@@ -18,4 +18,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     
     @Query("{'userdetails.zipCode': ?0}")
     List<User> findAllByZipCode(String zipCode);
+    
+    List<User> findByIdIn(List<String> userIds);
 }

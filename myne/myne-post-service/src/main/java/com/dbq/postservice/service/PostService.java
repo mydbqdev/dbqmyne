@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.client.S3StorageClient;
+import com.dbq.postservice.client.UserStorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.db.model.PostCollection;
 import com.dbq.postservice.db.repository.AdsRepository;
@@ -31,6 +32,7 @@ import com.dbq.postservice.dto.MediaUrlDetails;
 import com.dbq.postservice.dto.PostsBody;
 import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.PostsResponse;
+import com.dbq.postservice.dto.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,6 +45,7 @@ public class PostService {
 	 private PostsRepository postRepository; 
 	 private final S3StorageClient s3StorageClient;
 	 private final AdsRepository adsRepository;
+	 private final UserStorageClient userStorageClient;
 	 
 	    public String createPosts(MultipartFile[] files, PostsBody body) {
 	    	
@@ -170,6 +173,13 @@ public class PostService {
 	    
 	    public 	List<PostsResponse> getPostsAds(List<PostCollection> posts) {
 	    	List<PostsResponse> list = new ArrayList<>();
+	    	
+	    	List<String>userIds= posts.stream().map(d->d.getUserId()).toList();
+	    	
+	    	 ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(userIds);
+	    	 
+	    	 List<User>user =usersDetails.getBody();
+	    	 
         	
         	for (PostCollection postCollection : posts) {
         		
@@ -178,9 +188,16 @@ public class PostService {
         		responce.setUserId(postCollection.getUserId());
         		responce.setZipCode(postCollection.getZipCode());
         		responce.setPostId(postCollection.getPostId());
-        		responce.setCreatorName(postCollection.getUserId());
+        		
+        		String userName = user.stream()
+        			    .filter(d -> d.getId().equals(postCollection.getUserId()))
+        			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
+        			    .findFirst()  
+        			    .orElse("");
+        		
+        		responce.setCreatorName(userName);
+        		
         		responce.setDescription(postCollection.getDescription());
-        	
         		responce.setLikeCount(postCollection.getLikdUserIds() != null ? postCollection.getLikdUserIds().length : 0);
         		responce.setIsLiked(postCollection.getLikdUserIds() != null && Arrays.stream(postCollection.getLikdUserIds())
         		                          .anyMatch(userId -> userId.equals(postCollection.getUserId())));

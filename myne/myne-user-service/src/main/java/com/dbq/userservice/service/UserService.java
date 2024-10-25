@@ -124,4 +124,10 @@ public class UserService {
 
         return toUpdate;
     }
+
+	public List<User> getUserIdsUserDetails(List<String> userIds) {
+		
+		return  userRepository.findByIdIn(userIds);
+		
+	}
 }

@@ -61,4 +61,11 @@ public class UserController {
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
+    
+    @RequestMapping(value = "/getUserIdsUserDetails", method = {RequestMethod.POST, RequestMethod.GET})
+    ResponseEntity<List<User>> getUserIdsUserDetails(@RequestBody List<String> userIds){
+		
+	 return ResponseEntity.ok(userService.getUserIdsUserDetails(userIds));
+    }
+
 }
