@@ -9,12 +9,10 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.dbq.postservice.dto.AdsBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,9 +39,9 @@ public interface AdsApi {
     @RequestMapping(value = "/ads",
       produces = { "application/json" }, 
       consumes = {"multipart/form-data"},
-//    consumes = { "application/json" }, 
     method = RequestMethod.POST)
-    ResponseEntity<Object> adsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @ModelAttribute AdsBody body
+    ResponseEntity<Object> adsPost(@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=false, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
+    		@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @RequestParam("adsInfo") @Valid String body
 );
 
     

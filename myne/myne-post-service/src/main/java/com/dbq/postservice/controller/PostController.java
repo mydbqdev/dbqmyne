@@ -43,7 +43,28 @@ public class PostController implements PostsApi {
 
 	try {
 	    	PostsBody pbody = gson.fromJson(body,PostsBody.class);
-	    	return new ResponseEntity<Object>(postService.createPosts(files,pbody), HttpStatus.OK) {};
+
+	    	return new ResponseEntity<Object>("{\"status\":\"" + postService.createPosts(files,pbody) + "\"}", HttpStatus.OK) {};
+
+    } catch (IllegalArgumentException e) { 
+        log.error("Bad Request: Invalid arguments provided", e);
+        return new ResponseEntity<>("Invalid input: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (UnsupportedOperationException e) { 
+        log.error("Not Implemented: This operation is not supported", e);
+        return new ResponseEntity<>("This operation is not supported", HttpStatus.NOT_IMPLEMENTED);
+    } catch (Exception e) { 
+        log.error("An unexpected error occurred", e);
+        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+	}
+	
+	@Override
+	public ResponseEntity<Object> savePostsContent(PostsBody body) {
+		
+		try {
+			MultipartFile[] files = new MultipartFile[0];
+
+	    	return new ResponseEntity<Object>("{\"status\":\"" + postService.createPosts(files,body) + "\"}", HttpStatus.OK) {};
 
     } catch (IllegalArgumentException e) { 
         log.error("Bad Request: Invalid arguments provided", e);
@@ -135,6 +156,8 @@ public class PostController implements PostsApi {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 	
 
    

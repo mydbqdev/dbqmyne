@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.dto.ErrorResponse500;
+import com.dbq.postservice.dto.PostsBody;
 import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.PostsResponse;
 
@@ -50,25 +51,24 @@ public interface PostsApi {
 	    ResponseEntity<Object> savePosts(@Parameter(in = ParameterIn.DEFAULT, description = "The ID of the user creating the post.", required=false, schema=@Schema()) @RequestParam("files") MultipartFile[] files	, 
 	    		@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description, privacy settings, and media paths.", required=true, schema=@Schema()) @RequestParam("postInfo") @Valid String body
 	);
+	   
+	   @Operation(summary = "Create a new post", description = "Allows a user to create a new post with a description, privacy settings, and media (image or video).", tags={ "Posts Controller" })
+	    @ApiResponses(value = { 
+	        @ApiResponse(responseCode = "200", description = "Post created successfully", content = @Content(mediaType = "application/json")),
+	        
+	        @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
+	        
+	        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
+	        
+	        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
+	    @RequestMapping(value = "/content/save",
+	        produces = { "application/json" }, 
+	        consumes = {"application/json"}, 
+	        method = RequestMethod.POST)
+	    ResponseEntity<Object> savePostsContent(
+	    		@Parameter(in = ParameterIn.DEFAULT, description = "The content of the post to create, including description and privacy settings", required=true, schema=@Schema()) @RequestBody PostsBody body
+	);
 
-//    @Operation(summary = "Get all posts", description = "Fetches all posts along with their details, including comments and media.", tags={ "Posts Controller" })
-//    @ApiResponses(value = { 
-//        @ApiResponse(responseCode = "200", description = "List of all posts", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostsResponse.class))),
-//        
-//        @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
-//        
-//        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json")),
-//        
-//        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
-//    @RequestMapping(value = "/posts",
-//        produces = { "application/json" }, 
-//        method = {RequestMethod.GET,RequestMethod.POST})
-//    ResponseEntity<Object> getPosts(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "filterType", required = true) String filterType
-//, @Parameter(in = ParameterIn.QUERY, description = "Index of the page to retrieve (for pagination)." ,schema=@Schema()) @Valid @RequestParam(value = "pageIndex", required = false) Integer pageIndex
-//, @Parameter(in = ParameterIn.QUERY, description = "Size of the page to retrieve (for pagination)." ,schema=@Schema()) @Valid @RequestParam(value = "pageSize", required = false) Integer pageSize
-//, @Parameter(in = ParameterIn.QUERY, description = "Zip code of the user." ,schema=@Schema()) @Valid @RequestParam(value = "zipCode", required = false) String zipCode
-//, @Parameter(in = ParameterIn.QUERY, description = "" ,schema=@Schema()) @Valid @RequestParam(value = "searchTerm", required = false) String searchTerm
-//);
     
     @Operation(summary = "Get all posts", description = "Fetches all posts along with their details, including comments and media.", tags={ "Posts Controller" })
     @ApiResponses(value = { 

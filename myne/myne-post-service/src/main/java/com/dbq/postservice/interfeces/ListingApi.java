@@ -58,25 +58,6 @@ public interface ListingApi {
 	 method = {RequestMethod.GET,RequestMethod.POST})
 	ResponseEntity<Object> getlistingListingIdGet(
 			@Parameter(in = ParameterIn.PATH, description = "The unique ID of the listing to retrieve.", required = true, schema = @Schema()) @PathVariable("listing_id") String listingId);
-
-//	@Operation(summary = "Retrieve For Sale/Free Items", description = "Retrieves a list of for-sale or free items based on the specified filters and search term.", tags = {
-//			"Listing Controller" })
-//	@ApiResponses(value = {
-//			@ApiResponse(responseCode = "200", description = "List of listings retrieved successfully", content = @Content(mediaType = "application/json")),
-//
-//			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = "application/json")),
-//
-//			@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
-//	@RequestMapping(value = "/getlistings", produces = { "application/json" }, method = RequestMethod.GET)
-//	ResponseEntity<Object> getlistingsGet(
-//			@NotNull @Parameter(in = ParameterIn.QUERY, description = "The type of listings to filter (e.g., \"my Listings\").", required = true, schema = @Schema()) @Valid @RequestParam(value = "filterType", required = true) String filterType,
-//			@Parameter(in = ParameterIn.QUERY, description = "Category to filter listings (e.g., \"Electronics\").", schema = @Schema()) @Valid @RequestParam(value = "category", required = false) String category,
-//			@Parameter(in = ParameterIn.QUERY, description = "Filter for free items.", schema = @Schema()) @Valid @RequestParam(value = "isFree", required = false) Boolean isFree,
-//			@Parameter(in = ParameterIn.QUERY, description = "Filter for discounted items.", schema = @Schema()) @Valid @RequestParam(value = "isDiscount", required = false) Boolean isDiscount,
-//			@Parameter(in = ParameterIn.QUERY, description = "Index of the page to retrieve (for pagination).", schema = @Schema()) @Valid @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
-//			@Parameter(in = ParameterIn.QUERY, description = "Size of the page to retrieve (for pagination).", schema = @Schema()) @Valid @RequestParam(value = "pageSize", required = false) Integer pageSize,
-//			@Parameter(in = ParameterIn.QUERY, description = "The value to search for in the listings (e.g., \"laptop\", \"furniture\").", schema = @Schema()) @Valid @RequestParam(value = "searchTerm", required = false) String searchTerm);
-
 	
 	@Operation(summary = "Retrieve listings", 
 	           description = "Fetches listings based on the provided filter criteria.", 
@@ -87,7 +68,7 @@ public interface ListingApi {
 	    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
 	@RequestMapping(value = "/getlistings", 
 	                produces = { "application/json" }, 
-	                method = {RequestMethod.PUT,RequestMethod.POST})
+	                method = {RequestMethod.GET,RequestMethod.POST})
 	ResponseEntity<Object> getlistingsGet(
 	    @Parameter(description = "Filter criteria for retrieving listings.", required = true, schema = @Schema(implementation = ListingFilterDto.class)) 
 	    @RequestBody ListingFilterDto listingFilter);

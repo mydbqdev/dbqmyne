@@ -1,10 +1,6 @@
 package com.dbq.postservice.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import javax.validation.Valid;
 
 import org.springframework.validation.annotation.Validated;
 
