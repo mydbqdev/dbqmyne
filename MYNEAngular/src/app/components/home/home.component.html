@@ -1,3 +1,6 @@
+<ngx-spinner bdColor="rgba(0,0,0,0.8)" size="medium" color="#fff" type="ball-circus" [fullScreen]="true">
+  <p style="color: white;">Loading ...</p>
+</ngx-spinner>
 <div id="header" style="top:0;height: 100px;position: fixed;z-index: 1;width: 100%;background-color: #fff;">
   <div class="d-flex">
      <div style="width: 225px;border-right: 1px solid rgb(203, 203, 203);height: 100px;">
@@ -17,10 +20,10 @@
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
       <div class="d-flex" style="margin-top: 10px;">
-        <div class="m-2"><div class="profile-top img-circle elevation-2">S</div></div>
+        <div class="m-2"><div class="profile-top img-circle elevation-2">{{userInfo.userFirstName?.charAt(0).toUpperCase()}}</div></div>
         <div>
-           <div style="font-weight: 500;" class="ml-2 mt-3">Shesh</div>
-           <div class="fw-lighter ml-2">Small text</div>
+           <div style="font-weight: 500;" class="ml-2 mt-3">{{userInfo.userFirstName}} {{userInfo.userLastName}}</div>
+           <div class="fw-lighter ml-2">{{userInfo.zipCode}}</div>
         </div>
         <div>
           <a class="dropdown-toggle no-arrow" href="#" role="button" id="dropdownMenuLink"

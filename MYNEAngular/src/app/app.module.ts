@@ -39,6 +39,7 @@ import { UnderConstructionComponent } from './under-construction/under-construct
 import { PostComponent } from './components/post/post.component';
 import { ListingDetailsComponent } from './listing/listing-details/listing-details.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ToastrModule } from 'ngx-toastr';
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
 ];
@@ -77,6 +78,7 @@ const appRoutes: Routes = [
     MainPipe,
     InfiniteScrollModule,
     NgxSpinnerModule.forRoot(),
+    ToastrModule.forRoot(),
     NgIdleKeepaliveModule.forRoot(),
     DragDropModule,
   ],

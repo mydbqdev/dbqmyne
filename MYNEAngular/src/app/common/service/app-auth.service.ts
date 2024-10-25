@@ -12,6 +12,7 @@ import { User } from '../shared/user';
 import { UserService } from './user.service';
 import { ResponseStore } from '../models/response.model';
 import { SignupDetails } from '../shared/signup-details';
+import { DataService } from './data.service';
 
 @Injectable()
 export class AppAuthService extends AuthService{
@@ -22,7 +23,7 @@ export class AppAuthService extends AuthService{
     httpOptions ={
         headers :new HttpHeaders({'Content-Type':'application/json'})
     };
-    constructor(private httpclient:HttpClient,private router:Router,private messageService:MessageService,@Inject(BASE_PATH) private basePath:string,private userService:UserService,private encryptDecryptHelper:AESEncryptDecryptHelper){
+    constructor(private httpclient:HttpClient,private router:Router,private messageService:MessageService,@Inject(BASE_PATH) private basePath:string,private userService:UserService,private encryptDecryptHelper:AESEncryptDecryptHelper,private dataService:DataService){
        super();
         this.sessionSnapshot=null;
         this.message='';
@@ -97,6 +98,7 @@ export class AppAuthService extends AuthService{
          var msg:string;
          this.sessionSnapshot =null;
          this.message ='';
+         console.info("Refes pg")
          //this.checkLoginUserOnServer().subscribe(
             /* (result)=>{
                 this.sessionSnapshot = result;
@@ -108,11 +110,26 @@ export class AppAuthService extends AuthService{
 
                 let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
                 this.setSessionStore(resp);*/
-                if(sessionStorage.getItem('user')==null){
+                if(sessionStorage==undefined || sessionStorage ==null || sessionStorage.getItem('user')==null){
                     this.router.navigateByUrl('/signin');
                // }else if(result.firstTimePwd!=undefined && result.firstTimePwd!='Y'){
                 //    this.router.navigateByUrl('/first-time-chng-pwd')              
                }else{
+                console.info("Refesh pg")
+                    this.getUserSignupDetails(sessionStorage.getItem('user')).subscribe((data) => {
+                        console.info("Refesh3 pg")
+                        let user:SignupDetails = new SignupDetails() ;
+                        user.userId= data.id !=undefined?data.id:"";
+                        user.userEmail= data.userEmail !=undefined?data.userEmail:"";
+                        user.userFirstName= data.userFirstName !=undefined?data.userFirstName:"";
+                        user.userLastName= data.userLastName !=undefined?data.userLastName:"";
+                        user.zipCode= data.zipCode !=undefined?data.zipCode:"";
+                        this.dataService.setUserDetails(user);
+                        this.router.navigateByUrl('/home'); 
+                    },error =>{
+                        this.checkLogout();
+                     }
+                    );
                     this.router.navigateByUrl('/home'); 
                }
              /*},

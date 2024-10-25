@@ -218,30 +218,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 	
 	createPost(){
+		this.spinner.show();
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
-
-		let postInfo=JSON.stringify(this.postRequestModel)
-		
+		let postInfo=JSON.stringify(this.postRequestModel)	
 		const formData =  new  FormData();   
 		for  (var i =  0; i <  this.files.length; i++)  { 
 			formData.append("files",  this.files[i]);  
 		 } 
 		 if(this.files.length==0){
-	
 			formData.append("files",{} as File);
-			
-
 		 }
-		 formData.append('postInfo', postInfo );
-		
+		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
-		 if(data.length >0){
-		   this.postSearchResult = Object.assign([],data);
-		 }
+			console.info("data>>",data)
+	      this.notifyService.showSuccess(data, "")
 		 this.spinner.hide();
-		 this.dataService.setPostSearchResult(this.postSearchResult);
-		 this.router.navigateByUrl('/post-search');
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){
