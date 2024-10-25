@@ -349,6 +349,17 @@ a.nav-link.top-menu:hover{
     color: #fff;
 }
 
+.profile-3{
+    width: 35px;
+    height:35px;
+    background-color: rgb(41, 131, 173);
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 5px;
+    color: #fff;
+}
+
 .profile-list-1{
     width: 55px;
     height:55px;

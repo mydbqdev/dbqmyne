@@ -53,13 +53,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 public postSearchResult:PostSearchResult[]=[];
 	 searchRequest:SearchRequest=new SearchRequest();
 	 postRequestModel:PostRequestModel=new PostRequestModel();
-
+	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 	userInfo:SignupDetails=new SignupDetails();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
-		//this.userNameSession = userService.getUsername();
+		this.userNameSession = userService.getUsername();
 		//this.defHomeMenu=defMenuEnable;
 		//if (userService.getUserinfo() != undefined) {
 		//	this.rolesArray = userService.getUserinfo().previlageList;
@@ -91,6 +91,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		}
 		)
 	 this.postRequestModel.privacy= 'Anywhere';
+	 this.searchPostForHome();
 	}
 	ngAfterViewInit() {
 		//this.sidemenuComp.expandMenu(1);
@@ -169,6 +170,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	  }*/
 
 	  searchPost(event){
+		this.spinner.show();
 		console.info("serch :"+event.target.value);
 		this.dataService.setTopSearch(event.target.value);
 		// api post searrch
@@ -217,7 +219,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		alert("delete");
 	}
 	
-	createPost(){
+	createPost(type:number){
 		this.spinner.show();
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
@@ -231,8 +233,58 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		 }
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
-			console.info("data>>",data)
-	      this.notifyService.showSuccess(data, "")
+		  this.notifyService.showSuccess(data, "");
+		  this.postRequestModel.description="";
+		  this.previewUrl2=null;
+		  this.previewUrl=null;
+		  this.data2="";
+		  this.data="";
+		  this.postRequestModel.privacy="";
+		  if(type==2){
+			this.closeButtonNewSave.nativeElement.click();
+		  }
+		 this.spinner.hide();
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		
+	 }
+
+	 searchPostForHome(){
+		// api post searrch
+		this.spinner.show();
+		this.searchRequest.filterType="foryou";
+		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageSize=20;
+		this.searchRequest.zipCode="123456";
+		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
+		 if(data.length >0){
+		   this.postSearchResult = Object.assign([],data);
+		 }
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();

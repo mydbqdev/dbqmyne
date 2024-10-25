@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/common/service/auth.service';
-import { User } from 'src/app/common/shared/user';
-import { ResponseStore } from 'src/app/common/models/response.model';
 import { SignupDetails } from 'src/app/common/shared/signup-details';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from 'src/app/common/shared/message/notification.service';
@@ -22,8 +20,7 @@ export class SignupComponent implements OnInit {
 	error: string = '';
 	errorMsg: any;
 	user :SignupDetails=new SignupDetails();
-	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
-//,private spinner:NgxSpinnerService,private notifyService:NotificationService
+	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService,private spinner:NgxSpinnerService,private notifyService:NotificationService) { }
 	ngOnInit() {}
 
 	doSignup() {
@@ -31,7 +28,8 @@ export class SignupComponent implements OnInit {
 		this.submitted=true;	
 		if (this.email !== '' && this.email !== null && this.password !== '' && this.password !== null &&
 			this.firstname !== '' && this.firstname !== null && this.lastname !== '' && this.lastname !== null)
-			 {      
+			 {  
+				this.spinner.show();		     
 		this.submitted=false;
 		this.user.userFirstName=this.firstname;
 		this.user.userLastName=this.lastname;
@@ -39,10 +37,11 @@ export class SignupComponent implements OnInit {
 		this.user.password=this.password;
 		this.user.zipCode=this.zipcode;
 		this.authService.signupUser(this.user).subscribe((data) => {
-		//this.notifyService.showSuccess(data, "");
+		this.notifyService.showSuccess(data, "");
+		this.spinner.hide();
 		this.router.navigate(['/signin']);
-
 		},error =>{
+			this.spinner.hide();
 			console.log("error.error",error)
 			this.error = (error.error.error !=undefined?(error.error.error  +"."):"")
 			+ (error.error.userEmail!=undefined?("Email should be valid."):"")
