@@ -54,6 +54,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 searchRequest:SearchRequest=new SearchRequest();
 	 postRequestModel:PostRequestModel=new PostRequestModel();
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
+
+	 
+	business: string = '';
+	adstitle: string = '';
+	adDescription: string = '';
+	submittedAd=false;
+
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 	userInfo:SignupDetails=new SignupDetails();
@@ -97,7 +104,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
+	onFileChangedImg(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
 
+	onFileChangedLogo(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
 	onFileChanged(event,id:number) {
 		this.files=[];
 		this.previewUrl=false;
@@ -386,5 +417,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		 }
 	   });
 		
+	 }
+
+	 newAd(){
+		this.submittedAd=true; 
 	 }
 }

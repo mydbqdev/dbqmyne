@@ -38,6 +38,11 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
 	userInfo:SignupDetails=new SignupDetails();
 
+	business: string = '';
+	adstitle: string = '';
+	adDescription: string = '';
+	submittedAd=false;
+
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -71,6 +76,10 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		}
+		)
 		this.dataService.$topSearch.subscribe(
 			dt=>this.searchText=dt
 		);
@@ -82,6 +91,31 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.activeMenu(1, '');
 	}
 
+	onFileChangedImg(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
+
+	onFileChangedLogo(event) {
+		this.previewUrl=false;
+		this.files=[];
+		this.data="";
+		if(event.target.files.length>0){
+		  for(let i=0;i<event.target.files.length;i++){	
+		  this.fileData=<File>event.target.files[i];
+		  //this.preview(id);
+		  }
+		}
+	
+	}
 	onFileChanged(event,id:number) {
 		this.previewUrl=false;
 		this.previewUrl2=false;
@@ -123,67 +157,92 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.dataService.setIsSale(iss);
 	  }
 	searchPost(event){
-       console.info("serch :"+event.target.value);
-	   this.dataService.setTopSearch(event.target.value);
-	   // api post searrch
-	   this.searchRequest.filterType="recent";
+		let test:string=event.target.value;
+		if(test==""|| test==" "){
+			this.notifyService.showWarning("Please search using valid content.", "")
+			return;
+		}
+		this.spinner.show();
+		
+		this.dataService.setTopSearch(event.target.value);
+		// api post searrch
+		this.searchRequest.filterType='posts';
 		this.searchRequest.pageIndex=0;
 		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode="123456";
-	   this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
-		console.log("data",data);
-		if(data.length >0){
-		  this.postSearchResult = Object.assign([],data);
-		}
-		console.log("this.postSearchResult>>",this.postSearchResult); 
-		this.spinner.hide();
-		this.dataService.setPostSearchResult(this.postSearchResult);
-		this.router.navigateByUrl('/post-search');
-	  },error =>{
-		this.spinner.hide();
-		if(error.status==403){
-		  this.router.navigate(['/forbidden']);
-		}else  if (error.error && error.error.message) {
-		  this.errorMsg =error.error.message;
-		  console.log("Error:"+this.errorMsg);
-		  this.notifyService.showError(this.errorMsg, "");
-		  this.spinner.hide();
-		} else {
-		  this.spinner.hide();
-		  if(error.status==500 && error.statusText=="Internal Server Error"){
-			this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
-		  }else{
-			let str;
-			  if(error.status==400){
-			  str=error.error;
-			  }else{
-				str=error.message;
-				str=str.substring(str.indexOf(":")+1);
-			  }
-			  console.log("Error:"+str);
-			  this.errorMsg=str;
-		  }
-		  if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
-		}
-	  });
-	    
+		this.searchRequest.searchContent=test;
+		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
+		 if(data.length >0){
+		   this.postSearchResult = Object.assign([],data);
+		 }else{
+			this.postSearchResult = Object.assign([]);
+		 }
+		 this.spinner.hide();
+		 this.dataService.setPostSearchResult(this.postSearchResult);
+		 this.router.navigateByUrl('/post-search');
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });    
 	}
 
 	createPost(type:number){
-		this.spinner.show();
+
+		if(null == this.userInfo ){
+			this.notifyService.showError("Something went wrong, please log in again.","");
+			return;
+		}
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
+
+		if(this.postRequestModel.description ==undefined ||this.postRequestModel.description == "" || "" == this.postRequestModel?.description.trim())
+		{
+			this.notifyService.showError("Please provide some description. ","");
+			return;
+		}
+
+		if(this.files.length>0){
+			this.createPostWithFile(type);
+		 }else{
+			this.createPostWithOutFile(type);
+		 }
+
+	}
+	
+	createPostWithFile(type:number){
+		this.spinner.show();
 		let postInfo=JSON.stringify(this.postRequestModel)	
 		const formData =  new  FormData();   
 		for  (var i =  0; i <  this.files.length; i++)  { 
 			formData.append("files",  this.files[i]);  
 		 } 
-		 if(this.files.length==0){
-			formData.append("files",{} as File);
-		 }
+		
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
-		  this.notifyService.showSuccess(data, "");
+		  this.notifyService.showSuccess(data.status, "");
 		  this.postRequestModel.description="";
 		  this.previewUrl2=null;
 		  this.previewUrl=null;
@@ -222,5 +281,53 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 }
 	   });
 		
+	 }
+
+	 createPostWithOutFile(type:number){
+		this.spinner.show();	
+		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
+		  this.notifyService.showSuccess(data.status, "");
+		  this.postRequestModel.description="";
+		  this.previewUrl2=null;
+		  this.previewUrl=null;
+		  this.data2="";
+		  this.data="";
+		  this.postRequestModel.privacy="";
+		  if(type==2){
+			this.closeButtonNewSave.nativeElement.click();
+		  }
+		 this.spinner.hide();
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		
+	 }
+
+	 newAd(){
+		this.submittedAd=true; 
 	 }
 }

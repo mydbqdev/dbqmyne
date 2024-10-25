@@ -6,24 +6,24 @@
      <div style="width: 225px;border-right: 1px solid rgb(203, 203, 203);height: 100px;">
       <div class="mt-1 ml-2 mr-2 mb-2" style="padding-left: 60px;">
         <a href="index.html" class="logo">
-          <img src="assets/images/myne-logo.svg" alt="logo">
+          <img src="assets/images/myne-logo-f.png" alt="logo">
         </a>
       </div>
     </div>
     <div style="height: 100px;width: calc(100vw - 450px);">
       <div class="container-fluid form-group" style="padding: 40px 15px 5px 15px;">
         <div class="input-group">
-          <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;"><img src="assets/images/myne-smll-logo.png" alt="logo" style="height: 25px;"></span>
+          <span class="input-group-text" id="basic-addon1" style="height: 38px;border: 0px solid #fff;background: rgb(245, 243, 243) !important;"><img src="assets/images/myne-smll-logo-f.png" alt="logo" style="height: 25px;"></span>
           <input type="text" class="form-control" style="background-color: rgb(245, 243, 243);border: 0px solid #fff;" placeholder="Search for electronics"  (keydown.enter)="searchPost($event)"/>
           </div>
       </div>
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
       <div class="d-flex" style="margin-top: 10px;">
-        <div class="m-2"><div class="profile-top img-circle elevation-2">{{userInfo.userFirstName?.charAt(0).toUpperCase()}}</div></div>
+        <div class="m-2"><div class="profile-top img-circle elevation-2">{{userInfo?.userFirstName?.charAt(0).toUpperCase()}}</div></div>
         <div>
-           <div style="font-weight: 500;" class="ml-2 mt-3">{{userInfo.userFirstName}} {{userInfo.userLastName}}</div>
-           <div class="fw-lighter ml-2">{{userInfo.zipCode}}</div>
+           <div style="font-weight: 500;" class="ml-2 mt-3">{{userInfo?.userFirstName}} {{userInfo?.userLastName}}</div>
+           <div class="fw-lighter ml-2">{{userInfo?.zipCode}}</div>
         </div>
         <div>
           <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
@@ -206,7 +206,7 @@
 		   </div>
 		   <div class="modal-body" style="margin-top: -5px;">
 			<div class="row mb-3">
-			  <div class="col-sm-1"><div class="img-circle elevation-2 profile-3">{{userInfo.userFirstName?.charAt(0).toUpperCase()}}</div></div>			 
+			  <div class="col-sm-1"><div class="img-circle elevation-2 profile-3">{{userInfo?.userFirstName?.charAt(0).toUpperCase()}}</div></div>			 
 			  <div class="col-sm-11">
           <div style="border-radius: 5px;border: 1px solid rgb(203, 203, 203);">
             <textarea class="form-control" placeholder="What's on your mind?" [(ngModel)]="postRequestModel.description" style="border:0px solid;"></textarea>
@@ -286,7 +286,7 @@
               <div class="col-sm-3">
                 <label for="inputPrice" class="form-label">Price</label>
                 <input type="text" class="form-control form-control-sm" id="inputPrice" name="price" placeholder="Price" >
-                <div class="text-danger" *ngIf="submitted && description==''">
+                <div class="text-danger" *ngIf="submitted && price==''">
                   Please enter the price
                 </div>
               </div>
@@ -318,7 +318,7 @@
                 </div>
               </div>
               <div class="col-sm-3" style="padding-top: 32px;">
-                <a href="#" class="forgot-password ml-2">Edit</a>
+                <a class="forgot-password ml-2">Edit</a>
               </div>
           </div>
           
@@ -330,94 +330,6 @@
 		</div>
 	</div>
   </div>
-
-
-  <!--modal for create-->
-<div class="modal fade" id="newList" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
-	<div class="modal-dialog modal-lg" role="document">
-	  <div class="modal-content" >
-      <div class="d-flex">
-           <div>
-              <button type="button" class="close ml-2 mt-2" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewList>
-              <span aria-hidden="true">&times;</span>
-              </button>
-           </div>
-           <div class="ml-auto mt-3 mr-3"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newList()">List an Item</button></div>
-      </div>		  
-      <div class="modal-body" style="margin-top: -5px;">
-        <div>
-          <label>
-            <img src="assets/images/Add_photo.png" alt="Card image cap" style="width: 70%;">
-            <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChangedPhoto($event)">
-          </label>
-        </div>
-        <div style="padding-bottom: 10px;font-size: 11px;">Add up to 10 photos. Drag to reorder</div>
-        <div style="font-weight: 500;">What are you selling?</div>
-        <div class="form-group mb-1">
-              <label for="exampleInputFirst1" class="form-label">Title</label>
-							<input type="text" class="form-control form-control-sm" id="exampleInputFirst1" name="title" placeholder="Title" required>
-							<div class="text-danger" *ngIf="submitted && title==''">
-								Please enter the title
-							</div>
-        </div>
-        <div class="form-group mb-1">
-          <label for="inputDescription" class="form-label">Description</label>
-          <input type="text" class="form-control form-control-sm" id="inputDescription" name="description" placeholder="Description" required>
-          <div class="text-danger" *ngIf="submitted && description==''">
-            Please enter the description
-          </div>
-        </div>
-        <div class="form-group mb-1">
-          <div class="row">
-              <div class="col-sm-3">
-                <label for="inputPrice" class="form-label">Price</label>
-                <input type="text" class="form-control form-control-sm" id="inputPrice" name="price" placeholder="Price" >
-                <div class="text-danger" *ngIf="submitted && description==''">
-                  Please enter the price
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-check form-switch" style="padding-top: 32px;">
-                  <span style="margin-left: 25px;">Free</span>
-                  <input class="form-check-input" type="checkbox" name="free" style="margin-left: 5px;margin-top: 5px;" role="switch" id="flexSwitchCheckFree">
-                  <label class="form-check-label" for="flexSwitchCheckFree"></label>
-                </div>
-              </div>
-          </div>
-          
-        </div>
-
-        <div class="form-group mb-1">
-          <div class="row">
-              <div class="col-sm-3">
-                <label for="inputCategory" class="form-label">Category</label>
-                <input type="text" class="form-control form-control-sm" id="inputCategory" name="category" placeholder="Category" >
-                <div class="text-danger" *ngIf="submitted && category==''">
-                  Please enter the price
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <label for="inputPickup" class="form-label">Pickup location</label>
-                <input type="text" class="form-control form-control-sm" id="inputPickup" name="pickup" placeholder="Pickup location" >
-                <div class="text-danger" *ngIf="submitted && pickup==''">
-                  Please enter the pickup location
-                </div>
-              </div>
-              <div class="col-sm-3" style="padding-top: 32px;">
-                <a href="#" class="forgot-password ml-2">Edit</a>
-              </div>
-          </div>
-          
-        </div>
-			  <div class="row mb-3">
-			 
-			  </div>
-		  </div>		   
-		</div>
-	</div>
-  </div>
-
-
 
   <!--modal for create-->
 <div class="modal fade" id="newAds" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
