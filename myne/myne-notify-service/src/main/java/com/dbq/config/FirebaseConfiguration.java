@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 @Configuration
 @EnableConfigurationProperties(FirebaseProperties.class)
 public class FirebaseConfiguration {
+	
+
+	@Value("${app.firebase.config.filepath}")
+	private String fileConfig;
+	
 	 private final FirebaseProperties firebaseProperties;
 
 	    public FirebaseConfiguration(FirebaseProperties firebaseProperties) {
@@ -53,7 +59,8 @@ public class FirebaseConfiguration {
 	    
 	    @Bean
 	    FirebaseApp firebaseApp() throws IOException {
-	    	File file = ResourceUtils.getFile("classpath:firebase.json");
+	    	
+	    	File file = ResourceUtils.getFile("file://"  + fileConfig);
 	    	FileInputStream serviceAccount =new FileInputStream(file);
 	    	FirebaseOptions options = new FirebaseOptions.Builder()
 	    			  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
