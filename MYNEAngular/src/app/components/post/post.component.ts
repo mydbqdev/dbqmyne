@@ -38,9 +38,13 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
 	userInfo:SignupDetails=new SignupDetails();
 
+	@ViewChild('closeButtonNewAds') closeButtonNewAds;
+	 
 	business: string = '';
-	adstitle: string = '';
+	adsTitle: string = '';
 	adDescription: string = '';
+	websiteLink:string='';
+	category:string='';
 	submittedAd=false;
 
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
@@ -91,27 +95,50 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.activeMenu(1, '');
 	}
 
+	fileDataImgAds: File = null;
+	previewUrlImgAds:any[] = [];
+	filesImgAds:File[]=[];
+	previewUrlImg1:any = false;
 	onFileChangedImg(event) {
-		this.previewUrl=false;
-		this.files=[];
-		this.data="";
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
-		  this.fileData=<File>event.target.files[i];
-		  //this.preview(id);
+		  this.fileDataImgAds=<File>event.target.files[i];
+		  this.previewADs(i);
 		  }
 		}
-	
 	}
 
+	previewADs(id) {
+		// Show preview 
+		var mimeType = this.fileDataImgAds.type;
+		if (mimeType.match(/image\/*/) == null) {
+		  return;
+		}
+		var reader = new FileReader();      
+		reader.readAsDataURL(this.fileDataImgAds); 
+		this.filesImgAds.push(this.fileDataImgAds);
+		reader.onload = (_event) => { 
+			if(id==0 && !this.previewUrlImg1){
+				this.previewUrlImg1 = reader.result; 
+			}else{
+				this.previewUrlImgAds.push(reader.result);
+			}
+		}
+	}
+	fileDataLogo: File = null;
+	previewUrlLogo:any = null;
 	onFileChangedLogo(event) {
-		this.previewUrl=false;
-		this.files=[];
-		this.data="";
+		this.previewUrlLogo=false;
 		if(event.target.files.length>0){
-		  for(let i=0;i<event.target.files.length;i++){	
-		  this.fileData=<File>event.target.files[i];
-		  //this.preview(id);
+		  this.fileDataLogo=<File>event.target.files[0];
+		  var mimeType = this.fileDataLogo.type;
+		  if (mimeType.match(/image\/*/) == null) {
+			return;
+		  }
+		  var reader = new FileReader();      
+		  reader.readAsDataURL(this.fileData); 
+		  reader.onload = (_event) => { 
+				  this.previewUrlLogo = reader.result; 	 
 		  }
 		}
 	
@@ -328,6 +355,67 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 }
 
 	 newAd(){
+		if(this.filesImgAds.length==0){
+			this.notifyService.showWarning("Please choose atleast one image.", "")
+			return;
+		}
 		this.submittedAd=true; 
+		if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null &&
+			this.adDescription !== '' && this.adDescription !== null)
+			 {
+				this.spinner.show();
+				const formData =  new  FormData();   
+		        for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
+			     formData.append("files",  this.filesImgAds[i]);  
+		       } 
+		
+		 formData.append('business', this.business );	
+		 formData.append('adsTitle', this.adsTitle );	
+		 formData.append('adDescription', this.adDescription );	
+		 formData.append('category', this.category );
+		 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
+
+		this.appService.createPost(formData).subscribe((data: any) => {
+		  this.notifyService.showSuccess(data.status, "");
+		  this.closeButtonNewAds.nativeElement.click();
+		 this.spinner.hide();
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+			 }
+	 }
+
+	 resetAdPopup(){
+		 this.previewUrlImg1=false;
+		 this.filesImgAds=[];
+		 this.previewUrlImgAds=[];
+		 this.business="";
+		 this.adDescription="";
+		 this.adsTitle="";
+		 this.websiteLink="";
 	 }
 }

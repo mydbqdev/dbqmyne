@@ -58,7 +58,7 @@
       <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
           <button type="button" class="btn btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
           <div class="mt-4">
-          <button type="button" class="btn btn-outline-warning" style="border-radius: 5px !important;width: 145px;"  data-bs-toggle="modal" data-bs-target="#newAds">Post Ad</button>
+          <button type="button" class="btn btn-outline-warning" style="border-radius: 5px !important;width: 145px;"  data-bs-toggle="modal" data-bs-target="#newAds" (click)="resetAdPopup()">Post Ad</button>
           </div>
       </div>
     </div>
@@ -278,10 +278,10 @@
                             <i class="far fa-image mr-2 link3"  title="Upload Photo"></i>
                             <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChanged($event,2)">
                           </label>
-                          <a  routerLink="/signup" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
-                          <a  routerLink="/signup" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
-                          <a  routerLink="/signup" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
-                          <a  routerLink="/signup" class="link-2"><i class="far fa-calendar mr-2"></i></a>
+                          <a  href="javascript:void(0)" class="link-2" title="Upload GIF Poto"><img src="assets/images/GIF.png" style="width: 19px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  href="javascript:void(0)" class="link-2" title="Happyness"><i class="far fa-smile mr-2"></i></a> 
+                          <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
+                          <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
                         <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(2)">Post</button></div>
                   </div>
@@ -293,7 +293,7 @@
   </div>
 
 
-  <!--modal for create-->
+   <!--modal for create-->
 <div class="modal fade" id="newAds" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
 	<div class="modal-dialog modal-lg" role="document">
 	  <div class="modal-content" >
@@ -313,7 +313,7 @@
             <div class="col-sm-6">
               <div class="form-group mb-1">
                   <label for="exampleInputBusiness" class="form-label">Business name</label>
-							    <input type="text" class="form-control form-control-sm" id="exampleInputBusiness" name="businessname" placeholder="Business name" required>
+							    <input type="text" class="form-control form-control-sm" id="exampleInputBusiness" [(ngModel)]="business" name="businessname" placeholder="Business name" required>
 							    <div class="text-danger" *ngIf="submittedAd && business==''">
 								   Please enter the business name
                   </div>
@@ -326,15 +326,15 @@
               </div>
               <div class="form-group mb-1">
                 <label for="exampleInputAdsTitle" class="form-label">Ad Title</label>
-                <input type="text" class="form-control form-control-sm" id="exampleInputAdsTitle" name="adsTitle" placeholder="Ad Title" required>
-                <div class="text-danger" *ngIf="submittedAd && adstitle==''">
+                <input type="text" class="form-control form-control-sm" id="exampleInputAdsTitle"  [(ngModel)]="adsTitle" name="adsTitle" placeholder="Ad Title" required>
+                <div class="text-danger" *ngIf="submittedAd && adsTitle==''">
                  Please enter the ad title
                 </div>
               </div>
 
               <div class="form-group mb-1">
                 <label for="inputAdDescription" class="form-label">Ad Description</label>
-                <input type="text" class="form-control form-control-sm" id="inputAdDescription" name="adDescription" placeholder="AdDescription" required>
+                <input type="text" class="form-control form-control-sm" id="inputAdDescription" [(ngModel)]="adDescription" name="adDescription" placeholder="AdDescription" required>
                 <div class="text-danger" *ngIf="submittedAd && adDescription==''">
                   Please enter the Ad description
                 </div>
@@ -342,7 +342,7 @@
 
               <div class="form-group mb-1">
                 <label for="inputAdCategory" class="form-label">Select Category</label>
-                <select class="form-select form-select-sm" id="inputAdCategory" name="category" aria-label=".form-select-sm example">
+                <select class="form-select form-select-sm" id="inputAdCategory" name="category" [(ngModel)]="category" aria-label=".form-select-sm example">
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
@@ -351,11 +351,21 @@
 
             </div>
             <div class="col-sm-6">
-              <div>
-                <label>
-                  <img src="assets/images/Add_photo.png" alt="Card image cap" style="width: 50%;">
-                  <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChangedImg($event)">
-                </label>
+              <div *ngIf="previewUrlImg1">
+                <img [src]="previewUrlImg1" alt="Card image cap" style="width: 300px;height: 200px;" />
+              </div>
+              <div class="d-flex" style="max-height: 100px;max-width: 320px;overflow-x: auto;">
+                  <div>
+                    <span *ngFor="let pre of previewUrlImgAds">
+                      <img class="mr-1" src="{{pre}}" width="80px" height="80px" />&nbsp;
+                    </span>               
+                  </div>
+                  <div>
+                    <label>
+                      <img src="assets/images/Add_img.png" alt="Card image cap" style="width:80px">
+                      <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChangedImg($event)">
+                    </label>
+                  </div>
               </div>
             </div>
           </div>
@@ -366,7 +376,7 @@
           <div class="row">
               <div class="col-sm-6">
                 <label for="inputwebsiteLink" class="form-label">Website Link</label>
-                <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" name="websiteLink" placeholder="Website Link" >
+                <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
                 <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">Post Ads</button>
