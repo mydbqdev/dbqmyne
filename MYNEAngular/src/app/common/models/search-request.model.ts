@@ -5,4 +5,5 @@ export class SearchRequest {
     pageIndex: number;
     pageSize: number;
     zipCode: string;
+    searchContent:string;
 }

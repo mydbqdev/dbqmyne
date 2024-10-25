@@ -35,6 +35,32 @@ export class AppService{
             }
         );
     }
+    public createPostWithOnlyContent(data:any) : Observable<any>{
+        const url1=this.basePath +'post/content/save';
+        return this.httpclient.post<any>(
+            url1,
+            data,
+            {
+                headers:ServiceHelper.filesHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
+    
+
+    public getPostBySearch(searchRequest:SearchRequest) : Observable<any>{
+        const url1=this.basePath +'post/posts/search';
+        return this.httpclient.post<any>(
+            url1,
+            searchRequest,
+            {
+                headers:ServiceHelper.buildHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
 
     public getPostSearchResult(searchRequest:SearchRequest) : Observable<any>{
         const url1=this.basePath +'post/getPosts';

@@ -200,8 +200,9 @@ public class PostService {
 	        			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
 	        			    .findFirst()  
 	        			    .orElse("");
-	    		   
+	    		    
 	    			adsres.creatorName(userName);
+	    			adsres.setTitle(randomAd.getTitle());
 	    			adsres.setDescription(randomAd.getDescription());
 	    			adsres.createdAt(randomAd.getCreatedAt());
 	    			adsres.setMediaDetails(randomAd.getMediaDetails());

@@ -266,6 +266,7 @@ public class ListingService {
         			    .orElse("");
     		   
     			adsres.creatorName(userName);
+    			adsres.setTitle(randomAd.getTitle());
     			adsres.setDescription(randomAd.getDescription());
     			adsres.createdAt(randomAd.getCreatedAt());
     			adsres.setMediaPaths(randomAd.getMediaDetails());

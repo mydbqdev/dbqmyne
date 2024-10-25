@@ -98,6 +98,24 @@ public class PostsResponse   {
   @JsonSetter(nulls = Nulls.FAIL)
   private String adsHyperLink ;
   
+  @JsonProperty("title")
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String title = null;
+  
+  public PostsResponse title(String title) {
+      this.title = title;
+      return this;
+  }
+
+  public String getTitle() {
+      return title;
+  }
+
+  public void setTitle(String title) {
+      this.title = title;
+  }
+  
   public PostsResponse adsHyperLink(String adsHyperLink) { 
 
 	    this.adsHyperLink = adsHyperLink;
@@ -108,12 +126,11 @@ public class PostsResponse   {
     return adsHyperLink;
   }
 
-
-
   public void setAdsHyperLink(String adsHyperLink) { 
     this.adsHyperLink = adsHyperLink;
   }
 
+  
 
   public PostsResponse postId(String postId) { 
 
@@ -422,12 +439,13 @@ public class PostsResponse   {
         Objects.equals(this.mediaDetails, PostsResponse.mediaDetails) &&
         Objects.equals(this.createdAt, PostsResponse.createdAt) &&
         Objects.equals(this.updatedAt, PostsResponse.updatedAt)&&
-        Objects.equals(this.adsHyperLink, PostsResponse.adsHyperLink);
+        Objects.equals(this.adsHyperLink, PostsResponse.adsHyperLink)&&
+    	Objects.equals(this.title, PostsResponse.title); 
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(postId, userId, creatorName, zipCode, description, privacy, likeCount, isLiked, commentsCount, mediaDetails, createdAt, updatedAt,adsHyperLink);
+    return Objects.hash(postId, userId, creatorName, zipCode, description, privacy, likeCount, isLiked, commentsCount, mediaDetails, createdAt, updatedAt,adsHyperLink,title);
   }
 
   @Override
@@ -448,6 +466,7 @@ public class PostsResponse   {
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    adsHyperLink: ").append(toIndentedString(adsHyperLink)).append("\n");
+    sb.append("    title: ").append(toIndentedString(title)).append("\n"); 
     sb.append("}");
     return sb.toString();
   }
