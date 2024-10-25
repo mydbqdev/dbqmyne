@@ -24,13 +24,13 @@ public interface ListingRepository extends MongoRepository<ListingCollection, St
 	
 	
 	
-    @Query(value = "{ 'free': true, 'userId': ?0 }")
+    @Query(value = "{ 'free': true, 'creatorId': ?0 }")
     List<ListingCollection> findFreeListingsByUserId(String userId, Pageable pageable);
 
-    @Query(value = "{ 'free': false, 'userId': ?0 }")
+    @Query(value = "{ 'free': false, 'creatorId': ?0 }")
     List<ListingCollection> findNotFreeListingsByUserId(String userId, Pageable pageable);
 
-    @Query(value = "{ 'discount': true, 'userId': ?0 }")
+    @Query(value = "{ 'discount': true, 'creatorId': ?0 }")
     List<ListingCollection> findDiscountedListingsByUserId(String userId, Pageable pageable);
 	
 	
@@ -41,11 +41,11 @@ public interface ListingRepository extends MongoRepository<ListingCollection, St
 	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' } }")
 	List<ListingCollection> findByListingtitle(String title);
 	
-	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' }, 'isFree': { $eq: true } }")
+	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' }, 'free': { $eq: true } }")
 	List<ListingCollection> findByListingtitleisfree(String title);
 	
 
-	@Query(value = "{ 'category': { $regex: ?0, $options: 'i' }, 'isFree': ?1, 'isDiscount': ?2, " + " 'title': { $regex: ?3, $options: 'i' } }")
+	@Query(value = "{ 'category': { $regex: ?0, $options: 'i' }, 'free': ?1, 'discount': ?2, " + " 'title': { $regex: ?3, $options: 'i' } }")
 	List<ListingCollection> findListings(String category, Boolean isFree, Boolean isDiscount, String searchTerm);
 	
 	

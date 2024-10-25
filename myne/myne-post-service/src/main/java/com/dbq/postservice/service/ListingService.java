@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dbq.postservice.client.S3StorageClient;
+import com.dbq.postservice.client.UserStorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
 import com.dbq.postservice.db.model.ListingCollection;
 import com.dbq.postservice.db.repository.AdsRepository;
@@ -26,6 +27,7 @@ import com.dbq.postservice.dto.ListingBody;
 import com.dbq.postservice.dto.ListingFilterDto;
 import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.dto.MediaUrlDetails;
+import com.dbq.postservice.dto.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +38,7 @@ public class ListingService {
 	
 	private final S3StorageClient s3StorageClient;
 	private final AdsRepository adsRepository;
-
+	private final UserStorageClient userStorageClient;
 	private final ListingRepository listingRepository;
 
 	public String createListing(MultipartFile[] files, ListingBody model) {
@@ -229,24 +231,26 @@ public class ListingService {
 			break;
 		}
     	
-    	list=getListings(posts);
+    	list=getListingsAds(posts);
 
         return list; 
     }
 	
-    public List<ListingResponse> getListings(List<ListingCollection> listings) {
+    public List<ListingResponse> getListingsAds(List<ListingCollection> listings) {
 		List<ListingResponse> list = new ArrayList<>();
 		
-					
-	//	List<String> userIds=listings.
-				
+    	List<String>userIds= listings.stream().map(d->d.getCreatorId()).toList();
+
+   	    ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(userIds);
+   	 
+	    List<User>user =usersDetails.getBody();
+
+									
 		for (ListingCollection listing : listings) {
 			
 		ListingResponse response = new ListingResponse();
 		
 		response.setListingId(listing.getListingId());
-		response.setCreatorId(listing.getCreatorId());
-		response.setCreatorName(listing.getCreatorName());
 		response.setZipCode(listing.getZipCode());
 		response.setTitle(listing.getTitle());
 		response.setDescription(listing.getDescription());
@@ -258,6 +262,15 @@ public class ListingService {
 		response.setMediaPaths(listing.getMediaPaths());
 		response.setCreatedAt(listing.getCreatedAt());
 		response.setPickupLocation(listing.getPickupLocation());
+		response.setCreatorId(listing.getCreatorId());
+		
+		String userName = user.stream()
+			    .filter(d -> d.getId().equals(listing.getCreatorId()))
+			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
+			    .findFirst()  
+			    .orElse("");
+		
+		response.setCreatorName(userName);
 		
 		list.add(response);
 		}
