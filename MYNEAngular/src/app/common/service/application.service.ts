@@ -47,7 +47,18 @@ export class AppService{
             }
         );
     }
-    
+    public createListing(data:any) : Observable<any>{
+        const url1=this.basePath +'post/listings/save';
+        return this.httpclient.post<any>(
+            url1,
+            data,
+            {
+                headers:ServiceHelper.filesHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
 
     public getPostBySearch(searchRequest:SearchRequest) : Observable<any>{
         const url1=this.basePath +'post/posts/search';

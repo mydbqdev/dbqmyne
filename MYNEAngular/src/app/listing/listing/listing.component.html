@@ -67,14 +67,14 @@
         <div> 
           <div>
             <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link top-menu active" routerLink="/listing" (click)="isSalSelect(true);">All Listings</a>
+              <li class="nav-item" >
+                <a [ngClass]="menuSeleced=='all'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('all');">All Listings</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link top-menu" routerLink="/listing" (click)="isSalSelect(true);">Your listings</a>
+                <a  [ngClass]="menuSeleced=='yourlistings'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('yourlistings');">Your listings</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link top-menu" routerLink="/listing" (click)="isSalSelect(true);" >Saved listings</a>
+                <a  [ngClass]="menuSeleced=='savedlistings'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('savedlistings');" >Saved listings</a>
               </li>
             </ul>
           </div>
@@ -106,7 +106,7 @@
           </div>
         </div>
         <div></div>
-        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" data-bs-toggle="modal" data-bs-target="#newList">List an Item</button></div>
+        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" data-bs-toggle="modal" data-bs-target="#newList" (click)="openListingModel()" >List an Item</button></div>
       </div>
      </div>
 
@@ -256,28 +256,37 @@
               <span aria-hidden="true">&times;</span>
               </button>
            </div>
-           <div class="ml-auto mt-3 mr-3"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;">List an Item</button></div>
+           <div class="ml-auto mt-3 mr-3"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="createListing()" >List an Item</button></div>
       </div>		  
       <div class="modal-body" style="margin-top: -5px;">
-        <div>
+        <div class="d-flex">
+          <div>
           <label>
-            <img src="assets/images/Add_photo.png" alt="Card image cap" style="width: 70%;">
+            <img src="assets/images/Add_photo.png" alt="Card image cap" style="width: 100px;">
             <input type="file" id="file" style="display: none" name="image" accept="image/*" multiple="true" data-original-title="upload photos" (change)="onFileChangedPhoto($event)">
           </label>
+          </div>
+          <div style="max-height: 100px;max-width: 550px;overflow-x: auto;">
+            <div>
+              <span *ngFor="let pre of previewUrlPhoto">
+                <img class="mr-1" src="{{pre}}" width="80px" height="90px" />&nbsp;
+              </span>               
+            </div>
+          </div>
         </div>
         <div style="padding-bottom: 10px;font-size: 11px;">Add up to 10 photos. Drag to reorder</div>
         <div style="font-weight: 500;">What are you selling?</div>
         <div class="form-groupmb-1">
               <label for="exampleInputFirst1" class="form-label">Title</label>
-							<input type="text" class="form-control form-control-sm" id="exampleInputFirst1" name="title" placeholder="Title" required>
-							<div class="text-danger" *ngIf="submitted && title==''">
+							<input type="text" class="form-control form-control-sm" id="exampleInputFirst1" [(ngModel)]="listringInfo.title"  name="title" placeholder="Title" required>
+							<div class="text-danger" *ngIf="submitted && (listringInfo.title==undefined || listringInfo.title== '')">
 								Please enter the title
 							</div>
         </div>
         <div class="form-group mb-1">
           <label for="inputDescription" class="form-label">Description</label>
-          <input type="text" class="form-control form-control-sm" id="inputDescription" name="description" placeholder="Description" required>
-          <div class="text-danger" *ngIf="submitted && description==''">
+          <input type="text" class="form-control form-control-sm" id="inputDescription" name="description" [(ngModel)]="listringInfo.description"  placeholder="Description" required>
+          <div class="text-danger" *ngIf="submitted && (listringInfo.description==undefined || listringInfo.description== '')">
             Please enter the description
           </div>
         </div>
@@ -285,15 +294,15 @@
           <div class="row">
               <div class="col-sm-3">
                 <label for="inputPrice" class="form-label">Price</label>
-                <input type="text" class="form-control form-control-sm" id="inputPrice" name="price" placeholder="Price" >
-                <div class="text-danger" *ngIf="submitted && price==''">
+                <input type="number" class="form-control form-control-sm" id="inputPrice" name="price" placeholder="Price" [(ngModel)]="listringInfo.price" min="0" >
+                <div class="text-danger" *ngIf="submitted && !this.listringInfo.free && (listringInfo.price == undefined ||listringInfo.price== null) ">
                   Please enter the price
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-check form-switch" style="padding-top: 32px;">
                   <span style="margin-left: 25px;">Free</span>
-                  <input class="form-check-input" type="checkbox" name="free" style="margin-left: 5px;margin-top: 5px;" role="switch" id="flexSwitchCheckFree">
+                  <input class="form-check-input" type="checkbox" name="free" style="margin-left: 5px;margin-top: 5px;" role="switch" id="flexSwitchCheckFree" [(ngModel)]="listringInfo.free" >
                   <label class="form-check-label" for="flexSwitchCheckFree"></label>
                 </div>
               </div>
@@ -305,15 +314,15 @@
           <div class="row">
               <div class="col-sm-3">
                 <label for="inputCategory" class="form-label">Category</label>
-                <input type="text" class="form-control form-control-sm" id="inputCategory" name="category" placeholder="Category" >
-                <div class="text-danger" *ngIf="submitted && listcategory==''">
+                <input type="text" class="form-control form-control-sm" id="inputCategory" name="category" placeholder="Category" [(ngModel)]="listringInfo.category" >
+                <div class="text-danger" *ngIf="submitted && (listringInfo.category == undefined ||listringInfo.category=='')">
                   Please enter the category
                 </div>
               </div>
               <div class="col-sm-6">
                 <label for="inputPickup" class="form-label">Pickup location</label>
-                <input type="text" class="form-control form-control-sm" id="inputPickup" name="pickup" placeholder="Pickup location" >
-                <div class="text-danger" *ngIf="submitted && pickup==''">
+                <input type="text" class="form-control form-control-sm" id="inputPickup" name="pickup" placeholder="Pickup location" [(ngModel)]="listringInfo.pickupLocation">
+                <div class="text-danger" *ngIf="submitted && (listringInfo.pickupLocation == undefined || listringInfo.pickupLocation=='')">
                   Please enter the pickup location
                 </div>
               </div>

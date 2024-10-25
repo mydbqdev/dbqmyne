@@ -36,12 +36,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	files:File[]=[];
 	postRequestModel:PostRequestModel=new PostRequestModel();
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
-	 @ViewChild('closeButtonNewList') closeButtonNewList;
-	title: string = '';
-	description: string = '';
-	price: string = '';
-	listcategory: string = '';
-	pickup: string = '';
+	listringInfo:PostSearchResult=new PostSearchResult();
+	@ViewChild('closeButtonNewList') closeButtonNewList;
+
 	submitted=false;
 
 	@ViewChild('closeButtonNewAds') closeButtonNewAds;
@@ -53,6 +50,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	category:string='';
 	submittedAd=false;
 
+	menuSeleced:string=''
 	userInfo:SignupDetails=new SignupDetails();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
@@ -92,7 +90,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		this.postRequestModel.privacy= 'Anywhere';
 	}
 	ngAfterViewInit() {
-		this.searchListing();
+		this.activeMenu('all');
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
@@ -107,6 +105,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		  this.previewADs(i);
 		  }
 		}
+	
 	}
 
 	previewADs(id) {
@@ -144,18 +143,31 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	onFileChangedPhoto(event) {
-		this.previewUrl=false;
-		this.files=[];
-		this.data="";
-		if(event.target.files.length>0){
-		  for(let i=0;i<event.target.files.length;i++){	
-		  this.fileData=<File>event.target.files[i];
-		  //this.preview(id);
-		  }
-		}
-	
-	}
+	fileDataPhoto: File = null;
+    previewUrlPhoto:any[] = [];
+    filesPoto:File[]=[];
+    onFileChangedPhoto(event) {
+        if(event.target.files.length>0){
+          for(let i=0;i<event.target.files.length;i++){ 
+          this.fileDataPhoto=<File>event.target.files[i];
+          this.previewListPhoto(i);
+          }
+        }
+    
+    }
+    previewListPhoto(id) {
+        // Show preview 
+        var mimeType = this.fileDataPhoto.type;
+        if (mimeType.match(/image\/*/) == null) {
+          return;
+        }
+        var reader = new FileReader();      
+        reader.readAsDataURL(this.fileDataPhoto); 
+        this.filesPoto.push(this.fileDataPhoto);
+        reader.onload = (_event) => { 
+                this.previewUrlPhoto.push(reader.result);
+        }
+    }
 	onFileChanged(event,id:number) {
 		this.previewUrl=false;
 		this.previewUrl2=false;
@@ -248,18 +260,26 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 }
 	   }); 
 	 }
-	 searchListing(){
+	 activeMenu(menuName:string){
+		this.menuSeleced=menuName;
+		this.listingResult=[];
+		this.listingResultPrint=[];
+		this.searchListing(this.menuSeleced);
+	 }
+
+	 searchListing(filterType:string){
 		// api post searrch
 		this.searchRequest.listingType=this.isSaleSelect?"forSale":"forFree";
-		this.searchRequest.filterType="all";
+		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=0;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo.zipCode;
 		this.appService.getSaleResultList(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
 		   this.listingResult = Object.assign([],data);
+		 }else{
+			this.listingResult = Object.assign([]);
 		 }
-		 console.log("this.listingResult ",this.listingResult );
 		 for(let i=0;i<this.listingResult.length;i=i+4){
 			this.listingResultList=[];
             for(let j=i;j<i+4 && j<this.listingResult.length;j++){
@@ -267,7 +287,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			}
 			this.listingResultPrint.push(this.listingResultList);
 		 }
-		 console.log("this.listingResultPrint ",this.listingResultPrint );
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -417,34 +436,118 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		
 	 }
 
-	 newList(){
-		 this.submitted=true;
+	 newAd(){
+	 	if(this.filesImgAds.length==0){
+	 		this.notifyService.showWarning("Please choose atleast one image.", "")
+	 		return;
+	 	}
+	 	this.submittedAd=true; 
+	 	if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null &&
+	 		this.adDescription !== '' && this.adDescription !== null)
+	 		 {
+	 			this.spinner.show();
+	 			const formData =  new  FormData();   
+	 	        for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
+	 		     formData.append("files",  this.filesImgAds[i]);  
+	 	       } 
+	 	
+	 	 formData.append('business', this.business );	
+	 	 formData.append('adsTitle', this.adsTitle );	
+	 	 formData.append('adDescription', this.adDescription );	
+	 	 formData.append('category', this.category );
+	 	 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
+
+	 	this.appService.createPost(formData).subscribe((data: any) => {
+	 	  this.notifyService.showSuccess(data.status, "");
+	 	  this.closeButtonNewAds.nativeElement.click();
+	 	 this.spinner.hide();
+	    },error =>{
+	 	 this.spinner.hide();
+	 	 if(error.status==403){
+	 	   this.router.navigate(['/forbidden']);
+	 	 }else  if (error.error && error.error.message) {
+	 	   this.errorMsg =error.error.message;
+	 	   console.log("Error:"+this.errorMsg);
+	 	   this.notifyService.showError(this.errorMsg, "");
+	 	   this.spinner.hide();
+	 	 } else {
+	 	   this.spinner.hide();
+	 	   if(error.status==500 && error.statusText=="Internal Server Error"){
+	 		 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+	 	   }else{
+	 		 let str;
+	 		   if(error.status==400){
+	 		   str=error.error;
+	 		   }else{
+	 			 str=error.message;
+	 			 str=str.substring(str.indexOf(":")+1);
+	 		   }
+	 		   console.log("Error:"+str);
+	 		   this.errorMsg=str;
+	 	   }
+	 	   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+	 	 }
+	    });
+	 		 }
+	  }
+
+	  resetAdPopup(){
+	 	 this.previewUrlImg1=false;
+	 	 this.filesImgAds=[];
+	 	 this.previewUrlImgAds=[];
+	 	 this.business="";
+	 	 this.adDescription="";
+	 	 this.adsTitle="";
+	 	 this.websiteLink="";
+	  }
+
+	 openListingModel(){
+		this.submitted=false;
+		this.filesPoto=[];
+		this.fileDataPhoto=null;
+		this.previewUrlPhoto=[];
+		this.listringInfo= new PostSearchResult();
+		this.listringInfo.free=false;
+		
 	 }
 
-	 newAd(){
-		if(this.filesImgAds.length==0){
-			this.notifyService.showWarning("Please choose atleast one image.", "")
+	 createListing(){
+
+		this.submitted=true;
+		if(this.listringInfo.title ==undefined || this.listringInfo.title =='' || this.listringInfo.description ==undefined || this.listringInfo.description =='' ||
+			( !this.listringInfo.free && ( this.listringInfo.price ==undefined || this.listringInfo.price == null) )|| this.listringInfo.category ==undefined || this.listringInfo.category =='' ||
+			this.listringInfo.pickupLocation ==undefined || this.listringInfo.category ==''){
 			return;
 		}
-		this.submittedAd=true; 
-		if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null &&
-			this.adDescription !== '' && this.adDescription !== null)
-			 {
-				this.spinner.show();
-				const formData =  new  FormData();   
-		        for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
-			     formData.append("files",  this.filesImgAds[i]);  
-		       } 
-		
-		 formData.append('business', this.business );	
-		 formData.append('adsTitle', this.adsTitle );	
-		 formData.append('adDescription', this.adDescription );	
-		 formData.append('category', this.category );
-		 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
+		if(this.filesPoto.length==0){
+			this.notifyService.showError("Please upload at least one photo","");
+			return;
+		}
+		this.listringInfo.userId=this.userInfo.userId;
+		this.listringInfo.zipCode=this.userInfo.zipCode;
+		this.listringInfo.discount=false;
+		this.listringInfo.discountAmount=0;
+		if(this.listringInfo.price ==undefined || this.listringInfo.price == null)
+		{this.listringInfo.price =0}
 
-		this.appService.createPost(formData).subscribe((data: any) => {
+		let listingInfo=JSON.stringify(this.listringInfo)	
+		const formData =  new  FormData();   
+		for  (var i =  0; i <  this.filesPoto.length; i++)  { 
+			formData.append("files",  this.filesPoto[i]);  
+		 } 
+		
+		 formData.append('listingInfo', listingInfo );
+
+		  this.appService.createListing(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
-		  this.closeButtonNewAds.nativeElement.click();
+	
+		  this.previewUrl2=null;
+		  this.previewUrl=null;
+		  this.data2="";
+		  this.data="";
+		 
+		  this.closeButtonNewList.nativeElement.click();
+		  
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -473,16 +576,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
 		 }
 	   });
-			 }
+		
 	 }
 
-	 resetAdPopup(){
-		 this.previewUrlImg1=false;
-		 this.filesImgAds=[];
-		 this.previewUrlImgAds=[];
-		 this.business="";
-		 this.adDescription="";
-		 this.adsTitle="";
-		 this.websiteLink="";
-	 }
+
+	
 }

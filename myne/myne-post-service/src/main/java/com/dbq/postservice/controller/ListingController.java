@@ -46,7 +46,7 @@ public class ListingController implements ListingApi {
 
 		try {
 			ListingBody pbody = gson.fromJson(body,ListingBody.class);		
-			return new ResponseEntity<Object>(listingService.createListing(files, pbody), HttpStatus.OK) {};
+			return new ResponseEntity<Object>("{\"status\":\"" + listingService.createListing(files, pbody) + "\"}", HttpStatus.OK) {};
 		} catch (Exception e) {
 			log.error("Couldn't serialize response for content type application/json", e);
 			return new ResponseEntity<Object>(e, HttpStatus.BAD_REQUEST);
