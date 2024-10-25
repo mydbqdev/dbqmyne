@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dbq.utils.ConditionMessageRepresentation;
 import com.dbq.utils.MulticastMessageRepresentation;
 import com.dbq.utils.SubscriptionDto;
+import com.dbq.utils.TokenMessageDto;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.AndroidFcmOptions;
 import com.google.firebase.messaging.ApnsConfig;
@@ -30,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.SendResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,6 +50,7 @@ public class FirebasePublisherController {
 	    
 	    @PostMapping("/notifications/subscribe")
 	    public ResponseEntity<Void> notificationSubscription(@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
+	    	System.out.println("Subscribed:" + subscriptionDto.getUserId() + ":" + subscriptionDto.getRegistryToken() + ":" + subscriptionDto.getZipCode());
 	    	if(usersMap.containsKey(subscriptionDto.getUserId()))
 	    	{
 	    		Set<String> set = usersMap.get(subscriptionDto.getUserId());
@@ -76,7 +79,8 @@ public class FirebasePublisherController {
 	    }
 	    
 	    @PostMapping("/notifications/unsubscribe")
-	    public ResponseEntity<Void> notificationUnSubscription(@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {        
+	    public ResponseEntity<Void> notificationUnSubscription(@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
+	    	System.out.println("UnSubscribed:" + subscriptionDto.getUserId() + ":" + subscriptionDto.getRegistryToken() + ":" + subscriptionDto.getZipCode());
 	    	if(usersMap.containsKey(subscriptionDto.getUserId()))
 	    	{
 	    		Set<String> set = usersMap.get(subscriptionDto.getUserId());
@@ -85,7 +89,7 @@ public class FirebasePublisherController {
 	    		if(set.size()==0)
 	    		{
 	    			usersMap.remove(subscriptionDto.getUserId());
-	    			if(zipcodeUsersMap.contains(subscriptionDto.getZipCode()))
+	    			if(zipcodeUsersMap.containsKey(subscriptionDto.getZipCode()))
 	    			{
 	    				Set<String> zset = zipcodeUsersMap.get(subscriptionDto.getZipCode());
 	    				zset.remove(subscriptionDto.getUserId());
@@ -99,24 +103,27 @@ public class FirebasePublisherController {
 	    
 	    @PostMapping("/notifications/sendByZipcode/{zipCode}/{message}")
 	    public ResponseEntity<Void> sendNotificationByZipcode(@PathVariable Long zipCode,@PathVariable String message) throws FirebaseMessagingException {
-	    	if(zipcodeUsersMap.contains(zipCode))
+	    	if(zipcodeUsersMap.containsKey(zipCode))
 	    	{
 	    		Set<String> users = zipcodeUsersMap.get(zipCode);
 	    		Set<String> tokenSet = new HashSet<String>();
 	    		if(users.size()>0)
 	    		{
 	    			users.stream().forEach(user->{
-	    				if(usersMap.contains(user))
+	    				if(usersMap.containsKey(user))
 	    					tokenSet.addAll(usersMap.get(user));
 	    			});
 	    		}
-	    		
-	            MulticastMessage msg = MulticastMessage.builder()
+	    		Notification.Builder builder = Notification.builder();
+	            MulticastMessage firebaseMultiCastmsg = MulticastMessage.builder()
+	            		.setNotification(builder.build())
+	            		.putData("title", "Myne")
+				        .putData("body", message)
+				        .putData("image","https://static.wixstatic.com/media/991410_996ad37c50a844f6a88e6e651fc8211d~mv2.png/v1/fill/w_44,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo.png")
 	      	          .addAllTokens(tokenSet)
-	      	          .putData("body", message)
 	      	          .build();
 
-	      	    fcm.sendMulticast(msg);
+	      	    fcm.sendEachForMulticast(firebaseMultiCastmsg);
 	    	}
 	    	
 	    	return ResponseEntity.ok().build();        
@@ -124,18 +131,79 @@ public class FirebasePublisherController {
 	    
 	    @PostMapping("/notifications/sendByUser/{userId}/{message}")
 	    public ResponseEntity<Void> sendNotificationToUser(@PathVariable String userId,@PathVariable String message ) throws FirebaseMessagingException {
-	    	if(usersMap.contains(userId)) {
+	    	if(usersMap.containsKey(userId)) {
 	    		Set<String> tokens = usersMap.get(userId);
-	    		List<Message> list = new ArrayList<Message>();
-	    		tokens.stream().forEach(token-> {
-	    			Message msg = Message.builder()
-	    		   	          .setToken(token)
-	    		   	          .putData("body", message)
-	    		   	          .build();
-	    			list.add(msg);
-	    		});
-	    		fcm.sendAll(list);
+//	    		List<Message> list = new ArrayList<Message>();
+	    		if(tokens.size()>1)
+	    		{
+	    			Notification.Builder builder = Notification.builder();
+		            MulticastMessage firebaseMultiCastmsg = MulticastMessage.builder()
+		            		.setNotification(builder.build())
+		            		.putData("title", "Myne")
+					        .putData("body", message)
+					        .putData("image","https://static.wixstatic.com/media/991410_996ad37c50a844f6a88e6e651fc8211d~mv2.png/v1/fill/w_44,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo.png")
+		      	          .addAllTokens(tokens)
+		      	          .build();
+	    			  BatchResponse result = fcm.sendEachForMulticast(firebaseMultiCastmsg);
+	    			  System.out.println(result.getSuccessCount() + "::" + result.getFailureCount());
+	    			  for(SendResponse sendResponse : result.getResponses())
+	    			  {
+	    				  System.out.println(sendResponse.getMessageId() + "::" + sendResponse.isSuccessful());
+	    			  }
+	    		}
+	    		else if(tokens.size()==1)
+	    		{
+	    			String token = tokens.iterator().next();
+	    			Notification.Builder builder = Notification.builder();
+	    				Message firebasemsg = Message.builder()
+	    						.setNotification(builder.build())
+			            		.putData("title", "Myne")
+						        .putData("body", message)
+						        .putData("image","https://static.wixstatic.com/media/991410_996ad37c50a844f6a88e6e651fc8211d~mv2.png/v1/fill/w_44,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo.png")
+						        .setToken(token)
+		    		   	        .build();
+	    				String result = fcm.send(firebasemsg);
+	    				System.out.println(result);
+	    		}
+	    	
+	    		
 	    	}
+	    	return ResponseEntity.ok().build();        
+	    }
+	    
+	    @PostMapping("/notifications/testMessage")
+	    public ResponseEntity<Void> sendByToken(@RequestBody TokenMessageDto dto ) throws FirebaseMessagingException {
+	    				Notification.Builder builder = Notification.builder();
+	    				Message firebasemsg = Message.builder()
+	    						.setNotification(builder.build())
+	    						.putData("title", "Myne")
+	    				        .putData("body", dto.getMessage())
+	    				        .putData("image","https://static.wixstatic.com/media/991410_996ad37c50a844f6a88e6e651fc8211d~mv2.png/v1/fill/w_44,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo.png")
+ 	    		   	            .setToken(dto.getToken())
+		    		   	        .build();
+	    				String result = fcm.send(firebasemsg);
+	    				System.out.println(result);
+	    	return ResponseEntity.ok().build();        
+	    }
+	    @PostMapping("/notifications/testMulticastMessage")
+	    public ResponseEntity<Void> sendByMulticastToken(@RequestBody TokenMessageDto dto ) throws FirebaseMessagingException {
+	    	
+	    	  List<String> tokens = new ArrayList<String>();
+	    	  tokens.add(dto.getToken());
+	    	  Notification.Builder builder = Notification.builder();
+	            MulticastMessage firebaseMultiCastmsg = MulticastMessage.builder()
+	            		.setNotification(builder.build())
+	            		.putData("title", "Myne")
+				        .putData("body", dto.getMessage())
+				        .putData("image","https://static.wixstatic.com/media/991410_996ad37c50a844f6a88e6e651fc8211d~mv2.png/v1/fill/w_44,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Logo.png")
+	      	          .addAllTokens(tokens)
+	      	          .build();
+			  BatchResponse result = fcm.sendEachForMulticast(firebaseMultiCastmsg);
+			  System.out.println(result.getSuccessCount() + "::" + result.getFailureCount());
+			  for(SendResponse sendResponse : result.getResponses())
+			  {
+				  System.out.println(sendResponse.getMessageId() + "::" + sendResponse.isSuccessful());
+			  }
 	    	return ResponseEntity.ok().build();        
 	    }
 }
