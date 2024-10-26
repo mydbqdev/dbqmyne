@@ -46,6 +46,8 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	websiteLink:string='';
 	category:string='';
 	submittedAd=false;
+	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games",
+		"Books","Fashion Accessories","Furniture","Jewelry","Pet Supplies","Musical Instruments","Computers & Tablets","Cell Phones","Tickets & Experiences","Collectibles","Office Supplies","Others"];
 
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {

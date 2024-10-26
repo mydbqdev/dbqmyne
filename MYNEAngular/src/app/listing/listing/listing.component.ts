@@ -49,7 +49,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	websiteLink:string='';
 	category:string='';
 	submittedAd=false;
-
+	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Collectibles","Office Supplies","Others"];
 	menuSeleced:string=''
 	userInfo:SignupDetails=new SignupDetails();
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
@@ -261,6 +261,16 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 }
 	   }); 
 	 }
+	 load=true;
+	 pageIndex=0;
+	 loadMoreProducts(){
+		if(this.load){
+			this.load=false;
+			this.pageIndex=this.pageIndex+1;
+			this.searchListing(this.menuSeleced);
+			}
+	 }
+
 	 activeMenu(menuName:string){
 		this.menuSeleced=menuName;
 		this.listingResult=[];
@@ -272,15 +282,18 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		// api post searrch
 		this.searchRequest.listingType=this.isSaleSelect?"forSale":"forFree";
 		this.searchRequest.filterType=filterType;
-		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageIndex=this.pageIndex;
 		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode=this.userInfo.zipCode;
 		this.appService.getSaleResultList(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
-		   this.listingResult = Object.assign([],data);
+			for(let i of data){
+				this.listingResult.push(i);
+			}
 		 }else{
-			this.listingResult = Object.assign([]);
+			this.pageIndex=0;
 		 }
+		 this.load=true;
 		 for(let i=0;i<this.listingResult.length;i=i+4){
 			this.listingResultList=[];
             for(let j=i;j<i+4 && j<this.listingResult.length;j++){

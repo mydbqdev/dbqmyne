@@ -102,7 +102,7 @@ public class MinIoService {
 	        MediaUrlDetails details = new MediaUrlDetails();
 	        details.setContentType(mimeType);
 	        details.setType(ext);
-	        details.setUrl(url+"/" + bucketName + "/" + objectName);
+	        details.setUrl("https://s3.dbqportal.com/" + bucketName + "/" + objectName);
 	        return details;
 	    }
 	 

@@ -40,6 +40,12 @@
     </div>
   </div>
 </div>
+<div  
+        infiniteScroll 
+        [infiniteScrollDistance]="1"
+        [infiniteScrollThrottle]="150"
+        (scrolled)="loadMoreProducts()"
+      > 
 <div style="top:100px;">
   <div class="d-flex">
      <div style="z-index: 1;position: fixed;width: 225px;border-right: 1px solid rgb(203, 203, 203);height: calc(100vh - 100px);top:100px;">
@@ -109,13 +115,13 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div class="d-flex">
                         <div>{{postSearchResultDt.description}}</div>
-                        <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length>0" >
+                        <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length>0" >
                          <img [src]="postSearchResultDt.mediaDetails[0].url" style="width: 190px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
                          <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                         </div>
                         </div>
-                        <div class="ml-auto" *ngIf= "postSearchResultDt.mediaDetails.length == 0" >
+                        <div class="ml-auto" *ngIf= "postSearchResultDt?.mediaDetails?.length == 0" >
                          
                          </div>
                        </div>
@@ -135,13 +141,13 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div class="d-flex">
                         <div>{{postSearchResultDt.description}}</div>
-                        <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length>0" >
+                        <div class="ml-auto" style="width: 200px;padding-left: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length>0" >
                          <img [src]="postSearchResultDt.mediaDetails[0].url" style="width: 190px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
                          <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                         </div>
                         </div>
-                        <div class="ml-auto" *ngIf= "postSearchResultDt.mediaDetails.length == 0" ></div>
+                        <div class="ml-auto" *ngIf= "postSearchResultDt?.mediaDetails?.length == 0" ></div>
                        </div>
                     </div>
                   </div>
@@ -242,7 +248,7 @@
     </div>
   </div>
 </div>
-
+</div>
 <!--modal for create-->
 <div class="modal fade" id="newPost" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
 	<div class="modal-dialog" role="document">
@@ -343,9 +349,7 @@
               <div class="form-group mb-1">
                 <label for="inputAdCategory" class="form-label">Select Category</label>
                 <select class="form-select form-select-sm" id="inputAdCategory" name="category" [(ngModel)]="category" aria-label=".form-select-sm example">
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                 </select>
               </div>
 

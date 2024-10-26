@@ -46,6 +46,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 	websiteLink:string='';
 	category:string='';
 	submittedAd=false;
+	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Others"];
 
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
@@ -184,30 +185,53 @@ export class PostComponent implements OnInit, AfterViewInit {
 	isSaleSelect(iss:boolean){
 		this.dataService.setIsSale(iss);
 	  }
+
+	 load=true;
+	 pageIndex=1;
+
+	  loadMoreProducts(){
+
+		if(this.load){
+		this.load=false;
+		this.pageIndex=this.pageIndex+1;
+		this.searchResult();
+		}
+	}
+	//test:string='';
 	searchPost(event){
-		let test:string=event.target.value;
-		if(test==""|| test==" "){
+		this.pageIndex=0;
+		this.searchText =event.target.value;
+		if(this.searchText==""|| this.searchText==" "){
 			this.notifyService.showWarning("Please search using valid content.", "")
 			return;
-		}
-		this.spinner.show();
-		
+		}		
 		this.dataService.setTopSearch(event.target.value);
 		// api post searrch
+		this.searchResult();
+	}
+
+	searchResult(){
 		this.searchRequest.filterType='posts';
-		this.searchRequest.pageIndex=0;
+		this.searchRequest.pageIndex=this.pageIndex;
 		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode="123456";
-		this.searchRequest.searchContent=test;
+		this.searchRequest.searchContent=this.searchText;
+		this.spinner.show();
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
+			
 		   this.postSearchResult = Object.assign([],data);
+		   for(let i of this.postSearchResult){
+			this.postSearchResultDt.push(i);
+		   }
+		  
 		 }else{
-			this.postSearchResult = Object.assign([]);
+			this.pageIndex=0;
 		 }
 		 this.spinner.hide();
-		 this.dataService.setPostSearchResult(this.postSearchResult);
-		 this.router.navigateByUrl('/post-search');
+		 this.load=true;
+		 //this.dataService.setPostSearchResult(this.postSearchResult);
+		// this.router.navigateByUrl('/post-search');
 	   },error =>{
 		 this.spinner.hide();
 		 if(error.status==403){
@@ -236,6 +260,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 }
 	   });    
 	}
+
 
 	createPost(type:number){
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationEnd } from '@angular/router';
@@ -14,7 +14,6 @@ import { NotificationService } from 'src/app/common/shared/message/notification.
 import { PostSearchResult } from 'src/app/common/models/post-search-result.model';
 import { PostRequestModel } from 'src/app/common/models/post-request.model';
 import { SignupDetails } from 'src/app/common/shared/signup-details';
-import { TimeSheetSubMenu } from 'src/app/common/shared/timesheet-sub-menus';
 
 export interface DummyJsonResponse {
 	products: Product[];
@@ -56,14 +55,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 postRequestModel:PostRequestModel=new PostRequestModel();
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
 	 @ViewChild('closeButtonNewAds') closeButtonNewAds;
-	 
+	 menuSeleced:string=''
 	business: string = '';
 	adsTitle: string = '';
 	adDescription: string = '';
 	websiteLink:string='';
 	category:string='';
 	submittedAd=false;
-
+	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Others"];
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 	userInfo:SignupDetails=new SignupDetails();
@@ -102,9 +101,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		}
 		)
 	 this.postRequestModel.privacy= 'Anywhere';
-	 this.searchPostForHome();
+	
 	}
 	ngAfterViewInit() {
+		this.activeMenu('forYou');
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
@@ -198,34 +198,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.dataService.setIsSale(iss);
 	}
 
-	loadMoreProducts(paginator: ProductsPaginator){
-		console.info("scrolling down");
-		//if (!paginator.hasMorePages) {
-		//	return;
-		//  }
-		//  this.page$.next(paginator.page + 1);
-	}
+	loadMoreProducts(){
 
-    /*private loadProducts$(): Observable<ProductsPaginator> {
-		return this.page$.pipe(
-		  tap(() => this.loading$.next(true)),
-		   switchMap((page) => this.api.getProducts$(page)),
-		  scan(this.updatePaginator, {items: [], page: 0, hasMorePages: true} as ProductsPaginator),
-		  tap(() => this.loading$.next(false)),
-		);
-	  }
-	
-	  private updatePaginator(accumulator: ProductsPaginator, value: ProductsPaginator): ProductsPaginator {
-		if (value.page === 1) {
-		  return value;
+		if(this.load){
+		this.load=false;
+		this.pageIndex=this.pageIndex+1;
+		this.searchPostForHome(this.menuSeleced);
 		}
-	
-		accumulator.items.push(...value.items);
-		accumulator.page = value.page;
-		accumulator.hasMorePages = value.hasMorePages;
-	
-		return accumulator;
-	  }*/
+	}
 
 	  searchPost(event){
 
@@ -245,7 +225,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.searchRequest.searchContent=test;
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
-		   this.postSearchResult = Object.assign([],data);
+		   this.postSearchResult = Object.assign(data);
 		 }else{
 			this.postSearchResult = Object.assign([]);
 		 }
@@ -295,10 +275,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
 
-		if(this.postRequestModel.description ==undefined ||this.postRequestModel.description == "" || "" == this.postRequestModel?.description.trim())
+		if(this.postRequestModel.description ==undefined )
 		{
-			this.notifyService.showError("Please provide some description. ","");
-			return;
+			this.postRequestModel.description ="";
 		}
 
 		if(this.files.length>0){
@@ -403,18 +382,35 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	   });
 		
 	 }
+	 activeMenu(menuName:string){
+		this.pageIndex=0;
+		this.menuSeleced=menuName;
+		this.searchPostForHome(this.menuSeleced);
+	 }
 
-	 searchPostForHome(){
+	 load=true;
+	 pageIndex=0;
+	 postSearchResultResponce:PostSearchResult[]=[];
+
+	 searchPostForHome(filterType:string){
 		// api post searrch
 		this.spinner.show();
-		this.searchRequest.filterType="foryou";
-		this.searchRequest.pageIndex=0;
-		this.searchRequest.pageSize=20;
+		this.searchRequest.filterType=filterType;
+		this.searchRequest.pageIndex=this.pageIndex;
+		this.searchRequest.pageSize=10;
+		
 		this.searchRequest.zipCode="123456";
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
-		   this.postSearchResult = Object.assign([],data);
+			this.postSearchResultResponce=Object.assign([],data);
+			for(let i of this.postSearchResultResponce){
+				this.postSearchResult.push(i);
+			}
+		 }else{
+			this.pageIndex=0;
 		 }
+		 this.load=true;
+		 console.log("this.postSearchResult",this.postSearchResult)
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -473,12 +469,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		let adsInfo=JSON.stringify(adsRequestModel);	
 		
 		formData.append('adsInfo', adsInfo );	
-		//  formData.append('business', this.business );	
-		//  formData.append('adsTitle', this.adsTitle );	
-		//  formData.append('adDescription', this.adDescription );	
-		//  formData.append('category', this.category );
-		//  formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
-
 		this.appService.createAds(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
 		  this.closeButtonNewAds.nativeElement.click();
