@@ -64,6 +64,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 				this.router.navigated = false;
 			}
 		});
+		this.authService.checkLoginUserVlidaate();
 		this.dataService.$postSearchResult.subscribe(dt=>{
 			this.postSearchResultDt=dt;
 			console.log("this.postSearchResultDt<>< ngOnInit",this.postSearchResultDt)

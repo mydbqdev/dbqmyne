@@ -64,6 +64,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 				this.router.navigated = false;
 			}
 		});
+		this.authService.checkLoginUserVlidaate();
 	}
 
 	ngOnDestroy() {

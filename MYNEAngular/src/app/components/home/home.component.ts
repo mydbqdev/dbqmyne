@@ -84,6 +84,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 				this.router.navigated = false;
 			}
 		});
+		this.authService.checkLoginUserVlidaate();
 		//this.paginator$ = this.loadProducts$();
 	}
 
@@ -107,7 +108,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
-
 	fileDataImgAds: File = null;
 	previewUrlImgAds:any[] = [];
 	filesImgAds:File[]=[];

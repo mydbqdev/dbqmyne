@@ -81,7 +81,8 @@ public interface PostsApi {
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse500.class))) })
     @RequestMapping(value = "/getPosts",
       produces = { "application/json" }, 
-        method = {RequestMethod.GET,RequestMethod.POST})
+      consumes = {"application/json"}, 
+      method = {RequestMethod.GET,RequestMethod.POST})
     public ResponseEntity<Object> getPosts(@RequestBody @Valid PostsFilterDto postsFilter) ;
 
 

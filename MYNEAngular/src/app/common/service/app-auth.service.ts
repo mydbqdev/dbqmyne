@@ -191,38 +191,22 @@ export class AppAuthService extends AuthService{
 
      public checkLoginUserVlidaate() : void{
         var msg:string;
-        this.sessionSnapshot =null;
+       // this.sessionSnapshot =null;
         this.message ='';
-        this.checkLoginUserOnServer().subscribe(
-            (result)=>{
-               this.sessionSnapshot = result;
-               this.sessionSnapshot.username = result.userEmail;
-               this.sessionSnapshot.token = result.token;
-               this.userService.setUsername(result.userEmail);
-              // this.userService.setUserinfo(result);
-               this.userService.setDbquser(true);
-
-               let resp: ResponseStore={userEmail:result.userEmail,token:result.token};
-               this.setSessionStore(resp);
-            },
-            (err) =>{
-               if(err.error && err.error.message){
-                   msg=err.error.message;
-               }else{
-               msg='An error occured while processing your request.Please contact your Help Desk.';
-               }
-               this.message=msg;
-               this.router.navigateByUrl('/signin');
-            },
-            () =>{
-                if(!this.sessionSnapshot){
-                   msg='An error occured while processing your request.Please contact your Help Desk.';
-                   this.message=msg;
-                   this.router.navigateByUrl('/signin');
-                }
-            }
+        this.getUserSignupDetails(sessionStorage.getItem('user')).subscribe((data) => {
+            console.info("Refesh3 pg",data)
+            let user:SignupDetails = new SignupDetails() ;
+            user.userId= data.id !=undefined?data.id:"";
+            user.userEmail= data.userEmail !=undefined?data.userEmail:"";
+            user.userFirstName= data.userFirstName !=undefined?data.userFirstName:"";
+            user.userLastName= data.userLastName !=undefined?data.userLastName:"";
+            user.zipCode= data.zipCode !=undefined?data.zipCode:"";
+            this.dataService.setUserDetails(user);
+         //   this.router.navigateByUrl('/home'); 
+        },error =>{
+            this.checkLogout();
+         }
         );
-       
     }
 
      public checkLogoutUserOnServer() : Observable<ApplicationSession>{

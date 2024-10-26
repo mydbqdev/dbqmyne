@@ -129,7 +129,7 @@ public class PostService {
 	                break;
 	        }
 
-	        // Check if posts are not empty before processing
+	       
 	        if (!posts.isEmpty()) {
 	            list = getPostsAds(posts);
 	        }
@@ -166,16 +166,23 @@ public class PostService {
 				break;
 			}
 	    	
-	    	list=getPostsAds(posts);
+	    	if(null !=posts )
+	    		list=getPostsAds(posts);
 
             return list; 
 	    }
 	    
 	    public 	List<PostsResponse> getPostsAds(List<PostCollection> posts) {
-	    
+	    	List<String> userIds=  new ArrayList<>();
 	    	List<PostsResponse> list = new ArrayList<>();
-	    	String userName ="";
-	    	List<String>userIds= posts.stream().map(d->d.getUserId()).toList();
+	    	
+	    	String userName = "";
+	    	
+	    	List<String> getuserId = posts.stream().map(d->d.getUserId()).toList();
+	    	if(!getuserId.isEmpty()) {
+	    		userIds.addAll(getuserId);
+	    	}
+	    	
 	    	PostsResponse adsres = new PostsResponse();
 	    	
 	    	
@@ -191,7 +198,7 @@ public class PostService {
 	    		
 	    	ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(userIds);
 	    	   	 
-	    	List<User>user =usersDetails.getBody();
+	    	List<User> user = usersDetails.getBody();
 	    			   
 	    	if(null !=randomAd ) {
 	    			
@@ -293,7 +300,7 @@ public class PostService {
 	    	        
 	    	        return "Post has been updated successfully";
 	    	    } catch (Exception e) {
-	    	        // Handle exceptions, e.g., log error
+	    	        
 	    	        return "Error updating post: " + e.getMessage();
 	    	    }
 	    	}

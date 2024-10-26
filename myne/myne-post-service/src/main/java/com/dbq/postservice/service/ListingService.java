@@ -115,23 +115,20 @@ public class ListingService {
 			return "User not authorized to delete this Listing";
 		}
 
-		// Delete the Listing
 		listingRepository.deleteById(listingId);
 		return "Listing  deleted successfully";
 	}
 
 	public Object updateListings(String userId, String listingId, ListingBody body) {
 		try {
-			// Fetch the existing Listing
+		
 			ListingCollection post = listingRepository.findById(listingId)
 					.orElseThrow(() -> new RuntimeException("Listing not found"));
 
-			// Optional: Check if the userId matches the Listing's userId
 			if (!post.getCreatorId().equals(userId)) {
 				return "User not authorized to update this listing";
 			}
 
-			// Update the post's fields
 			post.setDescription(body.getDescription());
 			post.setFree(body.getFree());
 			post.setPrice(body.getPrice());
@@ -139,17 +136,14 @@ public class ListingService {
 			post.setDiscountAmount(body.getDiscountAmount());
 			post.setPickupLocation(body.getPickupLocation());
 
-			// Update timestamps
 			LocalDateTime currentDateTime = LocalDateTime.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String formattedDateTime = currentDateTime.format(formatter);
 			post.setUpdatedAt(formattedDateTime); // Update the updatedAt field
 
-			// Save the updated post
 			
 			return listingRepository.save(post);
 		} catch (Exception e) {
-			// Handle exceptions, e.g., log error
 			return "Error updating post: " + e.getMessage();
 		}
 	}
@@ -238,9 +232,14 @@ public class ListingService {
 	
     public List<ListingResponse> getListingsAds(List<ListingCollection> listings) {
 		
+    	List<String> userIds =new ArrayList<>();
     	List<ListingResponse> list = new ArrayList<>();
     	String userName ="";
-    	List<String>userIds= listings.stream().map(d->d.getCreatorId()).toList();
+    	
+    	List<String> getuserIds= listings.stream().map(d->d.getCreatorId()).toList();
+    	if(!getuserIds.isEmpty()) {
+    		userIds.addAll(getuserIds);
+    	}
     	ListingResponse adsres = new ListingResponse();
     	
     	List<AdsCollection> ads= adsRepository.findAll();
