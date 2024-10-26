@@ -72,7 +72,18 @@ export class AppService{
             }
         );
     }
-
+    public createAds(data:any) : Observable<any>{
+        const url1=this.basePath +'post/ads';
+        return this.httpclient.post<any>(
+            url1,
+            data,
+            {
+                headers:ServiceHelper.filesHeaders(),
+               observe : 'body',
+               withCredentials:true
+            }
+        );
+    }
     public getPostSearchResult(searchRequest:SearchRequest) : Observable<any>{
         const url1=this.basePath +'post/getPosts';
         return this.httpclient.post<any>(

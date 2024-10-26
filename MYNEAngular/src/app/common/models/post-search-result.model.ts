@@ -23,6 +23,11 @@ export class PostSearchResult {
     discountAmount:number;
     pickupLocation:string;
     mediaPaths:MediaDetails[]=[];
+
+    //
+    privacy:string;
+    hyperLink:string;
+
 }
 
 export class MediaDetails {
