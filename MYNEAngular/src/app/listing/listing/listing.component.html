@@ -42,7 +42,7 @@
 </div>
 <div  
         infiniteScroll 
-        [infiniteScrollDistance]="1"
+        [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="150"
         (scrolled)="loadMoreProducts()"
       > 
@@ -123,7 +123,7 @@
             <div class="card" style="cursor: pointer;" *ngFor="let listingRes of listingResult;">
              <div *ngIf="listingRes.listingId">
               <a routerLink="/listing-det/{{listingRes.listingId}}" style="color: #000;">
-                <div *ngIf= "listingRes.mediaPaths.length>0" >
+                <div *ngIf= "listingRes?.mediaPaths?.length>0" >
                     <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
                     <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
@@ -138,7 +138,7 @@
             </div>
 
             <div *ngIf="!listingRes.listingId">
-                <div *ngIf= "listingRes.mediaPaths.length>0" >
+                <div *ngIf= "listingRes?.mediaPaths?.length>0" >
                     <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
                     <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
@@ -155,7 +155,7 @@
         </div>
       </div> 
       <!-- end row list-->
-      <div   style="padding:10px 22px;">
+      <!--div   style="padding:10px 22px;">
         <div >
           <div class="card-deck">
             <div class="card">
@@ -193,7 +193,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div -->
 
 
     </div>

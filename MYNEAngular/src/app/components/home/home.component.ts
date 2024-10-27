@@ -47,9 +47,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		 previewUrl:any = null;
 		 previewUrl2:any = null;
     files:File[]=[];
-     public paginator$: Observable<ProductsPaginator>;
-     public loading$ = new BehaviorSubject(true);
-	 private page$ = new BehaviorSubject(1);
 	 public postSearchResult:PostSearchResult[]=[];
 	 searchRequest:SearchRequest=new SearchRequest();
 	 postRequestModel:PostRequestModel=new PostRequestModel();
@@ -66,6 +63,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	//@ViewChild(SideNavMenuComponent) sidemenuComp;
 	//public rolesArray: string[] = [];
 	userInfo:SignupDetails=new SignupDetails();
+	private window!: Window;
+	currentScrolledY:number=2000;
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		this.userNameSession = userService.getUsername();
@@ -101,7 +100,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		}
 		)
 	 this.postRequestModel.privacy= 'Anywhere';
-	
+	this.window=window;
 	}
 	ngAfterViewInit() {
 		this.activeMenu('forYou');
@@ -199,11 +198,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 
 	loadMoreProducts(){
-
 		if(this.load){
 		this.load=false;
 		this.pageIndex=this.pageIndex+1;
 		this.searchPostForHome(this.menuSeleced);
+		window.scrollTo(0, this.currentScrolledY);
+		this.currentScrolledY=this.window.scrollY;
 		}
 	}
 
@@ -444,7 +444,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 	 newAd(){
 		if(this.filesImgAds.length==0){
-			this.notifyService.showWarning("Please choose atleast one image.", "")
+			this.notifyService.showError("Please choose atleast one image.", "")
 			return;
 		}
 		this.submittedAd=true; 

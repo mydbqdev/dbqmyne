@@ -43,8 +43,9 @@
 </div>
 <div  
         infiniteScroll 
-        [infiniteScrollDistance]="1"
+        [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="150"
+        [immediateCheck]="true"
         (scrolled)="loadMoreProducts()"
       > 
 <div style="top:100px;">
@@ -470,7 +471,6 @@
           </div>
         </div>
       </div>
-      <p class="text-center my-3" *ngIf="loading$ | async">Loading...</p>
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
         <div class="m-2">

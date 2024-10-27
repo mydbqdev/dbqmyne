@@ -390,7 +390,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 
 	 newAd(){
 		if(this.filesImgAds.length==0){
-			this.notifyService.showWarning("Please choose atleast one image.", "")
+			this.notifyService.showError("Please choose atleast one image.", "")
 			return;
 		}
 		this.submittedAd=true; 

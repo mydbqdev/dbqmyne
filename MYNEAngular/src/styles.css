@@ -397,3 +397,6 @@ a.nav-link.top-menu:hover{
     background-image: url('./assets/images/myne-smll-logo-n.png')!important;
   }
  
+  .text-icon-green{
+    color:green;
+}

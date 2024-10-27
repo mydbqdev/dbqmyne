@@ -52,6 +52,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Collectibles","Office Supplies","Others"];
 	menuSeleced:string=''
 	userInfo:SignupDetails=new SignupDetails();
+	private window!: Window;
+	currentScrolledY:number=1000;
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		this.userNameSession = userService.getUsername();
@@ -89,6 +91,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			isS=>this.isSaleSelect=isS
 		);
 		this.postRequestModel.privacy= 'Anywhere';
+		this.window = window;
 	}
 	ngAfterViewInit() {
 		this.activeMenu('all');
@@ -268,6 +271,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.load=false;
 			this.pageIndex=this.pageIndex+1;
 			this.searchListing(this.menuSeleced);
+			window.scrollTo(0, this.currentScrolledY);
+		    this.currentScrolledY=this.window.scrollY;
 			}
 	 }
 
@@ -280,6 +285,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 
 	 searchListing(filterType:string){
 		// api post searrch
+		this.spinner.show();
 		this.searchRequest.listingType=this.isSaleSelect?"forSale":"forFree";
 		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=this.pageIndex;
@@ -452,7 +458,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 
 	 newAd(){
 	 	if(this.filesImgAds.length==0){
-	 		this.notifyService.showWarning("Please choose atleast one image.", "")
+	 		this.notifyService.showError("Please choose atleast one image.", "")
 	 		return;
 	 	}
 	 	this.submittedAd=true; 

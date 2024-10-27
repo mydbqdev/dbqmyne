@@ -47,7 +47,8 @@ export class PostComponent implements OnInit, AfterViewInit {
 	category:string='';
 	submittedAd=false;
 	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Others"];
-
+	private window!: Window;
+	currentScrolledY:number=500;
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -89,7 +90,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.dataService.$topSearch.subscribe(
 			dt=>this.searchText=dt
 		);
-
+        this.window=window;
 		this.postRequestModel.privacy= 'Anywhere';
 	}
 	ngAfterViewInit() {
@@ -190,11 +191,12 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 pageIndex=1;
 
 	  loadMoreProducts(){
-
 		if(this.load){
 		this.load=false;
 		this.pageIndex=this.pageIndex+1;
 		this.searchResult();
+		window.scrollTo(0, this.currentScrolledY);
+		this.currentScrolledY=this.window.scrollY;
 		}
 	}
 	//test:string='';
@@ -382,7 +384,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 
 	 newAd(){
 		if(this.filesImgAds.length==0){
-			this.notifyService.showWarning("Please choose atleast one image.", "")
+			this.notifyService.showError("Please choose atleast one image.", "")
 			return;
 		}
 		this.submittedAd=true; 

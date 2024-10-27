@@ -42,8 +42,9 @@
 </div>
 <div  
         infiniteScroll 
-        [infiniteScrollDistance]="1"
+        [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="150"
+        [immediateCheck]="true"
         (scrolled)="loadMoreProducts()"
       > 
 <div style="top:100px;">
@@ -159,7 +160,7 @@
       </div> 
     </div>
 
-      <div class="row">
+      <!--div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
               <div class="row" style="margin:20px 20px 5px 20px;">
@@ -234,7 +235,7 @@
               </div>
           </div>
         </div>
-      </div>
+      </div-->
 
       
     </div>
