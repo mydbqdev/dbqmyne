@@ -262,6 +262,16 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 }
 	   });    
 	}
+	clearPostRequestData(){
+		this.postRequestModel.description="";
+		this.previewUrl2=null;
+		this.previewUrl=null;
+		this.data2="";
+		this.data="";
+		this.postRequestModel.privacy="Anywhere";
+		this.files=[];
+		
+	}
 
 
 	createPost(type:number){
@@ -292,12 +302,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
-		  this.postRequestModel.description="";
-		  this.previewUrl2=null;
-		  this.previewUrl=null;
-		  this.data2="";
-		  this.data="";
-		  this.postRequestModel.privacy="";
+	
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
@@ -336,12 +341,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.spinner.show();	
 		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
-		  this.postRequestModel.description="";
-		  this.previewUrl2=null;
-		  this.previewUrl=null;
-		  this.data2="";
-		  this.data="";
-		  this.postRequestModel.privacy="";
+		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }

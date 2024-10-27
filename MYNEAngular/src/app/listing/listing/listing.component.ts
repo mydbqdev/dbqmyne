@@ -338,6 +338,17 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 
 	 }
 
+	 clearPostRequestData(){
+		this.postRequestModel.description="";
+		this.previewUrl2=null;
+		this.previewUrl=null;
+		this.data2="";
+		this.data="";
+		this.postRequestModel.privacy="Anywhere";
+		this.files=[];
+		
+	}
+
 	 createPost(type:number){
 
 		if(null == this.userInfo ){
@@ -346,12 +357,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		}
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
-
-		if(this.postRequestModel.description ==undefined ||this.postRequestModel.description == "" || "" == this.postRequestModel?.description.trim())
-		{
-			this.notifyService.showError("Please provide some description. ","");
-			return;
-		}
 
 		if(this.files.length>0){
 			this.createPostWithFile(type);
@@ -372,12 +377,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
-		  this.postRequestModel.description="";
-		  this.previewUrl2=null;
-		  this.previewUrl=null;
-		  this.data2="";
-		  this.data="";
-		  this.postRequestModel.privacy="";
+		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
