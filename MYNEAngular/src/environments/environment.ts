@@ -138,7 +138,17 @@ export const environment = {
       "settingsConfig":true,
       "settingsTDS":true,
     }
-  }
+  },
+  firebaseConfig: {
+    apiKey: 'AIzaSyDwZKE-Y7hYvBIdRl7p4j_ui4AJveo1QMo',
+    authDomain: 'zoy-mobile-app.firebaseapp.com',
+    projectId: 'zoy-mobile-app',
+    storageBucket: 'zoy-mobile-app.appspot.com',
+    messagingSenderId: '694212252477',
+    appId: '1:694212252477:web:3627a2a382cc57be46eb54',
+    measurementId: 'G-GHJ6WR7MR9',
+    vapidKey: 'BMVwCKtR3IDXmifTMlPun_n94q35ffZNgqSPBPbA50ohOCm_YtorrjFUoEISYC9mTgJdDWyglewQOnGuOm6PVn0'
+  },
 };
 
 /*

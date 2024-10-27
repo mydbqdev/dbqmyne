@@ -29,6 +29,7 @@
     "bootstrap": "^5.2.3",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
+    "firebase": "^11.0.1",
     "font-awesome": "^4.7.0",
     "http-headers": "^3.0.2",
     "jquery": "^3.6.3",

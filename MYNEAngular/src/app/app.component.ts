@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { AuthService } from './common/service/auth.service';
 import { CanonicalService } from './common/shared/CanonicalService';
+import { FcmService } from './common/service/fcm.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class AppComponent {
 
 	greeting: any[] = [];
 
-	constructor(private titleService:Title,private meta:Meta,private route: ActivatedRoute, private router: Router, private http: HttpClient, private authService: AuthService,private canonicalService:CanonicalService) {}
+	constructor(private titleService:Title,private meta:Meta,private route: ActivatedRoute, private router: Router, private http: HttpClient, private authService: AuthService,private canonicalService:CanonicalService,private fcmService:FcmService) {}
 
 	ngOnInit() {
 
@@ -32,6 +33,7 @@ export class AppComponent {
         {charset:'UTF-8'}
       ]);
 		this.canonicalService.setCanonicalURL();
+    this.fcmService.init();
 		
 			
 	}

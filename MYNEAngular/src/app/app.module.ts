@@ -40,6 +40,9 @@ import { PostComponent } from './components/post/post.component';
 import { ListingDetailsComponent } from './listing/listing-details/listing-details.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ToastrModule } from 'ngx-toastr';
+import { initializeApp } from "firebase/app";
+initializeApp(environment.firebaseConfig);
+
 const appRoutes: Routes = [
   {path:'**',component:PageNotFoundComponent,pathMatch:'full'}
 ];

@@ -392,3 +392,8 @@ a.nav-link.top-menu:hover{
     padding-top: 10px;
     color: #fff;
 }
+.myne  {
+    background-color: #05838B!important;
+    background-image: url('./assets/images/myne-smll-logo-n.png')!important;
+  }
+ 

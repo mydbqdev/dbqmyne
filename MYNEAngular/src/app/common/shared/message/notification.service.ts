@@ -27,5 +27,9 @@ export class NotificationService {
   downloadSuccess(message, title){
     this.toastr.success(message, title, {positionClass:'toast-bottom-left'})
 }
+  showNotification(message, title){
+    this.toastr.success(message, title,{toastClass:'myne ngx-toastr'})
+    }
+
 
 }
