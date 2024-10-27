@@ -27,7 +27,7 @@ public class AuthService {
     public TokenDto login(LoginRequest request) {
     	
     	if(!userRepository.existsByUserEmail(request.getUserEmail()))
-    	 throw new WrongCredentialsException("Wrong user Email");
+    	 throw new WrongCredentialsException("Please Enter the valid Email");
     	
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUserEmail(), request.getPassword()));
         if (authenticate.isAuthenticated())
@@ -35,7 +35,7 @@ public class AuthService {
                     .builder()
                     .token(jwtService.generateToken(request.getUserEmail()))
                     .build();
-        else throw new WrongCredentialsException("Wrong credentials");
+        else throw new WrongCredentialsException("Please Enter the valid credentials");
     }
 
     public ResponseEntity<Object> register(RegisterRequest request) {
