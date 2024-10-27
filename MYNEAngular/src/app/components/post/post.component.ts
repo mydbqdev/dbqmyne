@@ -444,4 +444,43 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 this.adsTitle="";
 		 this.websiteLink="";
 	 }
+	 
+	  
+	 likeOrDisLikePost(post:any,i:number){
+
+	    let userId=this.userInfo.userId;
+	    let postId=post.postId;
+	    this.appService.likeOrDisLikePost(userId,postId).subscribe((data: any) => {
+		this.postSearchResultDt[i].likeCount=this.postSearchResultDt[i].isLiked?this.postSearchResultDt[i].likeCount-1:this.postSearchResultDt[i].likeCount+1;
+		this.postSearchResultDt[i].isLiked=!this.postSearchResultDt[i].isLiked;
+
+	   },error =>{
+		 this.spinner.hide();
+		 if(error.status==403){
+		   this.router.navigate(['/forbidden']);
+		 }else  if (error.error && error.error.message) {
+		   this.errorMsg =error.error.message;
+		   console.log("Error:"+this.errorMsg);
+		   this.notifyService.showError(this.errorMsg, "");
+		   this.spinner.hide();
+		 } else {
+		   this.spinner.hide();
+		   if(error.status==500 && error.statusText=="Internal Server Error"){
+			 this.errorMsg=error.statusText+"! Please login again or contact your Help Desk.";
+		   }else{
+			 let str;
+			   if(error.status==400){
+			   str=error.error;
+			   }else{
+				 str=error.message;
+				 str=str.substring(str.indexOf(":")+1);
+			   }
+			   console.log("Error:"+str);
+			   this.errorMsg=str;
+		   }
+		   if(error.status !== 401 ){this.notifyService.showError(this.errorMsg, "");}
+		 }
+	   });
+		
+	 }
 }

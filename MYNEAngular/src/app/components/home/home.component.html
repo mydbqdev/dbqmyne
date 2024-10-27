@@ -140,7 +140,7 @@
       </div>  
   
   
-      <div class="row" *ngFor="let postSearchResultDt of postSearchResult">
+      <div class="row" *ngFor="let postSearchResultDt of postSearchResult;let i = index">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
               <div class="row" style="margin:20px 20px 5px 20px;">
@@ -168,7 +168,7 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div>{{postSearchResultDt.description}}</div>
                       <!--start single photo -->
-                      <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length==1">
+                      <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==1">
                          <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                          <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
@@ -176,7 +176,7 @@
                       </div>
                       <!--end photo -->
                      <!--start 2 photo list-->
-                       <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length==2">
+                       <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==2">
                         <div >
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid"  style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
@@ -193,7 +193,7 @@
                        <!--end 2 photo list-->
 
                        <!--start 3 photo list-->
-                     <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt.mediaDetails.length==3">
+                     <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==3">
                       <div>
                         <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                         <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
@@ -218,7 +218,7 @@
                      <!--end 3 photo list-->
 
                       <!--start two row 4 photo list-->
-                      <div *ngIf= "postSearchResultDt.mediaDetails.length>=4">
+                      <div *ngIf= "postSearchResultDt?.mediaDetails?.length>=4">
                       <div class="d-flex" style="padding-top: 10px;">
                         <div>
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
@@ -255,7 +255,7 @@
                       <!--end two row 4 photo list-->
                     </div>
                     <div class="d-flex" *ngIf=" postSearchResultDt.postId">
-                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
+                      <div><a (click)="likeOrDisLikePost(postSearchResultDt,i)" ><i [ngClass]="postSearchResultDt.isLiked ?'fa fa-heart like-red':'far fa-heart' " title="Like" ></i></a><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
                     </div>
                   </div>

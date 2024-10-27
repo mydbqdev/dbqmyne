@@ -99,7 +99,7 @@
             <div style="border-bottom: 1px solid rgb(203, 203, 203)"></div>
         </div>
       </div>
-      <div *ngFor="let postSearchResultDt of postSearchResultDt">     
+      <div *ngFor="let postSearchResultDt of postSearchResultDt;let i = index">     
       <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
@@ -127,7 +127,7 @@
                        </div>
                     </div>
                     <div class="d-flex">
-                      <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
+                      <div><a (click)="likeOrDisLikePost(postSearchResultDt,i)" ></a><i [ngClass]="postSearchResultDt.isLiked ?'fa fa-heart like-red':'far fa-heart' " title="Like"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
                     </div>
                   </div>
