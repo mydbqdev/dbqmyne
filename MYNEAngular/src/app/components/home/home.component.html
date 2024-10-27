@@ -65,7 +65,7 @@
           </nav>
       </div>
       <div class="m-4" style="padding-top: 6px;padding-left: 15px;">
-        <button type="button" class="btn btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost">Post</button>
+        <button type="button" class="btn btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 145px;" data-bs-toggle="modal" data-bs-target="#newPost" (click)="clearPostRequestData()" >Post</button>
         <div class="mt-4">
         <button type="button" class="btn btn-outline-warning" style="border-radius: 5px !important;width: 145px;"  data-bs-toggle="modal" data-bs-target="#newAds" (click)="resetAdPopup()">Post Ad</button>
         </div>
@@ -132,7 +132,10 @@
                           <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(1)" >Post</button></div>
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(1)" 
+                          [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
+                          [disabled]="(this.postRequestModel.description == undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0"
+                          >Post</button></div>
                   </div>
               </div>
             </div>  
@@ -490,7 +493,7 @@
 	<div class="modal-dialog" role="document">
 	  <div class="modal-content" >
 		  <div>
-		  <button type="button" class="close mr-2" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewSave>
+		  <button type="button" class="close mr-2" data-bs-dismiss="modal" (click)="clearPostRequestData()" aria-label="Close" #closeButtonNewSave>
 			<span aria-hidden="true">&times;</span>
 		  </button>
 		   </div>
@@ -525,7 +528,9 @@
                           <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(2)">Post</button></div>
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0"  style="border-radius: 15px !important;width: 95px;" (click)="createPost(2)"
+                          [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
+                          [disabled]="(this.postRequestModel.description == undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0">Post</button></div>
                   </div>
 			  </div>
 			</div>

@@ -273,12 +273,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.postRequestModel.userId=this.userInfo.userId;
 		this.postRequestModel.zipCode=this.userInfo.zipCode;
 
-		if(this.postRequestModel.description ==undefined ||this.postRequestModel.description == "" || "" == this.postRequestModel?.description.trim())
-		{
-			this.notifyService.showError("Please provide some description. ","");
-			return;
-		}
-
 		if(this.files.length>0){
 			this.createPostWithFile(type);
 		 }else{
