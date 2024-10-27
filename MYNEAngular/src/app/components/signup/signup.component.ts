@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit {
 			this.spinner.hide();
 			console.log("error.error",error)
 			this.error = (error.error.error !=undefined?(error.error.error  +"."):"")
-			+ (error.error.userEmail!=undefined?(error.error.userEmail):"")
+			+ (error.error.userEmail!=undefined?(error.error.userEmail+"."):"")
 			+(error.error.password!=undefined?(error.error.password  +"."):"");
 		  if(error.status==403){
 			this.router.navigate(['/forbidden']);

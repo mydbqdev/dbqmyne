@@ -583,7 +583,7 @@
    
               <div class="form-group mb-1">
                 <label for="inputAdCategory" class="form-label">Select Category</label>
-                <select class="form-select form-select-sm h4" id="inputAdCategory" name="category" [(ngModel)]="category" aria-label=".form-select-sm example" placeholder="All Category" >
+                <select class="form-select form-select-sm" id="inputAdCategory" name="category" [(ngModel)]="category" aria-label=".form-select-sm example" placeholder="All Category" >
                   <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                 </select>
               </div>
