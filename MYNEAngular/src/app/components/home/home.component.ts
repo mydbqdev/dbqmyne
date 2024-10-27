@@ -172,11 +172,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	data: any="";
 	data2: any="";
 	
+	isImg:number=0;
 	preview(id) {
+		this.isImg=0;
 		// Show preview 
 		var mimeType = this.fileData.type;
-		if (mimeType.match(/image\/*/) == null) {
-		  return;
+		//if (mimeType.match(/image\/*/) == null) {
+		//  return;
+		//}
+		if(mimeType.match(/image\/*/)!=null && mimeType.match(/image\/*/).toString().includes("image")){
+			this.isImg=1;
+		}else if(mimeType.match(/video\/*/)!=null && mimeType.match(/video\/*/).toString().includes("video")){
+			this.isImg=2;
+		}else{
+			this.isImg=0;
+			return;
 		}
 		var reader = new FileReader();      
 		reader.readAsDataURL(this.fileData); 
@@ -185,11 +195,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
 			if(id==1){
 		        this.previewUrl2=false;
 				this.previewUrl = reader.result; 
+				if(this.isImg==1){
 				this.data=this.data+"&nbsp;<img src='"+this.previewUrl+"' height='140px' width='120px'  class='elevation-2'/> <button type='button' class='close' style='margin-top:-70px;cursor:pointer;'  (click)='delete(0)' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
+				}else if(this.isImg==2){
+					this.data=this.data+"&nbsp;<div class='video-wrapper'><video controls='true' height='140px' width='180px' loop='true' style='background-color: black;border: 1px solid gray;'><source id='video_src1' src='"+this.previewUrl+" | safe' type='"+mimeType+"'></video></div>"
+				}else{
+
+				}
 			}else{
 				this.previewUrl=false;
 				this.previewUrl2 = reader.result; 
+				if(this.isImg==1){
 				this.data2=this.data2+"&nbsp;<img src='"+this.previewUrl2+"' height='140px' width='120px'  class='elevation-2'/>";
+			    }else if(this.isImg==2){
+				this.data2=this.data2+"&nbsp;<div class='video-wrapper'><video controls='true' height='140px' width='180px' loop='true' style='background-color: black;border: 1px solid gray;'><source id='video_src1' src='"+this.previewUrl+" | safe' type='"+mimeType+"'></video></div>"
+			    }else{
+
+			    }
 			}
 		}
 	}
