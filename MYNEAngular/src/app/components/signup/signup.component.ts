@@ -27,7 +27,8 @@ export class SignupComponent implements OnInit {
 		this.error="";
 		this.submitted=true;	
 		if (this.email !== '' && this.email !== null && this.password !== '' && this.password !== null &&
-			this.firstname !== '' && this.firstname !== null && this.lastname !== '' && this.lastname !== null)
+			this.firstname !== '' && this.firstname !== null && this.lastname !== '' && this.lastname !== null
+			&& this.zipcode !== '' && this.zipcode !== null )
 			 {  
 				this.spinner.show();		     
 		this.submitted=false;
@@ -37,14 +38,14 @@ export class SignupComponent implements OnInit {
 		this.user.password=this.password;
 		this.user.zipCode=this.zipcode;
 		this.authService.signupUser(this.user).subscribe((data) => {
-		this.notifyService.showSuccess(data, "");
+		this.notifyService.showSuccess("your account has been succssfully created.", "Congratulations,");
 		this.spinner.hide();
 		this.router.navigate(['/signin']);
 		},error =>{
 			this.spinner.hide();
 			console.log("error.error",error)
 			this.error = (error.error.error !=undefined?(error.error.error  +"."):"")
-			+ (error.error.userEmail!=undefined?("Email should be valid."):"")
+			+ (error.error.userEmail!=undefined?(error.error.userEmail):"")
 			+(error.error.password!=undefined?(error.error.password  +"."):"");
 		  if(error.status==403){
 			this.router.navigate(['/forbidden']);
