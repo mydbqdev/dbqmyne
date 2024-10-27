@@ -397,7 +397,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.spinner.show();
 		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=this.pageIndex;
-		this.searchRequest.pageSize=10;
+		this.searchRequest.pageSize=20;
 		
 		this.searchRequest.zipCode="123456";
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
@@ -518,12 +518,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 		let userId=this.userInfo.userId;
 		let postId=post.postId;
-
-		console.log("post",post)
-		console.log(userId,"<><>",postId)
-
-
-	   this.appService.likeOrDisLikePost(userId,postId).subscribe((data: any) => {
+	    this.appService.likeOrDisLikePost(userId,postId).subscribe((data: any) => {
 		this.postSearchResult[i].likeCount=this.postSearchResult[i].isLiked?this.postSearchResult[i].likeCount-1:this.postSearchResult[i].likeCount+1;
 		this.postSearchResult[i].isLiked=!this.postSearchResult[i].isLiked;
 
