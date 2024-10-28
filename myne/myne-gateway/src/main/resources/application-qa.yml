@@ -12,4 +12,3 @@ spring:
       httpclient:
         connect-timeout: 60000
         response-timeout: 60s
-                   

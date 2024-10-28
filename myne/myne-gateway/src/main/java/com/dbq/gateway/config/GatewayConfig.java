@@ -7,10 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.dbq.gateway.filter.JwtAuthenticationFilter;
 
-
-
-
-
 @Configuration
 public class GatewayConfig {
     private final JwtAuthenticationFilter filter;
@@ -46,6 +42,4 @@ public class GatewayConfig {
 //                        .uri("lb://file-storage"))
                 .build();
     }
-    
-    
 }

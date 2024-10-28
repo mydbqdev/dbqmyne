@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dbq.authservice.db.models.User;
 import com.dbq.authservice.db.repository.UserRepository;
+import com.dbq.utils.MyneUserDetails;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	@Transactional
-	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+	public MyneUserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 		User user = userRepository.findByUserEmail(userEmail)
 		        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userEmail));
 		 return CustomUserDetails.build(user);

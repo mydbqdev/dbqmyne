@@ -10,12 +10,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.dbq.authservice.db.models.User;
+import com.dbq.utils.MyneUserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements MyneUserDetails {
     
     
     private static final long serialVersionUID = 1L;
@@ -25,13 +26,17 @@ public class CustomUserDetails implements UserDetails {
     @JsonIgnore
     private String password;
 
+    @JsonIgnore
+    private String zipcode;
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(String id,String username, String password,
+    public CustomUserDetails(String id,String username, String password,String zipcode,
         Collection<? extends GrantedAuthority> authorities) {
       this.id = id;
       this.username = username;
       this.password = password;
+      this.zipcode = zipcode;
       this.authorities = authorities;
     }
 
@@ -44,6 +49,7 @@ public class CustomUserDetails implements UserDetails {
           user.getId(), 
           user.getUserEmail(),
           user.getPassword(), 
+          user.getZipCode(),
           authorities);
     }
 
@@ -95,4 +101,17 @@ public class CustomUserDetails implements UserDetails {
       CustomUserDetails user = (CustomUserDetails) o;
       return Objects.equals(id, user.id);
     }
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	
+
+
+
 }

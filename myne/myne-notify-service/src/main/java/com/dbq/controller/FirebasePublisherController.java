@@ -1,11 +1,15 @@
 package com.dbq.controller;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +37,15 @@ import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
 import com.google.firebase.messaging.SendResponse;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/v1/notify")
 public class FirebasePublisherController {
 	 private final FirebaseMessaging fcm;
-	 
+	 public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 	 private ConcurrentHashMap<String,Set<String>> usersMap = new ConcurrentHashMap<String,Set<String>>();
 	 private ConcurrentHashMap<Long,Set<String>> zipcodeUsersMap = new ConcurrentHashMap<Long,Set<String>>();
 	 
@@ -49,52 +55,74 @@ public class FirebasePublisherController {
 	    }
 	    
 	    @PostMapping("/notifications/subscribe")
-	    public ResponseEntity<Void> notificationSubscription(@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
-	    	System.out.println("Subscribed:" + subscriptionDto.getUserId() + ":" + subscriptionDto.getRegistryToken() + ":" + subscriptionDto.getZipCode());
-	    	if(usersMap.containsKey(subscriptionDto.getUserId()))
+	    public ResponseEntity<Void> notificationSubscription(HttpServletRequest request, HttpServletResponse response,@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
+	    	
+	    	String userToken = request.getHeader("Authorization");
+	    	if (userToken == null) {
+	    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+			} else {
+				userToken = userToken.replace("Bearer ", "");
+			}	
+	    	Map<String, Object> claims = this.getAllClaimsFromToken(userToken);
+	    	String userId = claims.get("userid").toString();
+	    	Long zipCode = Long.parseLong(claims.get("zipcode").toString());
+	    	
+	    	System.out.println("Subscribed:" + userId + ":" + subscriptionDto.getRegistryToken() + ":" + zipCode);
+	    	if(usersMap.containsKey(userId))
 	    	{
-	    		Set<String> set = usersMap.get(subscriptionDto.getUserId());
+	    		Set<String> set = usersMap.get(userId);
 	    		set.add(subscriptionDto.getRegistryToken());
 	    	}
 	    	else
 	    	{
 	    		Set<String> set = new HashSet<String>();
 	    		set.add(subscriptionDto.getRegistryToken());
-	    		usersMap.put(subscriptionDto.getUserId(),set);
+	    		usersMap.put(userId,set);
 	    	}
 	    	
-	    	if(zipcodeUsersMap.containsKey(subscriptionDto.getZipCode()))
+	    	if(zipcodeUsersMap.containsKey(zipCode))
 	    	{
-	    		Set<String> set = zipcodeUsersMap.get(subscriptionDto.getZipCode());
-	    		set.add(subscriptionDto.getUserId());
+	    		Set<String> set = zipcodeUsersMap.get(zipCode);
+	    		set.add(userId);
 	    	}
 	    	else
 	    	{
 	    		Set<String> set = new HashSet<String>();
-	    		set.add(subscriptionDto.getUserId());
-	    		zipcodeUsersMap.put(subscriptionDto.getZipCode(), set);
+	    		set.add(userId);
+	    		zipcodeUsersMap.put(zipCode, set);
 	    	}
 	    	
 	        return ResponseEntity.ok().build();        
 	    }
 	    
 	    @PostMapping("/notifications/unsubscribe")
-	    public ResponseEntity<Void> notificationUnSubscription(@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
-	    	System.out.println("UnSubscribed:" + subscriptionDto.getUserId() + ":" + subscriptionDto.getRegistryToken() + ":" + subscriptionDto.getZipCode());
-	    	if(usersMap.containsKey(subscriptionDto.getUserId()))
+	    public ResponseEntity<Void> notificationUnSubscription(HttpServletRequest request, HttpServletResponse response,@RequestBody SubscriptionDto subscriptionDto) throws FirebaseMessagingException {
+
+	    	String userToken = request.getHeader("Authorization");
+	    	if (userToken == null) {
+	    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+			} else {
+				userToken = userToken.replace("Bearer ", "");
+			}	
+	    	Map<String, Object> claims = this.getAllClaimsFromToken(userToken);
+	    	String userId = claims.get("userid").toString();
+	    	Long zipCode = Long.parseLong(claims.get("zipcode").toString());
+	    	
+	    	System.out.println("UnSubscribed:" + userId + ":" + subscriptionDto.getRegistryToken() + ":" + zipCode);
+	    	if(usersMap.containsKey(userId))
 	    	{
-	    		Set<String> set = usersMap.get(subscriptionDto.getUserId());
+	    		Set<String> set = usersMap.get(userId);
 	    		if(set.contains(subscriptionDto.getRegistryToken()))
 	    			set.remove(subscriptionDto.getRegistryToken());
 	    		if(set.size()==0)
 	    		{
-	    			usersMap.remove(subscriptionDto.getUserId());
-	    			if(zipcodeUsersMap.containsKey(subscriptionDto.getZipCode()))
+	    			usersMap.remove(userId);
+	    			if(zipcodeUsersMap.containsKey(zipCode))
 	    			{
-	    				Set<String> zset = zipcodeUsersMap.get(subscriptionDto.getZipCode());
-	    				zset.remove(subscriptionDto.getUserId());
+	    				Set<String> zset = zipcodeUsersMap.get(zipCode);
+	    				zset.remove(userId);
 	    				if(zset.size()==0)
-	    					zipcodeUsersMap.remove(subscriptionDto.getZipCode());
+	    					zipcodeUsersMap.remove(zipCode);
 	    			}
 	    		}
 	    	}
@@ -205,5 +233,18 @@ public class FirebasePublisherController {
 				  System.out.println(sendResponse.getMessageId() + "::" + sendResponse.isSuccessful());
 			  }
 	    	return ResponseEntity.ok().build();        
+	    }
+	    
+	    private Claims getAllClaimsFromToken(String token) {
+	        Claims claims;
+	        try {
+	            claims = Jwts.parser()
+	                    .setSigningKey(SECRET)
+	                    .parseClaimsJws(token)
+	                    .getBody();
+	        } catch (Exception e) {
+	            claims = null;
+	        }
+	        return claims;
 	    }
 }
