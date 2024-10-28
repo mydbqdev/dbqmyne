@@ -151,7 +151,7 @@
                   <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">{{postSearchResultDt.creatorName?.charAt(0).toUpperCase()}}</div></div>
                   <div class="col-sm-11">
                     <div class="d-flex">
-                       <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}.</span> <span style="color: rgb(164,166,173);padding-left: 10px;"  *ngIf=" postSearchResultDt.postId">{{postSearchResultDt.createdAt | date :'MMM d' }}</span></div></div>
+                       <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}</span> <span style="color: rgb(164,166,173);padding-left: 10px;"  *ngIf=" postSearchResultDt.postId">{{postSearchResultDt.createdAt | date :'MMM d' }}</span></div></div>
                        <div class="ml-auto">
                          <div  *ngIf=" postSearchResultDt.postId">
                                          <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
@@ -175,7 +175,7 @@
                       <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==1">
                          <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                          <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
-                          <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                          <video id="myVideo1" controls="true" width="500" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                          </div>
                       </div>
                       <!--end photo -->
@@ -184,13 +184,13 @@
                         <div >
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid"  style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                           </div>
                         </div>
                         <div class="ml-1">
                           <div><img [src]="postSearchResultDt.mediaDetails[1].url" class="img-fluid"  style="border-top-right-radius: 5px;border-bottom-right-radius: 5px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
                           </div>
                         </div>
                        </div>
@@ -201,20 +201,20 @@
                       <div>
                         <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                         <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
-                         <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                         <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                         </div>
                       </div>
                       <div class="ml-1">
                         <div>
                           <div><img [src]="postSearchResultDt.mediaDetails[1].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
                           </div>
                         </div>
                         <div class="mt-1">
                           <div><img [src]="postSearchResultDt.mediaDetails[2].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[2].url | safe" [type]="postSearchResultDt.mediaDetails[2].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[2].url | safe" [type]="postSearchResultDt.mediaDetails[2].contentType"> </video> 
                           </div>
                         </div>
                       </div>
@@ -227,14 +227,14 @@
                         <div>
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                           </div>
                         </div>
                         <div class="ml-1">
                           <div>
                             <div><img [src]="postSearchResultDt.mediaDetails[1].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('image')"></div>
                             <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('video')">                           
-                             <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
+                             <video id="myVideo1" controls="true" width="200" height="180" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
                             </div>
                           </div>
                         </div>
@@ -243,14 +243,14 @@
                         <div>
                           <div><img [src]="postSearchResultDt.mediaDetails[2].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[2].url | safe" [type]="postSearchResultDt.mediaDetails[2].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[2].url | safe" [type]="postSearchResultDt.mediaDetails[2].contentType"> </video> 
                           </div>
                         </div>
                         <div class="ml-1">
                           <div>
                             <div><img [src]="postSearchResultDt.mediaDetails[3].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[3].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[3].contentType.includes('video')">                           
-                           <video id="myVideo1" controls="true" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[3].url | safe" [type]="postSearchResultDt.mediaDetails[3].contentType"> </video> 
+                           <video id="myVideo1" controls="true" loop="true" width="200" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[3].url | safe" [type]="postSearchResultDt.mediaDetails[3].contentType"> </video> 
                           </div>
                           </div>
                         </div>
@@ -279,7 +279,7 @@
                   <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">M</div></div>
                   <div class="col-sm-11">
                     <div class="d-flex">
-                       <div><div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div></div>
+                       <div><div style="font-size: 17px;font-weight: 600;"><span>Monisha</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div></div>
                        <div class="ml-auto">
                                          <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -319,7 +319,7 @@
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-2">K</div></div>
                   <div class="col-sm-11">
                     <div class="d-flex">
-                      <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
+                      <div style="font-size: 17px;font-weight: 600;"><span>Kavya</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
                       <div class="ml-auto">
                         <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -358,7 +358,7 @@
               <div class="row" style="margin:20px 20px 5px 20px;">
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">M</div></div>
                   <div class="col-sm-11">
-                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
+                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
@@ -378,7 +378,7 @@
               <div class="row" style="margin:20px 20px 5px 20px;">
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">M</div></div>
                   <div class="col-sm-11">
-                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
+                    <div style="font-size: 17px;font-weight: 600;"><span>Monisha</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 9</span></div>
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
@@ -407,7 +407,7 @@
               <div class="row" style="margin:20px 20px 5px 20px;">
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-2">K</div></div>
                   <div class="col-sm-11">
-                    <div style="font-size: 17px;font-weight: 600;"><span>Kavya.</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
+                    <div style="font-size: 17px;font-weight: 600;"><span>Kavya</span> <span style="color: rgb(164,166,173);padding-left: 10px;">Oct 5</span></div>
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
