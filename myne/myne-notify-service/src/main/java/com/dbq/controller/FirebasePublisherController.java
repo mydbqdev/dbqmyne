@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -234,6 +235,24 @@ public class FirebasePublisherController {
 			  }
 	    	return ResponseEntity.ok().build();        
 	    }
+	    
+	    @GetMapping("/notifications/clearUserCache")
+	    public ResponseEntity<Void> clearUserCache() throws FirebaseMessagingException {
+	    	usersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+	    @GetMapping("/notifications/clearZipcodeUserCache")
+	    public ResponseEntity<Void> clearZipcodeUserCache() throws FirebaseMessagingException {
+	    	zipcodeUsersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+	    @GetMapping("/notifications/clearAllCache")
+	    public ResponseEntity<Void> clearAllCache() throws FirebaseMessagingException {
+	    	usersMap.clear();
+	    	zipcodeUsersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+
 	    
 	    private Claims getAllClaimsFromToken(String token) {
 	        Claims claims;

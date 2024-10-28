@@ -13,6 +13,7 @@ import { UserService } from './user.service';
 import { ResponseStore } from '../models/response.model';
 import { SignupDetails } from '../shared/signup-details';
 import { DataService } from './data.service';
+import { BrowserDetectorService } from './browser-detector.service';
 
 @Injectable()
 export class AppAuthService extends AuthService{
@@ -23,7 +24,7 @@ export class AppAuthService extends AuthService{
     httpOptions ={
         headers :new HttpHeaders({'Content-Type':'application/json'})
     };
-    constructor(private httpclient:HttpClient,private router:Router,private messageService:MessageService,@Inject(BASE_PATH) private basePath:string,private userService:UserService,private encryptDecryptHelper:AESEncryptDecryptHelper,private dataService:DataService){
+    constructor(private httpclient:HttpClient,private router:Router,private messageService:MessageService,@Inject(BASE_PATH) private basePath:string,private userService:UserService,private encryptDecryptHelper:AESEncryptDecryptHelper,private dataService:DataService, private browserService: BrowserDetectorService){
        super();
         this.sessionSnapshot=null;
         this.message='';
@@ -60,6 +61,25 @@ export class AppAuthService extends AuthService{
             loginUser,
             {
                 headers:ServiceHelper.buildHeadersAuth(encrypt),
+                observe : 'body',
+                withCredentials:true
+            }
+        );
+    }
+    public subscribeFcmNotification(subscribe:string) : Observable<any>{
+        
+        const url1=this.basePath +'notify/notifications/' + subscribe;
+        const key =this.browserService.getBrowserName();
+        let registryToken : any ={registryToken: localStorage.getItem("myne-"+ key)};
+
+        return this.httpclient.post<void>(
+            url1,
+            registryToken,
+            {
+                headers: new HttpHeaders({
+                    'Authorization':  sessionStorage.getItem('token'),
+                    'content-type': 'application/json'
+                }),
                 observe : 'body',
                 withCredentials:true
             }

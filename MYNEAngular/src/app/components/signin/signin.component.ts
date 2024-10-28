@@ -43,6 +43,8 @@ export class SigninComponent implements OnInit {
 				console.log("res>>>",res)
 				this.authService.setSessionStore(res);
 				this.loadInitialData();
+				this.authService.subscribeFcmNotification('unsubscribe').subscribe();
+				this.authService.subscribeFcmNotification('subscribe').subscribe();
 			//	this.authService.checkLoginUser();
 				this.router.navigate(['/home']);
 			}, error => {
