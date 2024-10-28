@@ -52,8 +52,11 @@ export abstract class AuthService {
             return of(false);
 
     }
+	public getAuthUser(user:User) : Observable<any>{
+        return of(true);
+    }
 
-    public getAuthUser(user:User) : Observable<any>{
+    public subscribeFcmNotification(subscribe:string) : Observable<any>{
         return of(true);
     }
     public getUserSignupDetails(data:any) : Observable<any>{

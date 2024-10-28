@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +37,8 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.Notification;
 import com.google.firebase.messaging.SendResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -48,7 +51,7 @@ public class FirebasePublisherController {
 	 public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 	 private ConcurrentHashMap<String,Set<String>> usersMap = new ConcurrentHashMap<String,Set<String>>();
 	 private ConcurrentHashMap<Long,Set<String>> zipcodeUsersMap = new ConcurrentHashMap<Long,Set<String>>();
-	 
+	 private Gson gson = new GsonBuilder().create();
 	    
 	    public FirebasePublisherController(FirebaseMessaging fcm) {
 	        this.fcm = fcm;        
@@ -159,11 +162,14 @@ public class FirebasePublisherController {
 	    
 	    @PostMapping("/notifications/sendByUser/{userId}/{message}")
 	    public ResponseEntity<Void> sendNotificationToUser(@PathVariable String userId,@PathVariable String message ) throws FirebaseMessagingException {
+	    	System.out.println("userId:" + userId + "::" + "message:" + message);
 	    	if(usersMap.containsKey(userId)) {
 	    		Set<String> tokens = usersMap.get(userId);
+	    		System.out.println("tokens size::" + tokens.size());
 //	    		List<Message> list = new ArrayList<Message>();
 	    		if(tokens.size()>1)
 	    		{
+	    			System.out.println("for tokens::" + gson.toJson(tokens));
 	    			Notification.Builder builder = Notification.builder();
 		            MulticastMessage firebaseMultiCastmsg = MulticastMessage.builder()
 		            		.setNotification(builder.build())
@@ -182,6 +188,7 @@ public class FirebasePublisherController {
 	    		else if(tokens.size()==1)
 	    		{
 	    			String token = tokens.iterator().next();
+	    			System.out.println("Triggering single token::" + token);
 	    			Notification.Builder builder = Notification.builder();
 	    				Message firebasemsg = Message.builder()
 	    						.setNotification(builder.build())
@@ -234,6 +241,24 @@ public class FirebasePublisherController {
 			  }
 	    	return ResponseEntity.ok().build();        
 	    }
+	    
+	    @GetMapping("/notifications/clearUserCache")
+	    public ResponseEntity<Void> clearUserCache() throws FirebaseMessagingException {
+	    	usersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+	    @GetMapping("/notifications/clearZipcodeUserCache")
+	    public ResponseEntity<Void> clearZipcodeUserCache() throws FirebaseMessagingException {
+	    	zipcodeUsersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+	    @GetMapping("/notifications/clearAllCache")
+	    public ResponseEntity<Void> clearAllCache() throws FirebaseMessagingException {
+	    	usersMap.clear();
+	    	zipcodeUsersMap.clear();
+	    	return ResponseEntity.ok().build();        
+	    }
+
 	    
 	    private Claims getAllClaimsFromToken(String token) {
 	        Claims claims;
