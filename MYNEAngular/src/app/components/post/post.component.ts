@@ -231,6 +231,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		}		
 		this.dataService.setTopSearch(event.target.value);
 		// api post searrch
+		this.postSearchResultDt=[];
 		this.searchResult();
 	}
 
@@ -242,6 +243,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.searchRequest.searchContent=this.searchText;
 		this.spinner.show();
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
+		 this.load=true;
 		 if(data.length >0){
 			
 		   this.postSearchResult = Object.assign([],data);
@@ -251,9 +253,10 @@ export class PostComponent implements OnInit, AfterViewInit {
 		  
 		 }else{
 			this.pageIndex=0;
+			this.searchResult();
 		 }
 		 this.spinner.hide();
-		 this.load=true;
+		
 		 //this.dataService.setPostSearchResult(this.postSearchResult);
 		// this.router.navigateByUrl('/post-search');
 	   },error =>{
@@ -285,6 +288,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 	   });    
 	}
 	clearPostRequestData(){
+		this.isCreating = false;
 		this.postRequestModel.description="";
 		this.previewUrl2=null;
 		this.previewUrl=null;
@@ -294,7 +298,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.files=[];
 		
 	}
-
+	isCreating = false;
 
 	createPost(type:number){
 
@@ -310,7 +314,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 }else{
 			this.createPostWithOutFile(type);
 		 }
-
+		 this.isCreating = true;
 	}
 	
 	createPostWithFile(type:number){
@@ -323,13 +327,17 @@ export class PostComponent implements OnInit, AfterViewInit {
 		
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
-		  this.notifyService.showSuccess(data.status, "");
-	
+		//  this.notifyService.showSuccess(data.status, "");
+		var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		this.postSearchResultDt.unshift(model);
+		console.log("model",model)
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -362,13 +370,19 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 createPostWithOutFile(type:number){
 		this.spinner.show();	
 		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
-		  this.notifyService.showSuccess(data.status, "");
+		 // this.notifyService.showSuccess(data.status, "");
+		 console.log("data>>",data)
+		  var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		  console.log(this.postSearchResultDt,"data>>",model)
+		  this.postSearchResultDt.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -418,12 +432,14 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 formData.append('adDescription', this.adDescription );	
 		 formData.append('category', this.category );
 		 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
-
+		 this.isCreating = true;
 		this.appService.createPost(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
 		  this.closeButtonNewAds.nativeElement.click();
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -454,6 +470,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 	 }
 
 	 resetAdPopup(){
+		this.isCreating=false;
 		 this.previewUrlImg1=false;
 		 this.filesImgAds=[];
 		 this.previewUrlImgAds=[];

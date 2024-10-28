@@ -132,10 +132,21 @@
                           <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(1)" 
+                        <div class="ml-auto">
+                          <button type="button" 
+                                  class="btn-sm btn-info border-0" 
+                                  style="border-radius: 15px !important; background-color: #8B5805 !important; width: 100px;" 
+                                  (click)="createPost(1)"
+                                  [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
+                                  [disabled]="(this.postRequestModel.description == undefined || this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0 || isCreating">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                            {{ isCreating ? 'Creating...' : 'Post' }}
+                          </button>
+                        </div>
+                        <!-- <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(1)" 
                           [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
                           [disabled]="(this.postRequestModel.description == undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0"
-                          >Post</button></div>
+                          >Post</button></div> -->
                   </div>
               </div>
             </div>  
@@ -153,12 +164,12 @@
                     <div class="d-flex">
                        <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}</span> <span style="color: rgb(164,166,173);padding-left: 10px;"  *ngIf=" postSearchResultDt.postId">{{postSearchResultDt.createdAt | date :'MMM d' }}</span></div></div>
                        <div class="ml-auto">
-                         <div  *ngIf=" postSearchResultDt.postId">
+                         <div  *ngIf=" postSearchResultDt.postId && postSearchResultDt.userId == userInfo.userId">
                                          <a class="dropdown-toggle no-arrow" style="margin-right: -10px;" href="#" role="button" id="dropdownMenuLink"
                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                           <i class="fas fa-ellipsis-v text-gray-400"></i>
                                           </a>
-                                          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" 
                                               aria-labelledby="dropdownMenuLink">
                                               <a class="dropdown-item" href="javascript:void(0)" >Delete</a>
                                               <a class="dropdown-item" href="javascript:void(0)" >Edit</a>
@@ -272,7 +283,7 @@
 
 
 
-      <div class="row">
+    <!--    <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
               <div class="row" style="margin:20px 20px 5px 20px;">
@@ -296,12 +307,12 @@
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
-                     <!--start 2 photo list-->
+                    
                        <div class="d-flex" style="padding-top: 10px;">
                         <div ><img src="assets/images/listing2.JPG" style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" class="img-fluid" alt="logo"></div>
                         <div class="ml-1"><img src="assets/images/listing3.JPG" style="border-top-right-radius: 5px;border-bottom-right-radius: 5px;" class="img-fluid" alt="logo"></div>
                        </div>
-                       <!--end 2 photo list-->
+                    
                     </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
@@ -325,7 +336,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <i class="fas fa-ellipsis-v text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" 
                             aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="javascript:void(0)" >Delete</a>
                             <a class="dropdown-item" href="javascript:void(0)" >Edit</a>
@@ -337,11 +348,11 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
 
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
-                     <!--start single photo -->
+                     
                      <div class="d-flex" style="padding-top: 10px;">
                       <div><img src="assets/images/coast-6310250_1280.png" class="img-fluid" alt="logo"></div>
                      </div>
-                     <!--end photo -->
+                    
                     </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
@@ -352,7 +363,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+    <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
               <div class="row" style="margin:20px 20px 5px 20px;">
@@ -372,7 +383,7 @@
           </div>
         </div>
       </div> 
-      <div class="row">
+       <div class="row">
         <div class="col-sm-12">
           <div style="border-bottom: 1px solid rgb(203, 203, 203)">
               <div class="row" style="margin:20px 20px 5px 20px;">
@@ -382,7 +393,7 @@
                     <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore</div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
-                      <!--start 3 photo list-->
+                     
                       <div class="d-flex" style="padding-top: 10px;">
                         <div><img src="assets/images/car-8647805_1280.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
@@ -390,7 +401,7 @@
                           <div class="mt-1"><img src="assets/images/speedometer-1249610_1280.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
-                       <!--end 3 photo list-->
+                     
                     </div>
                     <div class="d-flex">
                       <div><i class="far fa-heart" title="Like"></i><span style="font-size: 11px;margin-left: 2px;">5</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">4</span></div>
@@ -412,7 +423,6 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
                      <div style="padding-top: 10px;">
-                       <!--start two row 4 photo list-->
                        <div class="d-flex" style="padding-top: 10px;">
                         <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
@@ -425,7 +435,6 @@
                           <div><img src="assets/images/Frame_32342572.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
-                      <!--end two row 4 photo list-->
                      </div>
                     </div>
                     <div class="d-flex">
@@ -449,7 +458,6 @@
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px;">
                      <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</div>
                      <div style="padding-top: 10px;">
-                      <!--start two row more than 4 photo list-->
                        <div class="d-flex" style="padding-top: 10px;">
                         <div><img src="assets/images/pexels-haru-mio-298755868-14444882.png" class="img-fluid" alt="logo"></div>
                         <div class="ml-1">
@@ -462,7 +470,6 @@
                           <div><img src="assets/images/Frame_32342572.png" class="img-fluid" alt="logo"></div>
                         </div>
                        </div>
-                       <!--end two row more than 4 photo list-->
                      </div>
                     </div>
                     <div class="d-flex">
@@ -473,7 +480,7 @@
               </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
         <div class="m-2">
@@ -528,10 +535,19 @@
                           <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0"  style="border-radius: 15px !important;width: 95px;" (click)="createPost(2)"
+                        <button type="button" 
+                                  class="btn-sm btn-info border-0" 
+                                  style="border-radius: 15px !important; background-color: #8B5805 !important; width: 100px;" 
+                                  (click)="createPost(1)"
+                                  [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
+                                  [disabled]="(this.postRequestModel.description == undefined || this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0 || isCreating">
+                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                            {{ isCreating ? 'Creating...' : 'Post' }}
+                          </button>
+                        <!-- <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0"  style="border-radius: 15px !important;width: 95px;" (click)="createPost(2)"
                           [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
                           [disabled]="(this.postRequestModel.description == undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0">Post</button></div>
-                  </div>
+                  </div> -->
 			  </div>
 			</div>
 		   </div>		   
@@ -623,7 +639,10 @@
                 <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
-                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">Post Ads</button>
+                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 100px;" (click)="newAd()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                  {{ isCreating ? 'Creating...' : 'Post Ads' }}</button>
+
               </div>
           </div>
           

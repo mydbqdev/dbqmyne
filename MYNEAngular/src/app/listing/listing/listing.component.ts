@@ -361,6 +361,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	 }
 
 	 clearPostRequestData(){
+		this.isCreating = false;
 		this.postRequestModel.description="";
 		this.previewUrl2=null;
 		this.previewUrl=null;
@@ -385,7 +386,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 }else{
 			this.createPostWithOutFile(type);
 		 }
-
+		 this.isCreating = true;
 	}
 	
 	createPostWithFile(type:number){
@@ -404,7 +405,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.closeButtonNewSave.nativeElement.click();
 		  }
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -448,7 +451,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.closeButtonNewSave.nativeElement.click();
 		  }
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -498,12 +503,14 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	 	 formData.append('adDescription', this.adDescription );	
 	 	 formData.append('category', this.category );
 	 	 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
-
+		  this.isCreating = true;
 	 	this.appService.createPost(formData).subscribe((data: any) => {
-	 	  this.notifyService.showSuccess(data.status, "");
-	 	  this.closeButtonNewAds.nativeElement.click();
+	 	 this.notifyService.showSuccess(data.status, "");
+		 this.isCreating = false;
+	 	 this.closeButtonNewAds.nativeElement.click();
 	 	 this.spinner.hide();
 	    },error =>{
+			this.isCreating = false;
 	 	 this.spinner.hide();
 	 	 if(error.status==403){
 	 	   this.router.navigate(['/forbidden']);
@@ -532,8 +539,10 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	    });
 	 		 }
 	  }
+	  isCreating = false;
 
 	  resetAdPopup(){
+		 this.isCreating = false;
 	 	 this.previewUrlImg1=false;
 	 	 this.filesImgAds=[];
 	 	 this.previewUrlImgAds=[];
@@ -544,6 +553,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	  }
 
 	 openListingModel(){
+		this.isCreating = false;
 		this.submitted=false;
 		this.filesPoto=[];
 		this.fileDataPhoto=null;
@@ -579,7 +589,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 } 
 		
 		 formData.append('listingInfo', listingInfo );
-
+		 this.isCreating = true;
 		  this.appService.createListing(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
 	
@@ -587,11 +597,12 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		  this.previewUrl=null;
 		  this.data2="";
 		  this.data="";
-		 
+		  this.isCreating = false;
 		  this.closeButtonNewList.nativeElement.click();
 		  
 		 this.spinner.hide();
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);

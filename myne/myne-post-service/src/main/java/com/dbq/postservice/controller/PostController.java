@@ -44,8 +44,8 @@ public class PostController implements PostsApi {
 	try {
 	    	PostsBody pbody = gson.fromJson(body,PostsBody.class);
 
-	    	return new ResponseEntity<Object>("{\"status\":\"" + postService.createPosts(files,pbody) + "\"}", HttpStatus.OK) {};
-
+	    //	return new ResponseEntity<Object>("{\"status\":\"" + postService.createPosts(files,pbody) + "\"}", HttpStatus.OK) {};
+	    	return new ResponseEntity<Object>(postService.createPosts(files,pbody) , HttpStatus.OK) {};
     } catch (IllegalArgumentException e) { 
         log.error("Bad Request: Invalid arguments provided", e);
         return new ResponseEntity<>("Invalid input: " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -64,7 +64,7 @@ public class PostController implements PostsApi {
 		try {
 			MultipartFile[] files = new MultipartFile[0];
 
-	    	return new ResponseEntity<Object>("{\"status\":\"" + postService.createPosts(files,body) + "\"}", HttpStatus.OK) {};
+	    	return new ResponseEntity<Object>( postService.createPosts(files,body), HttpStatus.OK) {};
 
     } catch (IllegalArgumentException e) { 
         log.error("Bad Request: Invalid arguments provided", e);

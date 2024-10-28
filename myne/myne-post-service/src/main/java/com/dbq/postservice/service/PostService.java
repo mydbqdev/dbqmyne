@@ -47,7 +47,7 @@ public class PostService {
 	 private final AdsRepository adsRepository;
 	 private final UserStorageClient userStorageClient;
 	 
-	    public String createPosts(MultipartFile[] files, PostsBody body) {
+	    public Object createPosts(MultipartFile[] files, PostsBody body) {
 	    	
 	    	   PostCollection savedPost = new PostCollection();
 	        try {
@@ -68,9 +68,9 @@ public class PostService {
 	            savedPost = postRepository.save(post);
 	            String postId =savedPost.getPostId();           
 	            
-	            uploadFilesAsync(files, postId, savedPost);
+	            savedPost =uploadFilesAsync(files, postId, savedPost);
 	            
-	            return "Post has been created successfully";
+	            return savedPost;
 	        } catch (Exception e) {
 	            // Handle exceptions, e.g., log error
 	        	
@@ -79,8 +79,9 @@ public class PostService {
 	    }
 
 	    @Async
-	    public void uploadFilesAsync(MultipartFile[] files, String postId, PostCollection savedPost) {
+	    public PostCollection uploadFilesAsync(MultipartFile[] files, String postId, PostCollection savedPost) {
 	        List<MediaUrlDetails> list = new ArrayList<>();
+	        PostCollection updatePost = new PostCollection();
 	        for (MultipartFile file : files) {
 	        	  if (file == null || file.isEmpty()) {
 	        		  log.error("File is null or empty: Skipping.");
@@ -100,8 +101,9 @@ public class PostService {
 	            
 	         savedPost.setMediaDetails(list);
 	          
-	            postRepository.save(savedPost);
+	         updatePost = postRepository.save(savedPost);
 	        }
+	        return updatePost;
 	    }
 	    
 	    
@@ -131,7 +133,7 @@ public class PostService {
 
 	       
 	        if (!posts.isEmpty()) {
-	            list = getPostsAds(posts);
+	            list = getPostsAds(posts ,"");
 	        }
 
 	        return list;
@@ -167,12 +169,12 @@ public class PostService {
 			}
 	    	
 	    	if(null !=posts )
-	    		list=getPostsAds(posts);
+	    		list=getPostsAds(posts ,postsFilter.getFilterType());
 
             return list; 
 	    }
 	    
-	    public 	List<PostsResponse> getPostsAds(List<PostCollection> posts) {
+	    public 	List<PostsResponse> getPostsAds(List<PostCollection> posts,String filter) {
 	    	List<String> userIds=  new ArrayList<>();
 	    	List<PostsResponse> list = new ArrayList<>();
 	    	
@@ -251,7 +253,8 @@ public class PostService {
     		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt())) 
     			list.add(adsres);
         	
-        	Collections.shuffle(list);
+        	if(!"recent".equals(filter) )
+        			Collections.shuffle(list);
          
             return list; 
         

@@ -328,13 +328,13 @@ a.nav-link.top-menu:hover{
 }
 
 .profile-top{
-    width: 70px;
-    height:70px;
+    width: 55px;
+    height:55px;
     background-color: rgb(41, 131, 173);
     font-weight: 500;
     font-size: 22px;
     text-align: center;
-    padding: 25% 30%;
+    padding-top: 10px;
     color: #fff;
 }
 

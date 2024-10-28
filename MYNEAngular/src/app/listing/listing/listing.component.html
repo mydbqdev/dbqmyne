@@ -243,8 +243,10 @@
                         </div>
                         <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(2)"
                           [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
-                          [disabled]="(this.postRequestModel?.description ==undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length==0"  
-                          >Post</button></div>
+                          [disabled]="(this.postRequestModel?.description ==undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length==0"  >
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                          {{ isCreating ? 'Creating...' : 'Post' }}
+                          </button></div>
                   </div>
 			  </div>
 			</div>
@@ -265,7 +267,10 @@
               <span aria-hidden="true">&times;</span>
               </button>
            </div>
-           <div class="ml-auto mt-3 mr-3"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="createListing()" >List an Item</button></div>
+           <div class="ml-auto mt-3 mr-3"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 100px;" (click)="createListing()" >
+            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+            {{ isCreating ? 'Creating...' : 'List an Item' }}
+            </button></div>
       </div>		  
       <div class="modal-body" style="margin-top: -5px;">
         <div class="d-flex">
@@ -435,7 +440,10 @@
                 <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
-                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">Post Ads</button>
+                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                            {{ isCreating ? 'Creating...' : 'Post Ads' }}
+                  </button>
               </div>
           </div>
           

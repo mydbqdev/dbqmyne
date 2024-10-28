@@ -307,9 +307,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		 }else{
 			this.createPostWithOutFile(type);
 		 }
+		 this.isCreating = true;
 
 	}
 	clearPostRequestData(){
+		this.isCreating = false;
 		this.postRequestModel.description="";
 		this.previewUrl2=null;
 		this.previewUrl=null;
@@ -330,13 +332,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		
 		 formData.append('postInfo', postInfo );		
 		this.appService.createPost(formData).subscribe((data: any) => {
-		  this.notifyService.showSuccess(data.status, "");
+		 // this.notifyService.showSuccess(data.status, "");
+		  var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		  this.postSearchResult.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
+		  this.isCreating = false;
 		 this.spinner.hide();
 	   },error =>{
+		 this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -369,13 +375,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 createPostWithOutFile(type:number){
 		this.spinner.show();	
 		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
-		  this.notifyService.showSuccess(data.status, "");
+		 // this.notifyService.showSuccess(data.status, "");
+		 var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		 this.postSearchResult.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
+		  this.isCreating = false;
 		 this.spinner.hide();
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -405,6 +415,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		
 	 }
 	 activeMenu(menuName:string){
+		this.postSearchResult=[];
 		this.pageIndex=0;
 		this.menuSeleced=menuName;
 		this.searchPostForHome(this.menuSeleced);
@@ -413,7 +424,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 load=true;
 	 pageIndex=0;
 	 postSearchResultResponce:PostSearchResult[]=[];
-
+	 isCreating = false;
 	 searchPostForHome(filterType:string){
 		// api post searrch
 		this.spinner.show();
@@ -423,16 +434,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		
 		this.searchRequest.zipCode="123456";
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
-		 if(data.length >0){
+			this.load=true;
+			if(data.length >0){
 			this.postSearchResultResponce=Object.assign([],data);
 			for(let i of this.postSearchResultResponce){
 				this.postSearchResult.push(i);
 			}
 		 }else{
 			this.pageIndex=0;
+			this.searchPostForHome(filterType);
 		 }
-		 this.load=true;
-		 console.log("this.postSearchResult",this.postSearchResult)
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -491,11 +502,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		let adsInfo=JSON.stringify(adsRequestModel);	
 		
 		formData.append('adsInfo', adsInfo );	
+		this.isCreating = true;
 		this.appService.createAds(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
 		  this.closeButtonNewAds.nativeElement.click();
 		 this.spinner.hide();
+		 this.isCreating = false;
 	   },error =>{
+		this.isCreating = false;
 		 this.spinner.hide();
 		 if(error.status==403){
 		   this.router.navigate(['/forbidden']);
@@ -526,6 +540,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 }
 
 	 resetAdPopup(){
+		this.isCreating=false;
 		 this.previewUrlImg1=false;
 		 this.filesImgAds=[];
 		 this.previewUrlImgAds=[];

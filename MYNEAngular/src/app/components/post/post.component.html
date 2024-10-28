@@ -290,9 +290,12 @@
                           <a  href="javascript:void(0)" class="link-2" title="Poll"><img src="assets/images/Poll.png" style="width: 15px;margin-top: -4px;" class="mr-2"></a> 
                           <a  href="javascript:void(0)" class="link-2"><i class="far fa-calendar mr-2"></i></a>
                         </div>
-                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 95px;" (click)="createPost(2)" 
+                        <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0" style="border-radius: 15px !important;background-color: #8B5805 !important;width: 100px;" (click)="createPost(2)" 
                           [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
-                          [disabled]="(this.postRequestModel?.description ==undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length==0"  >Post</button></div>
+                          [disabled]="(this.postRequestModel?.description ==undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length==0"  >
+                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                            {{ isCreating ? 'Creating...' : 'Post' }}
+                          </button></div>
                   </div>
 			  </div>
 			</div>
@@ -386,7 +389,10 @@
                 <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
-                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">Post Ads</button>
+                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">
+                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
+                            {{ isCreating ? 'Creating...' : 'Post Ads' }}
+                 </button>
               </div>
           </div>
           
