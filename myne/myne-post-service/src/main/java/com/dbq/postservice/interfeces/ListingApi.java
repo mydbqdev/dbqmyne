@@ -112,35 +112,35 @@ public interface ListingApi {
 
 	
 	
-	@Operation(summary = "Search for listings", description = "Retrieves listings based on the provided title search term.", tags = {
-    "Listing Controller" })
-@ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Listings retrieved successfully", content = @Content(mediaType = "application/json")),
-    @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
-    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
-@RequestMapping(value = "/listings/search",
-    produces = { "application/json" },
-	method = {RequestMethod.GET,RequestMethod.POST})
-ResponseEntity<?> searchListings(
-    @Parameter(in = ParameterIn.QUERY, description = "The title to search for listings.", required = true, schema = @Schema()) @RequestParam String title);
-
-	
-	
-	@Operation(summary = "Search for listings for free", 
-	           description = "Retrieves listings based on the provided title search term for items that are free.", 
-	           tags = { "Listing Controller" })
-	@ApiResponses(value = {
-	    @ApiResponse(responseCode = "200", description = "Listings retrieved successfully", content = @Content(mediaType = "application/json")),
-	    @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
-	    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
-	@RequestMapping(value = "/listings/search/free", 
-	                produces = { "application/json" }, 
-	                method = {RequestMethod.PUT,RequestMethod.POST})
-	ResponseEntity<?> searchListingsbyforfree(
-	    @Parameter(in = ParameterIn.QUERY, description = "The title to search for listings for free.", required = true, schema = @Schema()) 
-	    @RequestParam String title);
-
-	
+//	@Operation(summary = "Search for listings", description = "Retrieves listings based on the provided title search term.", tags = {
+//    "Listing Controller" })
+//@ApiResponses(value = {
+//    @ApiResponse(responseCode = "200", description = "Listings retrieved successfully", content = @Content(mediaType = "application/json")),
+//    @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
+//    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
+//@RequestMapping(value = "/listings/search",
+//    produces = { "application/json" },
+//	method = {RequestMethod.GET,RequestMethod.POST})
+//ResponseEntity<?> searchListings(
+//    @Parameter(in = ParameterIn.QUERY, description = "The title to search for listings.", required = true, schema = @Schema()) @RequestParam String title);
+//
+//	
+//	
+//	@Operation(summary = "Search for listings for free", 
+//	           description = "Retrieves listings based on the provided title search term for items that are free.", 
+//	           tags = { "Listing Controller" })
+//	@ApiResponses(value = {
+//	    @ApiResponse(responseCode = "200", description = "Listings retrieved successfully", content = @Content(mediaType = "application/json")),
+//	    @ApiResponse(responseCode = "400", description = "Bad request - Invalid input", content = @Content(mediaType = "application/json")),
+//	    @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json")) })
+//	@RequestMapping(value = "/listings/search/free", 
+//	                produces = { "application/json" }, 
+//	                method = {RequestMethod.PUT,RequestMethod.POST})
+//	ResponseEntity<?> searchListingsbyforfree(
+//	    @Parameter(in = ParameterIn.QUERY, description = "The title to search for listings for free.", required = true, schema = @Schema()) 
+//	    @RequestParam String title);
+//
+//	
 	
 	
 }

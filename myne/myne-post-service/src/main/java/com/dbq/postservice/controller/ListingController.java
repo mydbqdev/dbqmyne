@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,11 +46,16 @@ public class ListingController implements ListingApi {
 		try {
 			ListingBody pbody = gson.fromJson(body,ListingBody.class);		
 			return new ResponseEntity<Object>("{\"status\":\"" + listingService.createListing(files, pbody) + "\"}", HttpStatus.OK) {};
-		} catch (Exception e) {
-			log.error("Couldn't serialize response for content type application/json", e);
-			return new ResponseEntity<Object>(e, HttpStatus.BAD_REQUEST);
-		}
-
+		} catch (IllegalArgumentException e) { 
+	        log.error("Bad Request: Invalid arguments provided", e);
+	        return new ResponseEntity<>("Invalid input: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+	    } catch (UnsupportedOperationException e) { 
+	        log.error("Not Implemented: This operation is not supported", e);
+	        return new ResponseEntity<>("This operation is not supported", HttpStatus.NOT_IMPLEMENTED);
+	    } catch (Exception e) { 
+	        log.error("An unexpected error occurred", e);
+	        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 
 	public ResponseEntity<Object> listingsUserIdListingIdDeleteDelete(String userId, String listingId) {
@@ -115,28 +119,15 @@ public class ListingController implements ListingApi {
 	}
 	
 	
-	@Override
-	public ResponseEntity<?> searchListings(@RequestParam String title) {
-	    try {
-	        List<ListingCollection> listings = listingService.getListingsbysearchterm(title);
-	        return ResponseEntity.ok(listings);
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.badRequest().body(e.getMessage());
-	    }
-	}
-	
-
-	@Override
-	public ResponseEntity<?> searchListingsbyforfree(@RequestParam String title) {
-	    try {
-	        List<ListingCollection> listings = listingService.getListingsbysearchterm(title);
-	        return ResponseEntity.ok(listings);
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.badRequest().body(e.getMessage());
-	    }
-	}
-	
+//	@Override
+//	public ResponseEntity<?> searchListings(@RequestParam String title) {
+//	    try {
+//	        List<ListingCollection> listings = listingService.getListingsbysearchterm(title);
+//	        return ResponseEntity.ok(listings);
+//	    } catch (IllegalArgumentException e) {
+//	        return ResponseEntity.badRequest().body(e.getMessage());
+//	    }
+//	}
 	    
-
 
 }

@@ -26,6 +26,11 @@ public interface ListingRepository extends MongoRepository<ListingCollection, St
 	
     @Query(value = "{ 'free': true, 'creatorId': ?0 }")
     List<ListingCollection> findFreeListingsByUserId(String userId, Pageable pageable);
+    
+    @Query(value = "{ 'free': true, 'creatorId': ?0, " +
+            " ?1 != '' ? {'$text': {'$search': ?1}} : {} }")
+    List<ListingCollection> findFreeListingsByUserId(String userId, String searchContent, Pageable pageable);
+
 
     @Query(value = "{ 'free': false, 'creatorId': ?0 }")
     List<ListingCollection> findNotFreeListingsByUserId(String userId, Pageable pageable);
@@ -33,16 +38,14 @@ public interface ListingRepository extends MongoRepository<ListingCollection, St
     @Query(value = "{ 'discount': true, 'creatorId': ?0 }")
     List<ListingCollection> findDiscountedListingsByUserId(String userId, Pageable pageable);
 	
+    @Query(value = "{ 'title': { $regex: ?0, $options: 'i' }, 'free': false }")
+	List<ListingCollection> findByListingtitle(String title, Pageable pageable);
 	
+	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' }, 'free': { $eq: true } }")
+	List<ListingCollection> findByListingtitleisfree(String title, Pageable pageable);
     
 	@Query(value = "{ 'listingId': ?0 }")
 	ListingCollection findByListingId(String listingId);
-	
-	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' } }")
-	List<ListingCollection> findByListingtitle(String title);
-	
-	@Query(value = "{ 'title': { $regex: ?0, $options: 'i' }, 'free': { $eq: true } }")
-	List<ListingCollection> findByListingtitleisfree(String title);
 	
 
 	@Query(value = "{ 'category': { $regex: ?0, $options: 'i' }, 'free': ?1, 'discount': ?2, " + " 'title': { $regex: ?3, $options: 'i' } }")

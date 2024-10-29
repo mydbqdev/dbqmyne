@@ -27,6 +27,7 @@ import com.dbq.postservice.dto.ListingBody;
 import com.dbq.postservice.dto.ListingFilterDto;
 import com.dbq.postservice.dto.ListingResponse;
 import com.dbq.postservice.dto.MediaUrlDetails;
+import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.User;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class ListingService {
 	private final UserStorageClient userStorageClient;
 	private final ListingRepository listingRepository;
 
-	public String createListing(MultipartFile[] files, ListingBody model) {
+	public Object createListing(MultipartFile[] files, ListingBody model) {
 		
 		ListingCollection savedCollection = new ListingCollection();
 		try {
@@ -67,9 +68,9 @@ public class ListingService {
 			savedCollection = listingRepository.save(listingCollection);
             String listingId =savedCollection.getListingId();
             
-            uploadFilesAsync(files, listingId, savedCollection);
+            savedCollection=uploadFilesAsync(files, listingId, savedCollection);
             
-            return "Listing has been created successfully";
+            return savedCollection ;
 		} catch (Exception e) {
 			// Handle exceptions, e.g., log error
 			return "Error creating Listing: " + e.getMessage();
@@ -77,8 +78,9 @@ public class ListingService {
 	}
 
     @Async
-    public void uploadFilesAsync(MultipartFile[] files, String postId, ListingCollection savedListing) {
+    public ListingCollection uploadFilesAsync(MultipartFile[] files, String postId, ListingCollection savedListing) {
         List<MediaUrlDetails> list = new ArrayList<>();
+        ListingCollection updateListing=new ListingCollection();
         for (MultipartFile file : files) {
         	
         	  if (file == null || file.isEmpty()) {
@@ -99,9 +101,11 @@ public class ListingService {
         synchronized (savedListing) {
             
         	savedListing.setMediaPaths(list);
+        	
+        	updateListing=listingRepository.save(savedListing);
           
-         listingRepository.save(savedListing);
         }
+        return updateListing;
     }
 	
 	public String deleteListings(String userId, String listingId) {
@@ -153,34 +157,41 @@ public class ListingService {
 	}
 
 	
-	public List<ListingCollection> getListingsbysearchterm(String title) {
-		
-		 if (title == null || title.trim().isEmpty()) {
-			 
-	            throw new IllegalArgumentException("Search term cannot be null or empty");
-	            
-	        }
-		 String titlefinal = Pattern.quote(title.trim());
-		 
-	    List<ListingCollection> listings = listingRepository.findByListingtitle(titlefinal);
-	         
-	    return listings;
+	public List<ListingResponse> getListingsbysearchterm(PostsFilterDto listingFilter) {
+	    List<ListingResponse> list = new ArrayList<>();
+	    List<ListingCollection> posts;
+
+	    Pageable pageable = PageRequest.of(listingFilter.getPageIndex(), listingFilter.getPageSize());
+
+	    String searchContent = listingFilter.getSearchContent();
+	    if (searchContent == null || searchContent.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Search term cannot be null or empty");
+	    }
+	    
+	    String titlefinal = Pattern.quote(searchContent.trim());
+
+	    switch (listingFilter.getFilterType()) {
+	        case "forSale":
+	            posts = listingRepository.findByListingtitle(titlefinal, pageable);
+	            break;
+
+	        case "forfree":
+	            posts = listingRepository.findByListingtitleisfree(titlefinal, pageable);
+	            break;
+
+	        default:
+	            posts = listingRepository.findAll(pageable).getContent();
+	            break;
+	    }
+
+	    if (!posts.isEmpty()) {
+	        list = getListingsAds(posts);
+	    }
+
+	    return list;
 	}
+
 	
-	
-	public List<ListingCollection>  getListingsbyforfree(String title) {
-		 if (title == null || title.trim().isEmpty()) {
-			 
-	            throw new IllegalArgumentException("Search term cannot be null or empty");
-	            
-	        }
-		 String titlefinal = Pattern.quote(title.trim());
-		 
-		List<ListingCollection> listings = listingRepository.findByListingtitle(titlefinal);
-		
-		return listings;
-		  
-	}
 	
     public List<ListingResponse> getListings(ListingFilterDto listingFilter) {
     	

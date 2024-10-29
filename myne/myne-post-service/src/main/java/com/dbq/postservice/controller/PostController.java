@@ -20,6 +20,7 @@ import com.dbq.postservice.dto.PostsBody;
 import com.dbq.postservice.dto.PostsFilterDto;
 import com.dbq.postservice.dto.PostsResponse;
 import com.dbq.postservice.interfeces.PostsApi;
+import com.dbq.postservice.service.ListingService;
 import com.dbq.postservice.service.PostService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,6 +37,7 @@ public class PostController implements PostsApi {
 //				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
     private final PostService postService;
     private final ModelMapper modelMapper;
+    private final ListingService listingService;
     
     
 	@Override
@@ -146,14 +148,19 @@ public class PostController implements PostsApi {
 	    }
 	   }
 
-	public ResponseEntity<List<PostsResponse>> searchPosts(@RequestBody PostsFilterDto postsFilter) {
+	public ResponseEntity<Object> searchPosts(@RequestBody(required = false) PostsFilterDto postsFilter) {
         try {
-            List<PostsResponse> response = postService.getPostsbysearch(postsFilter);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        	      
+           if( "posts".equals( postsFilter.getFilterType())) {
+        	   return new ResponseEntity<>( postService.getPostsbysearch(postsFilter), HttpStatus.OK);
+           }else {
+        	   return new ResponseEntity<>( listingService.getListingsbysearchterm(postsFilter), HttpStatus.OK); 
+           }     
+          
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);  
         }
     }
 
