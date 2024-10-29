@@ -182,16 +182,69 @@
                     <div style="font-size: 15px;font-weight: 400;color: rgb(164,166,173);padding-top: 0px;" *ngIf="!postSearchResultDt.postId">Sponsored</div>
                     <div style="font-size: 13px;font-weight: normal;padding: 5px 0px">
                       <div>{{postSearchResultDt.description}}</div>
+
+                      <div style="padding-top: 10px;" *ngIf= "postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length>0 && postSearchResultDt?.mediaDetails?.length<4">
+                        <div class="d-flex">
+                          <div class="img-thumbnail-home mr-2" *ngFor="let photolist of postSearchResultDt.mediaDetails">
+                            <img [src]="photolist.url" class="img-thumbnail-home-inner" alt="logo" *ngIf="photolist.contentType.includes('image')">
+                            <div class="video-wrapper"  *ngIf="photolist.contentType.includes('video')">                           
+                              <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="photolist.url | safe" [type]="photolist.contentType"> </video> 
+                             </div>
+                          </div>
+                          </div>
+                      </div>
+                      <div class="d-flex" style="padding-top: 10px;" *ngIf= "!postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length>=1">
+                         <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
+                      </div>
+                      <div style="padding-top: 10px;" *ngIf= "!postSearchResultDt.postId && postSearchResultDt.adsHyperLink">
+                        <a *ngIf="postSearchResultDt.adsHyperLink" class="btn btn-sm btn-info" style="margin: 0px 0px 0px 10px ;" [href]="postSearchResultDt.adsHyperLink" target="_blank"> Read more</a>
+                      </div>
+                      <div style="padding-top: 10px;" *ngIf= "postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length==4">
+                        <div class="d-flex">
+                          <div class="img-thumbnail-home mr-2">
+                            <img [src]="postSearchResultDt.mediaDetails[0].url" class="img-thumbnail-home-inner" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
+                            <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
+                              <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
+                             </div>
+                          </div>
+
+                          <div class="img-thumbnail-home mr-2">
+                            <img [src]="postSearchResultDt.mediaDetails[1].url" class="img-thumbnail-home-inner" alt="logo" *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('image')">
+                            <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[1].contentType.includes('video')">                           
+                              <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
+                             </div>
+                          </div>
+
+                        </div>
+
+                        <div class="d-flex mt-2">
+                          <div class="img-thumbnail-home mr-2">
+                            <img [src]="postSearchResultDt.mediaDetails[2].url" class="img-thumbnail-home-inner" alt="logo" *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('image')">
+                            <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[2].contentType.includes('video')">                           
+                              <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[2].url | safe" [type]="postSearchResultDt.mediaDetails[2].contentType"> </video> 
+                             </div>
+                          </div>
+
+                          <div class="img-thumbnail-home mr-2">
+                            <img [src]="postSearchResultDt.mediaDetails[3].url" class="img-thumbnail-home-inner" alt="logo" *ngIf="postSearchResultDt.mediaDetails[3].contentType.includes('image')">
+                            <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[3].contentType.includes('video')">                           
+                              <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[3].url | safe" [type]="postSearchResultDt.mediaDetails[3].contentType"> </video> 
+                             </div>
+                          </div>
+
+                        </div>
+                       </div>
+                  
                       <!--start single photo -->
-                      <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==1">
+                      <!--div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==1">
                          <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                          <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
                           <video id="myVideo1" controls="true" width="500" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[0].url | safe" [type]="postSearchResultDt.mediaDetails[0].contentType"> </video> 
                          </div>
-                      </div>
+                      </div-->
                       <!--end photo -->
                      <!--start 2 photo list-->
-                       <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==2">
+                       <!--div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==2">
                         <div >
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid"  style="border-top-left-radius: 5px;border-bottom-left-radius: 5px;" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                           <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
@@ -204,11 +257,11 @@
                            <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[1].url | safe" [type]="postSearchResultDt.mediaDetails[1].contentType"> </video> 
                           </div>
                         </div>
-                       </div>
+                       </div-->
                        <!--end 2 photo list-->
 
                        <!--start 3 photo list-->
-                     <div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==3">
+                     <!--div class="d-flex" style="padding-top: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length==3">
                       <div>
                         <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
                         <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('video')">                           
@@ -229,11 +282,11 @@
                           </div>
                         </div>
                       </div>
-                     </div>
+                     </div-->
                      <!--end 3 photo list-->
 
                       <!--start two row 4 photo list-->
-                      <div *ngIf= "postSearchResultDt?.mediaDetails?.length>=4">
+                      <!--div *ngIf= "postSearchResultDt?.mediaDetails?.length>=4">
                       <div class="d-flex" style="padding-top: 10px;">
                         <div>
                           <div><img [src]="postSearchResultDt.mediaDetails[0].url" class="img-fluid" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')"></div>
@@ -266,7 +319,7 @@
                           </div>
                         </div>
                        </div>
-                       </div>
+                       </div-->
                       <!--end two row 4 photo list-->
                     </div>
                     <div class="d-flex" *ngIf=" postSearchResultDt.postId">
@@ -484,10 +537,10 @@
     </div>
     <div class="ml-auto" style="width: 220px;height: 100px;">
         <div class="m-2">
-          <div  style="margin-top: 120px;"><img src="assets/images/right-top.PNG" class="img-fluid"/></div>
+          <div  style="margin-top: 110px;position: fixed;"><img src="assets/images/right-top.PNG" class="img-fluid"/></div>
         </div>
         <div class="m-2">
-          <div><a routerLink="/home"><img src="assets/images/right-top-2.PNG" class="img-fluid"/></a></div>
+          <div style="margin-top: 360px;position: fixed;"><a routerLink="/home"><img src="assets/images/right-top-2.PNG" class="img-fluid"/></a></div>
         </div>
     </div>
   </div>
@@ -549,7 +602,7 @@
                         <!-- <div class="ml-auto"><button type="button" class="btn-sm btn-info border-0"  style="border-radius: 15px !important;width: 95px;" (click)="createPost(2)"
                           [ngStyle]="{'background-color': (this.postRequestModel?.description === undefined || this.postRequestModel.description === '' || this.postRequestModel.description.trim() === '') && this.files.length === 0 ? '#e3e0e0' : '#8B5805'}"
                           [disabled]="(this.postRequestModel.description == undefined ||this.postRequestModel.description == '' || '' == this.postRequestModel.description.trim()) && this.files.length == 0">Post</button></div>
-                  </div> -->
+                  </div-->
 			  </div>
 			</div>
 		   </div>		   
@@ -640,6 +693,7 @@
               <div class="col-sm-6">
                 <label for="inputwebsiteLink" class="form-label">Website Link</label>
                 <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
+                <div class="text-muted" style="font-size: 12px;">Start with https:// or http://</div>
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
                 <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 100px;" (click)="newAd()">

@@ -498,3 +498,30 @@ a.nav-link.top-menu:hover{
 .img-thumbnail-post > img {
     vertical-align: middle;
   }
+
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+
+.img-thumbnail-home {
+    background-image: url('./assets/images/Frame 3234510.png')!important;
+    border: 0px solid #dee2e6;
+    border-radius: .25rem;
+    box-shadow: 0 1px 2px #00000013;
+    width: 228px;
+    height: 212px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.img-thumbnail-home-inner {
+    max-width: 226px;
+    max-height: 212px;
+}
+
+.img-thumbnail-home > img {
+    vertical-align: middle;
+  }
