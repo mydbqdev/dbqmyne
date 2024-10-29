@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 230px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
+    <div style="border-right: 0px solid rgb(203, 203, 203);width: calc(100vw - 230px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
       <div >
         <div> 
           <div>
@@ -123,34 +123,38 @@
             <div class="card" style="cursor: pointer;" *ngFor="let listingRes of listingResult;">
              <div *ngIf="listingRes.listingId">
               <a routerLink="/listing-det/{{listingRes.listingId}}" style="color: #000;">
-                <div *ngIf= "listingRes?.mediaPaths?.length>0" >
-                    <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
-                    <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
-                          <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
-                    </div>
+                <div *ngIf= "listingRes?.mediaPaths?.length>0" style="text-align: center;" class="rounded img-thumbnail-list">
+                    <img [src]="listingRes.mediaPaths[0].url"  alt="Card image cap" class="img-thumbnail-list-inner" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
                 </div>
               <div class="card-body" style="padding:0px;">
                 <div style="font-weight: 500;" *ngIf="isSaleSelect">{{listingRes.price}}$</div>
-                <div style="font-weight: 500;">{{listingRes.title}}</div>
+                <div style="font-weight: 500;" class="text-truncate">{{listingRes.title}}</div>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
               </a>
             </div>
 
             <div *ngIf="!listingRes.listingId">
-                <div *ngIf= "listingRes?.mediaPaths?.length>0" >
-                    <img [src]="listingRes.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
-                    <div class="video-wrapper"  *ngIf="listingRes.mediaPaths[0].contentType.includes('video')">                           
-                          <video id="myVideo1" controls="true" loop="true" width="250" height="180" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="listingRes.mediaPaths[0].url | safe" [type]="listingRes.mediaPaths[0].contentType"> </video> 
-                    </div>
+                <div *ngIf= "listingRes?.mediaPaths?.length>0" style="text-align: center;" class="rounded img-thumbnail-list">
+                    <img [src]="listingRes.mediaPaths[0].url" class="img-thumbnail-list-inner" alt="Card image cap" *ngIf="listingRes.mediaPaths[0].contentType.includes('image')">
+                    <a class="btn btn-sm btn-info" style="margin: 100px 0px 0px -36% ;" [href]="listingRes.adsHyperLink" target="_blank"> Read more</a>
                 </div>
               <div class="card-body" style="padding:0px;">
-                <div style="font-weight: 400;">{{listingRes.description}}</div>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div style="font-weight: 500;" class="text-truncate">{{listingRes.description}}</div>
+                <div class="d-flex">
+                  <div class="img-circle elevation-2 profile-3">{{listingRes.creatorName?.charAt(0).toUpperCase()}}</div>
+                  <div style="margin-left: 10px;" ><span style="font-weight: 400px;">Sponsored by</span> <br/> <span style="font-weight: 500;">{{listingRes.creatorName}}</span></div>
+                </div>
               </div>
             </div>
 
             </div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==1"></div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==1"></div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==1"></div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==2"></div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==2"></div>
+            <div class="card" style="cursor: pointer;" *ngIf="listingResult.length==3"></div>
           </div>
         </div>
       </div> 

@@ -26,7 +26,7 @@ export class PostSearchResult {
 
     //
     privacy:string;
-    hyperLink:string;
+    adsHyperLink:string;
 
 }
 

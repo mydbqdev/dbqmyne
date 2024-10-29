@@ -491,7 +491,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		adsRequestModel.title = this.adsTitle ;
 		adsRequestModel.description = this.adDescription ;
 		adsRequestModel.privacy = "" ;
-		adsRequestModel.hyperLink = this.websiteLink!=null? this.websiteLink: "" ;
+		adsRequestModel.adsHyperLink = this.websiteLink!=null? this.websiteLink: "" ;
 		adsRequestModel.userId = this.userInfo.userId;
 		adsRequestModel.description = this.adDescription ;
 
