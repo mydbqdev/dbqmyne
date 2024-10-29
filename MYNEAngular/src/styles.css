@@ -474,3 +474,27 @@ a.nav-link.top-menu:hover{
   .carousel-control-next, .carousel-control-prev {
     width: 20px !important;
 }
+
+
+.img-thumbnail-post {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    box-shadow: 0 1px 2px #00000013;
+    width: 150px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.img-thumbnail-post-inner {
+    padding: .25rem;
+    background-color: #fff;
+    max-width: 100%;
+    max-height: 115px;
+}
+
+.img-thumbnail-post > img {
+    vertical-align: middle;
+  }
