@@ -1,5 +1,9 @@
 package com.dbq.authservice.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,5 +31,18 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequest request) {
         return authService.register(request);
+    }
+    
+    @PostMapping("/refreshToken")
+    public ResponseEntity<Object> renewToken(HttpServletRequest request, HttpServletResponse response) {
+
+    	String userToken = request.getHeader("Authorization");
+    	if (userToken == null) {
+    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); 
+		} else {
+			userToken = userToken.replace("Bearer ", "");
+		}	
+    	
+        return ResponseEntity.ok(authService.refreshToken(userToken));
     }
 }
