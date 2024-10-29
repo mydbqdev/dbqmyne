@@ -108,11 +108,11 @@
                 <div class="col-sm-1"><div class="img-circle elevation-2 profile-list-1">{{postSearchResultDt.creatorName?.charAt(0).toUpperCase()}}</div></div>
                   <div class="col-sm-11">
                     <div class="d-flex">
-                       <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}</span> <span style="color: rgb(164,166,173);padding-left: 10px;">{{postSearchResultDt.createdAt | date :'MMM d' }} </span></div></div>
+                       <div><div style="font-size: 17px;font-weight: 600;"><span>{{postSearchResultDt.creatorName}}</span></div></div>
                        <div class="ml-auto"></div>
                     </div>
                     
-                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">HSR Layout, Bangalore,{{postSearchResultDt.zipCode}}</div>
+                    <div style="font-size: 15px;font-weight: 500;color: rgb(164,166,173);padding-top: 0px;">{{postSearchResultDt.zipCode}} . <span style="color: rgb(164,166,173);padding-left: 10px;">{{postSearchResultDt.createdAt | date :'MMM d' }} </span></div>
                     <div style="font-size: 13px;font-weight: 400;padding: 5px 0px">
                       <div class="d-flex">
                         <div>{{postSearchResultDt.description}}</div>

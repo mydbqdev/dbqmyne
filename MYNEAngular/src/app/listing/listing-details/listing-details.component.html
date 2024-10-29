@@ -62,7 +62,7 @@
         </div>
       </div>
     </div>
-    <div style="border-right: 1px solid rgb(203, 203, 203);width: calc(100vw - 230px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
+    <div style="border-right: 0px solid rgb(203, 203, 203);width: calc(100vw - 230px);margin-top: 100px;margin-left:225px;min-height: calc(100vh - 100px);">
       <div >
         <div> 
           <div>
@@ -85,9 +85,20 @@
         <div>
           <div class="card-deck">
             <div class="card" *ngIf= "searchResultDet.mediaPaths.length>0">
-                <img [src]="searchResultDet.mediaPaths[0].url" class="rounded card-img-top" alt="Card image cap" *ngIf="searchResultDet.mediaPaths[0].contentType.includes('image')">
-                <div class="video-wrapper"  *ngIf="searchResultDet.mediaPaths[0].contentType.includes('video')">                           
-                      <video id="myVideo1" controls="true" loop="true" width="300" height="200" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="searchResultDet.mediaPaths[0].url | safe" [type]="searchResultDet.mediaPaths[0].contentType"> </video> 
+                <div id="carouselExampleControls" class="carousel slide  carousel-fade" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active img-thumbnail-details" *ngFor="let mediImg of searchResultDet.mediaPaths">
+                      <img [src]="mediImg.url" class="rounded d-block img-thumbnail-details-inner" alt="Card image cap" *ngIf="mediImg.contentType.includes('image')">
+                    </div>
+                  </div>
+                  <button  *ngIf= "searchResultDet.mediaPaths.length>1" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button  *ngIf= "searchResultDet.mediaPaths.length>1" class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
                 </div>
             </div>
             <div class="card">
@@ -96,7 +107,7 @@
                   <div style="font-weight: 500;font-size: 22px;">{{searchResultDet.title}}</div>
                   <div class="ml-auto">
                     <i class="far fa-bookmark ml-2"></i> 
-                    <i class="fas fa-ellipsis-h ml-2 mr-2 text-gray-400"></i>
+                    <i class="fas fa-ellipsis-h ml-2 mr-2 text-gray-400" *ngIf="searchResultDet.creatorId == userInfo.userId"></i>
                   </div>
                 </div>
                 
@@ -105,7 +116,7 @@
                   <div style="width: 75px;"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
                   <div>
                     <div style="font-size: 17px;font-weight: 600;"><span>{{searchResultDet.creatorName}}</span></div>
-                    <p class="card-text"><small class="text-muted">EC,Bangalore ,0.2km</small></p>
+                    <p class="card-text"><small class="text-muted">0.2km</small></p>
                     <div class="card-text">{{searchResultDet.description}}..<small class="text-muted ml-2">more</small></div>
                   </div>
                 </div>

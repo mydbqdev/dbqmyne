@@ -322,13 +322,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.pageIndex=0;
 		 }
 		 this.load=true;
-		 for(let i=0;i<this.listingResult.length;i=i+4){
-			this.listingResultList=[];
-            for(let j=i;j<i+4 && j<this.listingResult.length;j++){
-				this.listingResultList.push(this.listingResult[j]);
-			}
-			this.listingResultPrint.push(this.listingResultList);
-		 }
+		 console.info("this.listingResult",this.listingResult);
+		 this.disply();
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -359,7 +354,17 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	   });
 		 
 	 }
-
+     disply(){
+		 //this.listingResultPrint=[];
+		for(let i=0;i<this.listingResult.length;i=i+4){
+			this.listingResultList=[];
+            for(let j=i;j<i+4 && j<this.listingResult.length;j++){
+				this.listingResultList.push(this.listingResult[j]);
+			}
+			console.info("this.listingResultList",this.listingResultList);
+			this.listingResultPrint.push(this.listingResultList);
+		 }
+	 }
 	 clearPostRequestData(){
 		this.isCreating = false;
 		this.postRequestModel.description="";
