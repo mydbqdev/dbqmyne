@@ -149,7 +149,7 @@ public interface PostsApi {
  @RequestMapping(value = "/posts/search", 
                  produces = { "application/json" }, 
                  method = {RequestMethod.GET,RequestMethod.POST})
- ResponseEntity<List<PostsResponse>> searchPosts(
+ ResponseEntity<Object> searchPosts(
      @Parameter(description = "Filter criteria for retrieving posts.", required = true, schema = @Schema(implementation = PostsFilterDto.class)) 
      @RequestBody PostsFilterDto postsFilter);
 

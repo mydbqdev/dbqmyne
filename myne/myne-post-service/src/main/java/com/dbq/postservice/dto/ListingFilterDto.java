@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ListingFilterDto {
-	@JsonProperty("listingType")
+    @JsonProperty("listingType")
     @JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
     @JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
     private String listingType = null;
@@ -34,6 +34,11 @@ public class ListingFilterDto {
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     @JsonSetter(nulls = Nulls.FAIL)
     private Integer pageSize = null;
+
+    @JsonProperty("searchContent")
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonSetter(nulls = Nulls.FAIL)
+    private String searchContent = null;
 
     public ListingFilterDto listingType(String listingType) {
         this.listingType = listingType;
@@ -105,6 +110,20 @@ public class ListingFilterDto {
         this.pageSize = pageSize;
     }
 
+    public ListingFilterDto searchContent(String searchContent) {
+        this.searchContent = searchContent;
+        return this;
+    }
+
+    @Schema(example = "2-bedroom apartment", description = "Content to search for in listings.")
+    public String getSearchContent() {
+        return searchContent;
+    }
+
+    public void setSearchContent(String searchContent) {
+        this.searchContent = searchContent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,12 +133,13 @@ public class ListingFilterDto {
                Objects.equals(filterType, that.filterType) &&
                Objects.equals(userId, that.userId) &&
                Objects.equals(pageIndex, that.pageIndex) &&
-               Objects.equals(pageSize, that.pageSize);
+               Objects.equals(pageSize, that.pageSize) &&
+               Objects.equals(searchContent, that.searchContent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(listingType, filterType, userId, pageIndex, pageSize);
+        return Objects.hash(listingType, filterType, userId, pageIndex, pageSize, searchContent);
     }
 
     @Override
@@ -131,6 +151,7 @@ public class ListingFilterDto {
         sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
         sb.append("    pageIndex: ").append(toIndentedString(pageIndex)).append("\n");
         sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+        sb.append("    searchContent: ").append(toIndentedString(searchContent)).append("\n");
         sb.append("}");
         return sb.toString();
     }
