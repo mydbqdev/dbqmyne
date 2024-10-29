@@ -70,7 +70,7 @@ public class ListingService {
             
             savedCollection=uploadFilesAsync(files, listingId, savedCollection);
             
-            return savedCollection ;
+            return "Listing has been created successfully" ;
 		} catch (Exception e) {
 			// Handle exceptions, e.g., log error
 			return "Error creating Listing: " + e.getMessage();
