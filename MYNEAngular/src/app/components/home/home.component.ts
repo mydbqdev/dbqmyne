@@ -11,7 +11,7 @@ import {BehaviorSubject,Observable} from 'rxjs';
 import { SearchRequest } from 'src/app/common/models/search-request.model';
 import { AppService } from 'src/app/common/service/application.service';
 import { NotificationService } from 'src/app/common/shared/message/notification.service';
-import { PostSearchResult } from 'src/app/common/models/post-search-result.model';
+import { MediaDetails, PostSearchResult } from 'src/app/common/models/post-search-result.model';
 import { PostRequestModel } from 'src/app/common/models/post-request.model';
 import { SignupDetails } from 'src/app/common/shared/signup-details';
 
@@ -588,5 +588,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	   });
 		
 	 }
-
+	 mediaPathsSlide:MediaDetails[]=[];
+     slidesPhoto(list:any[]){
+		this.mediaPathsSlide=Object.assign([],list);
+		console.info("this.mediaPathsSlide",this.mediaPathsSlide);
+	 }
 }

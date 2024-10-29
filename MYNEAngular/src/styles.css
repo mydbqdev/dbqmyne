@@ -525,3 +525,43 @@ a.nav-link.top-menu:hover{
 .img-thumbnail-home > img {
     vertical-align: middle;
   }
+
+  .img-thumbnail-home-spons {
+    background-color: rgb(128, 194, 248);
+    border: 0px solid #dee2e6;
+    border-radius: .25rem;
+    box-shadow: 0 1px 2px #00000013;
+    max-width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.img-thumbnail-home-spons-inner {
+    max-width: 99%;
+    max-height: 298px;
+}
+
+.img-thumbnail-home-spons > img {
+    vertical-align: middle;
+  }
+
+  .img-thumbnail-home-slides {
+    background-color: rgb(128, 194, 248);
+    border: 0px solid #dee2e6;
+    border-radius: .25rem;
+    box-shadow: 0 1px 2px #00000013;
+    max-width: 100%;
+    height: 450px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+.img-thumbnail-home-slides-inner {
+    max-width: 99%;
+    max-height: 435px;
+}
+
+.img-thumbnail-home-slides > img {
+    vertical-align: middle;
+  }
