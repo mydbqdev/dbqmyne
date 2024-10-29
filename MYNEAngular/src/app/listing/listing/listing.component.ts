@@ -355,13 +355,14 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 
 	 }
      disply(){
+		//console.log(this.listingResultPrint.)
 		 //this.listingResultPrint=[];
 		for(let i=0;i<this.listingResult.length;i=i+4){
 			this.listingResultList=[];
             for(let j=i;j<i+4 && j<this.listingResult.length;j++){
 				this.listingResultList.push(this.listingResult[j]);
 			}
-			console.info("this.listingResultList",this.listingResultList);
+			//console.info("this.listingResultList",this.listingResultList);
 			this.listingResultPrint.push(this.listingResultList);
 		 }
 	 }
@@ -494,22 +495,28 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	 		return;
 	 	}
 	 	this.submittedAd=true; 
-	 	if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null &&
-	 		this.adDescription !== '' && this.adDescription !== null)
-	 		 {
-	 			this.spinner.show();
-	 			const formData =  new  FormData();   
-	 	        for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
-	 		     formData.append("files",  this.filesImgAds[i]);  
-	 	       } 
-	 	
-	 	 formData.append('business', this.business );	
-	 	 formData.append('adsTitle', this.adsTitle );	
-	 	 formData.append('adDescription', this.adDescription );	
-	 	 formData.append('category', this.category );
-	 	 formData.append('websiteLink', this.websiteLink!=null? this.websiteLink: "");	
-		  this.isCreating = true;
-	 	this.appService.createPost(formData).subscribe((data: any) => {
+	 	if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null && this.adsTitle !== '' && this.adsTitle !== null &&
+			this.adDescription !== '' && this.adDescription !== null && this.category !== '' && this.category !== null&& this.websiteLink !== '' && this.websiteLink !== null)
+			 {
+				this.spinner.show();
+				let adsRequestModel=new PostSearchResult();
+				adsRequestModel.title = this.adsTitle ;
+				adsRequestModel.description = this.adDescription ;
+				adsRequestModel.privacy = "Anywhere" ;
+				adsRequestModel.hyperLink = this.websiteLink!=null? this.websiteLink: "" ;
+				adsRequestModel.userId = this.userInfo.userId;
+				adsRequestModel.description = this.adDescription ;
+				adsRequestModel.category = this.category;
+		
+				const formData =  new  FormData();   
+						for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
+						 formData.append("files",  this.filesImgAds[i]);  
+					   } 
+				let adsInfo=JSON.stringify(adsRequestModel);	
+				
+				formData.append('adsInfo', adsInfo );
+		this.isCreating = true;
+	 	this.appService.createAds(formData).subscribe((data: any) => {
 	 	 this.notifyService.showSuccess(data.status, "");
 		 this.isCreating = false;
 	 	 this.closeButtonNewAds.nativeElement.click();

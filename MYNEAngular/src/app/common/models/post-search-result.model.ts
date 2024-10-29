@@ -24,7 +24,8 @@ export class PostSearchResult {
     pickupLocation:string;
     mediaPaths:MediaDetails[]=[];
 
-    //
+    //ads 
+    hyperLink:string;//post ads
     privacy:string;
     adsHyperLink:string;
 

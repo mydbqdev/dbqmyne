@@ -481,27 +481,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
 			return;
 		}
 		this.submittedAd=true; 
-		if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null &&
-			this.adDescription !== '' && this.adDescription !== null)
+		if (this.business !== '' && this.business !== null && this.adsTitle !== '' && this.adsTitle !== null && this.adsTitle !== '' && this.adsTitle !== null &&
+			this.adDescription !== '' && this.adDescription !== null && this.category !== '' && this.category !== null&& this.websiteLink !== '' && this.websiteLink !== null)
 			 {
 				this.spinner.show();
-				
-			  
-		let adsRequestModel=new PostSearchResult();
-		adsRequestModel.title = this.adsTitle ;
-		adsRequestModel.description = this.adDescription ;
-		adsRequestModel.privacy = "" ;
-		adsRequestModel.adsHyperLink = this.websiteLink!=null? this.websiteLink: "" ;
-		adsRequestModel.userId = this.userInfo.userId;
-		adsRequestModel.description = this.adDescription ;
-
-		const formData =  new  FormData();   
-		        for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
-			     formData.append("files",  this.filesImgAds[i]);  
-		       } 
-		let adsInfo=JSON.stringify(adsRequestModel);	
+				let adsRequestModel=new PostSearchResult();
+				adsRequestModel.title = this.adsTitle ;
+				adsRequestModel.description = this.adDescription ;
+				adsRequestModel.privacy = "Anywhere" ;
+				adsRequestModel.hyperLink = this.websiteLink!=null? this.websiteLink: "" ;
+				adsRequestModel.userId = this.userInfo.userId;
+				adsRequestModel.description = this.adDescription ;
+				adsRequestModel.category = this.category;
 		
-		formData.append('adsInfo', adsInfo );	
+				const formData =  new  FormData();   
+						for  (var i =  0; i <  this.filesImgAds.length; i++)  { 
+						 formData.append("files",  this.filesImgAds[i]);  
+					   } 
+				let adsInfo=JSON.stringify(adsRequestModel);	
+				
+				formData.append('adsInfo', adsInfo );	
+
 		this.isCreating = true;
 		this.appService.createAds(formData).subscribe((data: any) => {
 		  this.notifyService.showSuccess(data.status, "");
@@ -540,7 +540,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 }
 
 	 resetAdPopup(){
-		this.isCreating=false;
+		 this.isCreating=false;
 		 this.previewUrlImg1=false;
 		 this.filesImgAds=[];
 		 this.previewUrlImgAds=[];

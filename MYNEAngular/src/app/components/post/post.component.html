@@ -130,7 +130,7 @@
                        </div>
                     </div>
                     <div class="d-flex">
-                      <div><a (click)="likeOrDisLikePost(postSearchResultDt,i)" ></a><i [ngClass]="postSearchResultDt.isLiked ?'fa fa-heart like-red':'far fa-heart' " title="Like"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
+                      <div><a (click)="likeOrDisLikePost(postSearchResultDt,i)" ><i [ngClass]="postSearchResultDt.isLiked ?'fa fa-heart like-red':'far fa-heart' " title="Like"></i></a><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.likeCount}}</span> <i class="far fa-comment ml-3" title="Comment"></i><span style="font-size: 11px;margin-left: 2px;">{{postSearchResultDt.commentsCount}}</span></div>
                       <div class="ml-auto"><i class="far fa-bookmark"></i> <i class="fas fa-share-alt ml-3" title="Share"></i></div>
                     </div>
                   </div>
@@ -390,7 +390,7 @@
                 <input type="text" class="form-control form-control-sm" id="inputwebsiteLink" [(ngModel)]="websiteLink"  name="websiteLink" placeholder="Website Link" >
               </div>
               <div class="col-sm-6" style="padding-top: 32px;text-align: right;">
-                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 95px;" (click)="newAd()">
+                <button type="button" class="btn-sm btn-info border-0" style="border-radius: 5px !important;background-color: #8B5805 !important;width: 100px;" (click)="newAd()">
                   <i class="fa" [ngClass]="{'fa-spin fa-spinner': isCreating, '': !isCreating}"></i>
                             {{ isCreating ? 'Creating...' : 'Post Ads' }}
                  </button>
