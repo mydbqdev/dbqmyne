@@ -168,7 +168,7 @@ public class PostService {
 				break;
 			}
 	    	
-	    	if(null !=posts )
+	    	if(null !=posts && posts.size()>0)
 	    		list=getPostsAds(posts ,postsFilter.getFilterType());
 
             return list; 

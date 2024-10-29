@@ -184,7 +184,7 @@ public class ListingService {
 	            break;
 	    }
 
-	    if (!posts.isEmpty()) {
+	    if (!posts.isEmpty() && posts.size()>0) {
 	        list = getListingsAds(posts);
 	    }
 
@@ -316,7 +316,7 @@ public class ListingService {
 		}
 		
 		
-		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt()))
+		if( null != adsres && null != adsres.getCreatedAt() && !"".equals(adsres.getCreatedAt()) && list.size()>0)
 			list.add(adsres);
 		
 		Collections.shuffle(list);
