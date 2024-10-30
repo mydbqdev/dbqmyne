@@ -404,7 +404,7 @@ a.nav-link.top-menu:hover{
 
 .img-thumbnail-list {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     box-shadow: 0 1px 2px #00000013;
@@ -416,7 +416,7 @@ a.nav-link.top-menu:hover{
 }
 .img-thumbnail-list-inner {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     max-width: 100%;
     max-height: 175px;
 }
@@ -427,7 +427,7 @@ a.nav-link.top-menu:hover{
 
   .img-thumbnail-list-spons {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     box-shadow: 0 1px 2px #00000013;
@@ -439,7 +439,7 @@ a.nav-link.top-menu:hover{
 }
 .img-thumbnail-list-inner-spons {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     max-width: 100%;
     max-height: 165px;
 }
@@ -451,7 +451,7 @@ a.nav-link.top-menu:hover{
 
   .img-thumbnail-details {
     padding: 1rem;
-    background-color:#878b88;
+    background-color:#262626;
     border: 1px solid #dee2e6;
     border-radius: .75rem;
     box-shadow: 0 1px 2px #00000013;
@@ -478,7 +478,7 @@ a.nav-link.top-menu:hover{
 
 .img-thumbnail-post {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     border: 1px solid #dee2e6;
     border-radius: .25rem;
     box-shadow: 0 1px 2px #00000013;
@@ -490,7 +490,7 @@ a.nav-link.top-menu:hover{
 }
 .img-thumbnail-post-inner {
     padding: .25rem;
-    background-color: #fff;
+    background-color: #262626;
     max-width: 100%;
     max-height: 115px;
 }
@@ -527,7 +527,7 @@ a.nav-link.top-menu:hover{
   }
 
   .img-thumbnail-home-spons {
-    background-color: rgb(128, 194, 248);
+    background-color: #262626;
     border: 0px solid #dee2e6;
     border-radius: .25rem;
     box-shadow: 0 1px 2px #00000013;
