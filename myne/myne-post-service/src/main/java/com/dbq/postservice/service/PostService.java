@@ -208,7 +208,7 @@ public class PostService {
 	        			    .filter(d -> d.getId().equals(randomAd.getCreaterId()))
 	        			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
 	        			    .findFirst()  
-	        			    .orElse("");
+	        			    .orElse("Unknown User");
 	    		    
 	    			adsres.creatorName(userName);
 	    			adsres.setTitle(randomAd.getTitle());
@@ -232,7 +232,7 @@ public class PostService {
         			    .filter(d -> d.getId().equals(postCollection.getUserId()))
         			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
         			    .findFirst()  
-        			    .orElse("");
+        			    .orElse("Unknown User");
         		
         		responce.setCreatorName(userName);
         		

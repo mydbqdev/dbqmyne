@@ -261,6 +261,8 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	 searchListingDet(){
 		this.appService.getListSearchResultDet(this.listingId).subscribe((data: any) => {
 		   this.searchResultDet =data;
+		   console.log(" this.searchResultDet>>", this.searchResultDet)
+		   this.urlPl= this.searchResultDet.mediaPaths[0].url;
 		 this.spinner.hide();
 	   },error =>{
 		 this.spinner.hide();
@@ -481,5 +483,24 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 
 	 moreContentEnable(id:number){
 		this.searchResultDet[id].moreContent=true;
+	}
+
+
+
+	urlPl:string="";
+	vie:number=0;
+	viewpl(i:number){
+	   var l =this.searchResultDet.mediaPaths.length -1;
+	   if(i==0){
+		   this.vie = this.vie-1 < 0?l:this.vie-1;
+		   this.urlPl=this.searchResultDet.mediaPaths[this.vie].url;
+
+	   }else{
+		   
+		   this.vie = this.vie+1 > l?0:this.vie+1;
+		   this.urlPl=this.searchResultDet.mediaPaths[this.vie].url;
+
+	   }
+
 	}
 }

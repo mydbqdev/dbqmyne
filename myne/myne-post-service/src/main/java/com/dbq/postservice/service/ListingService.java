@@ -152,8 +152,28 @@ public class ListingService {
 		}
 	}
 
-	public ListingCollection getListingById(String listingId) {
-		return listingRepository.findByListingId(listingId);
+	public ListingResponse getListingById(String listingId) {
+		ListingCollection listingCollection=listingRepository.findByListingId(listingId);
+		ResponseEntity<List<User>> usersDetails= userStorageClient.getUserIdsUserDetails(Collections.singletonList(listingCollection.getCreatorId()));
+		ListingResponse listingRes=new ListingResponse();
+		listingRes.setCreatedAt(listingCollection.getCreatedAt());
+		listingRes.setCondition(listingCollection.getCondition());
+		listingRes.setCreatorId(listingCollection.getCreatorId());
+		if (usersDetails != null && usersDetails.getBody() != null && !usersDetails.getBody().isEmpty()) {
+	        listingRes.setCreatorName(usersDetails.getBody().get(0).getUserFirstName() + " " + usersDetails.getBody().get(0).getUserLastName());
+	    } else {
+	        listingRes.setCreatorName("Unknown User");
+	    }
+		listingRes.setDescription(listingCollection.getDescription());
+		listingRes.setdiscount(listingCollection.isDiscount());
+		listingRes.setDiscountAmount(listingCollection.getDiscountAmount());
+		listingRes.setListingId(listingCollection.getListingId());
+		listingRes.setMediaPaths(listingCollection.getMediaPaths());
+		listingRes.setCreatedAt(listingCollection.getCreatedAt());
+		listingRes.setTitle(listingCollection.getTitle());
+		listingRes.setZipCode(listingCollection.getZipCode());
+		listingRes.setFree(listingCollection.isFree());
+		return listingRes;
 	}
 
 	
@@ -273,7 +293,7 @@ public class ListingService {
         			    .filter(d -> d.getId().equals(randomAd.getCreaterId()))
         			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
         			    .findFirst()  
-        			    .orElse("");
+        			    .orElse("Unknown User");
     		   
     			adsres.creatorName(userName);
     			adsres.setTitle(randomAd.getTitle());
@@ -308,7 +328,7 @@ public class ListingService {
 			    .filter(d -> d.getId().equals(listing.getCreatorId()))
 			    .map(m -> String.join(" ", m.getUserFirstName(), m.getUserLastName()))
 			    .findFirst()  
-			    .orElse("");
+			    .orElse("Unknown User");
 		
 		response.setCreatorName(userName);
 		

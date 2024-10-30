@@ -293,7 +293,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.load=false;
 			this.pageIndex=this.pageIndex+1;
 			this.searchListing(this.menuSeleced);
-			window.scrollTo(0, this.currentScrolledY);
+			window.scrollTo(0, this.window.scrollY-100);
 		    this.currentScrolledY=this.window.scrollY;
 			}
 	 }
@@ -597,7 +597,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.notifyService.showError("Please add up to 10 photos only.","");
 			return;
 		}
-		this.listringInfo.userId=this.userInfo.userId;
+		this.listringInfo.creatorId=this.userInfo.userId;
 		this.listringInfo.zipCode=this.userInfo.zipCode;
 		this.listringInfo.discount=false;
 		this.listringInfo.discountAmount=0;

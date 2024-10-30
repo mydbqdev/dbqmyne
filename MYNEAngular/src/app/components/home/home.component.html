@@ -43,7 +43,7 @@
 </div>
 <div  
         infiniteScroll 
-        [infiniteScrollDistance]="2"
+        [infiniteScrollDistance]="1"
         [infiniteScrollThrottle]="150"
         [immediateCheck]="true"
         (scrolled)="loadMoreProducts()"
@@ -202,7 +202,7 @@
                       <div style="padding-top: 10px;" *ngIf= "!postSearchResultDt.postId && postSearchResultDt.adsHyperLink">
                         <a *ngIf="postSearchResultDt.adsHyperLink" class="btn btn-sm btn-info" style="margin: 0px 0px 0px 10px ;" [href]="postSearchResultDt.adsHyperLink" target="_blank"> Read more</a>
                       </div>
-                      <div style="padding-top: 10px;" *ngIf= "postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length==4">
+                      <div style="padding-top: 10px;" *ngIf= "postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length>=4">
                         <div class="d-flex">
                           <div class="img-thumbnail-home mr-2" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#photoSlides" (click)="slidesPhoto(postSearchResultDt.mediaDetails)">
                             <img [src]="postSearchResultDt.mediaDetails[0].url" class="img-thumbnail-home-inner" alt="logo" *ngIf="postSearchResultDt.mediaDetails[0].contentType.includes('image')">
@@ -730,20 +730,20 @@
       <div class="modal-body" style="margin-top: -5px;height: 500px;">
         <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div *ngFor="let photos of mediaPathsSlide;">
-            <div [ngClass]="true ? 'carousel-item active img-thumbnail-home-slides':'carousel-item img-thumbnail-home-slides'">
-              <img [src]="photos.url" class="img-thumbnail-home-slides-inner" alt="logo" *ngIf="photos.contentType.includes('image')">
-              <div class="video-wrapper"  *ngIf="photos.contentType.includes('video')">                           
-                <video id="myVideo1" controls="true" class="img-thumbnail-home-slides-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="photos.url | safe" [type]="photos.contentType"> </video> 
+           
+             <div class="img-thumbnail-home-slides">
+              <img [src]="urlPl.url" class="img-thumbnail-home-slides-inner" alt="logo" *ngIf="urlPl.contentType?.includes('image')" >
+              <div class="video-wrapper"  *ngIf="urlPl.contentType?.includes('video')">                           
+                <video id="myVideo1" controls="true" class="img-thumbnail-home-slides-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="urlPl.url | safe" [type]="urlPl.contentType"> </video> 
                </div>
-            </div>
-            </div>
+           
           </div>
-          <button *ngIf="mediaPathsSlide.length>1" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+          </div>
+          <button *ngIf="mediaPathsSlide.length>1" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev" (click)="viewpl(0)">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button *ngIf="mediaPathsSlide.length>1" class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+          <button *ngIf="mediaPathsSlide.length>1" class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next" (click)="viewpl(1)">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>

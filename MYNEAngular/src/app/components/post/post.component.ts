@@ -217,7 +217,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.load=false;
 		this.pageIndex=this.pageIndex+1;
 		this.searchResult();
-		window.scrollTo(0, this.currentScrolledY);
+		window.scrollTo(0, this.window.scrollY-100);
 		this.currentScrolledY=this.window.scrollY;
 		}
 	}
@@ -329,6 +329,9 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.appService.createPost(formData).subscribe((data: any) => {
 		//  this.notifyService.showSuccess(data.status, "");
 		var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		model.creatorName=this.userInfo.userFirstName +' '+this.userInfo.userLastName;
+		model.likeCount=0;
+		model.commentsCount=0;
 		this.postSearchResultDt.unshift(model);
 		console.log("model",model)
 		  if(type==2){
@@ -374,6 +377,9 @@ export class PostComponent implements OnInit, AfterViewInit {
 		 console.log("data>>",data)
 		  var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
 		  console.log(this.postSearchResultDt,"data>>",model)
+		  model.creatorName=this.userInfo.userFirstName +' '+this.userInfo.userLastName;
+		  model.likeCount=0;
+		  model.commentsCount=0;
 		  this.postSearchResultDt.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){

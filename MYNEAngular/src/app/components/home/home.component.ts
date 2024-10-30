@@ -205,7 +205,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.load=false;
 		this.pageIndex=this.pageIndex+1;
 		this.searchPostForHome(this.menuSeleced);
-		window.scrollTo(0, this.currentScrolledY);
+		window.scrollTo(0, this.window.scrollY-100);
 		this.currentScrolledY=this.window.scrollY;
 		}
 	}
@@ -315,6 +315,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.appService.createPost(formData).subscribe((data: any) => {
 		 // this.notifyService.showSuccess(data.status, "");
 		  var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
+		  model.creatorName=this.userInfo.userFirstName +' '+this.userInfo.userLastName;
+		  model.likeCount=0;
+		  model.commentsCount=0;
 		  this.postSearchResult.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){
@@ -358,7 +361,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
 		 // this.notifyService.showSuccess(data.status, "");
 		 var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
-		 this.postSearchResult.unshift(model);
+		 model.creatorName=this.userInfo.userFirstName +' '+this.userInfo.userLastName;
+		  model.likeCount=0;
+		  model.commentsCount=0;
+		  this.postSearchResult.unshift(model);
 		  this.clearPostRequestData();
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
@@ -572,9 +578,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	 mediaPathsSlide:MediaDetails[]=[];
      slidesPhoto(list:any[]){
 		this.mediaPathsSlide=Object.assign([],list);
+		this.urlPl=this.mediaPathsSlide[0] ;
 		console.info("this.mediaPathsSlide",this.mediaPathsSlide);
+		console.log("this.urlPl",this.urlPl);
 	 }
 	 moreContentEnable(id:number){
 		this.postSearchResult[id].moreContent=true;
+	}
+
+	urlPl:MediaDetails=new MediaDetails();
+	vie:number=0;
+	viewpl(i:number){
+	   var l =this.mediaPathsSlide.length -1;
+	   if(i==0){
+		   this.vie = this.vie-1 < 0?l:this.vie-1;
+		   this.urlPl=this.mediaPathsSlide[this.vie];
+
+	   }else{
+		   
+		   this.vie = this.vie+1 > l?0:this.vie+1;
+		   this.urlPl=this.mediaPathsSlide[this.vie];
+
+	   }
+
 	}
 }

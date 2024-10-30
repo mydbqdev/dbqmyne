@@ -77,7 +77,7 @@ public class ListingController implements ListingApi {
 
 	public ResponseEntity<Object> getlistingListingIdGet(@PathVariable("listing_id") String listingId) {
 		try {
-			ListingCollection response = listingService.getListingById(listingId);
+			ListingResponse response = listingService.getListingById(listingId);
 			if (response != null) {
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			} else {
