@@ -1,29 +1,24 @@
 import React from 'react';
-import SplashScreen from './src/screens/SplashScreen';
+import SplashLoginScreen from './src/screens/SplashLoginScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-
-import { Provider } from 'react-redux';
-import { Dimensions, TouchableOpacity } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Toast from 'react-native-toast-message';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import SignUp from './src/screens/signup';
 import LogIn from './src/screens/signin';
-import SplashLoginScreen from './src/screens/SplashLoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import DiscoverScreen from './src/screens/DiscoverScreen';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 // Define the navigators
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-
-export const mob = Dimensions.get('screen').width < 768;
+const BottomTab = createMaterialBottomTabNavigator();
 
 const App = () => {
   return (
     <AutocompleteDropdownContextProvider>
-      {/* <Provider store={store}> */}
       <Toast />
       <NavigationContainer>
         <Stack.Navigator initialRouteName={'splash'}>
@@ -42,21 +37,37 @@ const App = () => {
             component={LogIn}
             options={{ headerShown: false }}
           />
-          {/* Wrap the Tab Navigator in a Stack Screen */}
           <Stack.Screen
             name="home"
-            component={HomeTabs} // Use a new component for the tabs
+            component={BottomTabs} // Use BottomTabs for main navigation
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
-      {/* </Provider> */}
     </AutocompleteDropdownContextProvider>
   );
 };
 
-// Create a separate component for the Tab Navigator
-const HomeTabs = () => {
+// Create a separate component for the Bottom Tab Navigator
+const BottomTabs = () => {
+  return (
+    <BottomTab.Navigator
+      initialRouteName="Home"
+      activeColor="#6200ea"
+      inactiveColor="#a1a1a1"
+      barStyle={{ backgroundColor: '#ffffff' }}
+    >
+      <BottomTab.Screen name="Home" component={HomeTabScreen} options={{ title: 'Home' }} />
+      <BottomTab.Screen name="Discover" component={DiscoverScreen} />
+      <BottomTab.Screen name="Search" component={HomeScreen} />
+      <BottomTab.Screen name="ForSale" component={DiscoverScreen} options={{ title: 'For Sale' }} />
+      <BottomTab.Screen name="Chats" component={HomeScreen} options={{ title: 'Chats' }} />
+    </BottomTab.Navigator>
+  );
+};
+
+// Create a separate component for the Top Tab Navigator
+const HomeTabScreen = () => {
   return (
     <Tab.Navigator
       initialRouteName="ForYou"
@@ -68,8 +79,8 @@ const HomeTabs = () => {
         tabBarStyle: { backgroundColor: '#ffffff' },
       }}
     >
-      <Tab.Screen name="ForYou" component={HomeScreen} options={{ title: 'For you' }} />
-      <Tab.Screen name="MyPosts" component={HomeScreen} options={{ title: 'My posts' }} />
+      <Tab.Screen name="ForYou" component={HomeScreen} options={{ title: 'For You' }} />
+      <Tab.Screen name="MyPosts" component={HomeScreen} options={{ title: 'My Posts' }} />
       <Tab.Screen name="Recent" component={HomeScreen} />
       <Tab.Screen name="Nearby" component={HomeScreen} />
       <Tab.Screen name="Trending" component={HomeScreen} />

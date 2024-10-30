@@ -103,7 +103,7 @@ const HomeScreen = () => {
               if (media.contentType.startsWith('image/')) {
                 return (
                   <Image
-                    key={index}
+                    key={`${item.postId}-${media.url}-${index}`} // Use postId combined with media URL for uniqueness
                     source={{ uri: media.url }}
                     style={styles.image}
                     resizeMode="cover"
@@ -118,6 +118,8 @@ const HomeScreen = () => {
             </View>
           </View>
         )}
+        
+        
         onEndReached={loadMorePosts} // Load more posts on scroll to end
         onEndReachedThreshold={0.5} // Trigger when 50% of the screen is left
         ListFooterComponent={loading ? <Text>Loading more posts...</Text> : null} // Show loading indicator
