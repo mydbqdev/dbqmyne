@@ -37,6 +37,9 @@ public class GatewayConfig {
                 		.filters(f -> f.filter(filter))
                         .uri("lb://myne-notify-service"))
                 
+                .route("myne-chat-service", r -> r.path("/v1/chat/**")
+                		.filters(f -> f.filter(filter))
+                        .uri("lb://myne-chat-service"))
 //                .route("file-storage", r -> r.path("/v1/file-storage/**")
 //                        .filters(f -> f.filter(filter))
 //                        .uri("lb://file-storage"))
