@@ -104,7 +104,7 @@
             <div class="card">
               <div class="card-body" style="padding:0px;">
                 <div class="d-flex">
-                  <div style="font-weight: 500;font-size: 22px;">{{searchResultDet.title}}</div>
+                  <div style="font-weight: 500;font-size: 22px;" class="text-break lh-1">{{searchResultDet.title}}</div>
                   <div class="ml-auto">
                     <i class="far fa-bookmark fa-lg ml-2"></i> 
                     <i class="fas fa-ellipsis-h ml-2 mr-2 text-gray-400" *ngIf="searchResultDet.creatorId == userInfo.userId"></i>
@@ -113,11 +113,16 @@
                 
                 <div style="font-weight: 500;" class="mb-4" *ngIf="isSaleSelect">{{searchResultDet.price}}$</div>
                 <div class="d-flex">
-                  <div style="width: 75px;"><img src="assets/images/NotAvailable.jpg" style="width: 55px;" class="img-circle elevation-2"></div>
+                  <div style="width: 75px;">
+                    <div class="img-circle elevation-2 profile-list-1">{{searchResultDet.creatorName?.charAt(0).toUpperCase()}}</div>
+                  </div>
                   <div>
                     <div style="font-size: 17px;font-weight: 600;"><span>{{searchResultDet.creatorName}}</span></div>
                     <p class="card-text"><small class="text-muted">0.2km</small></p>
-                    <div class="card-text">{{searchResultDet.description}}..<small class="text-muted ml-2">more</small></div>
+                    <div class="card-text text-break lh-1">
+                        <span *ngIf="searchResultDet?.description && searchResultDet?.description?.length > 400">{{searchResultDet.description.slice(0, 400)}}... <a href="javascript:void(0)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">more</a></span>
+                        <span *ngIf="searchResultDet?.description && searchResultDet?.description?.length <= 400">{{searchResultDet.description}}</span>
+                    </div>
                   </div>
                 </div>
                 <div class="card-text" style="text-align: end;"><small class="text-muted">Last updated 3 mins ago</small></div>
