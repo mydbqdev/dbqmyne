@@ -587,6 +587,11 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			this.notifyService.showError("Please upload at least one photo","");
 			return;
 		}
+
+		if(this.filesPoto.length>10){
+			this.notifyService.showError("Please add up to 10 photos only.","");
+			return;
+		}
 		this.listringInfo.userId=this.userInfo.userId;
 		this.listringInfo.zipCode=this.userInfo.zipCode;
 		this.listringInfo.discount=false;
