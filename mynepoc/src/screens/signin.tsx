@@ -14,6 +14,7 @@ import { BASE_URL } from "../../devprofile";
 import axios from "axios";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import useAuthStore from "../zustand/useAuthStore";
+import useStore, { UserDetails } from "../zustand/useStore";
 
 
 const LogIn = () => {
@@ -23,14 +24,27 @@ const LogIn = () => {
   const { setToken } = useAuthStore();
   const handleLogin = async () => {
     try {
+      // Call the login API
       const response = await ApiService.post(`${BASE_URL}/auth/login`, {
         userEmail: email,
         password: password,
       });
-
+  
       if (response.status === 200) {
         Alert.alert("Login Successful", `Welcome ${email}!`);
-        setToken(response.data.token)
+        setToken(response.data.token); // Store the token
+        
+        // Fetch user details
+        const userDetailsResponse = await ApiService.get(
+          `${BASE_URL}/user/getUserByUserEmail?userEmail=${email}`
+        );
+  console.log("userDetailsResponse::",userDetailsResponse.data)
+        if (userDetailsResponse.status === 200) {
+          // Store user details in Zustand
+          const userDetails: UserDetails = userDetailsResponse.data; // Ensure the response matches the type
+          useStore.getState().setUserDetails(userDetails);
+        }
+  
         navigation.navigate("home");
       }
     } catch (error) {

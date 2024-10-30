@@ -4,6 +4,7 @@ import { Button, TextInput } from 'react-native-paper';
 import axios from 'axios';
 import ApiService from '../Api/ApiService'; // Adjust the import path
 import { BASE_URL } from '../../devprofile';
+import useStore from '../zustand/useStore';
 
 // Define an interface for Post
 interface MediaDetail {
@@ -34,7 +35,7 @@ const HomeScreen = () => {
   const [pageIndex, setPageIndex] = useState(0); // Pagination state
   const [loading, setLoading] = useState(false); // Loading state
   const [hasMore, setHasMore] = useState(true); // Check if there are more posts to load
-
+  const {userDetails} = useStore();
   // Fetch posts from API with filters
   const fetchPosts = async () => {
     if (loading || !hasMore) return; // Prevent multiple requests if already loading or no more posts
@@ -42,14 +43,15 @@ const HomeScreen = () => {
     setLoading(true);
     // Define the request body
     const requestBody = {
-      filterType: "recent",
+      filterType: "forYou",
       pageIndex: pageIndex, // Use the current page index
       pageSize: 10, // Adjust the page size as needed
-      zipCode: "560034", // Replace with the actual zip code or input value
+      zipCode: userDetails?.zipCode, // Replace with the actual zip code or input value
     };
 
     try {
       const response = await ApiService.post(`${BASE_URL}/post/getPosts`, requestBody);
+      console.log("CH: ",response.data)
       // Check if response contains data
       if (response.data && response.data.length > 0) {
         setPosts((prevPosts) => [...prevPosts, ...response.data]); // Append new posts to existing ones
