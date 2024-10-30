@@ -24,9 +24,9 @@ import reactor.core.publisher.Flux;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-@CrossOrigin(value = { "*" },
-maxAge = 900
-)
+// @CrossOrigin(value = { "*" },
+// maxAge = 900
+// )
 @RestController
 @RequestMapping("/v1/chat")
 @RequiredArgsConstructor
