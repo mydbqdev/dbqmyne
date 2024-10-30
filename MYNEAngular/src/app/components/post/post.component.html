@@ -117,8 +117,9 @@
                       <div class="d-flex">
                         
                         <div class="text-break lh-2">
-                          <span *ngIf="postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description.slice(0, 500)}}... <a href="javascript:void(0)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Read more</a></span>
+                          <span *ngIf="(!postSearchResultDt?.moreContent) && postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description.slice(0, 500)}}... <a href="javascript:void(0)" (click)="moreContentEnable(i)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Read more</a></span>
                           <span *ngIf="postSearchResultDt?.description && postSearchResultDt?.description?.length <= 500">{{postSearchResultDt.description}}</span>
+                          <span *ngIf="(postSearchResultDt?.moreContent) && postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description}}</span>
                         </div>
                         <div class="ml-auto" style="width: 150px;padding-left: 10px;" *ngIf= "postSearchResultDt?.mediaDetails?.length>0" >
                              <div class="rounded img-thumbnail-post">

@@ -182,9 +182,10 @@
                     <div style="font-size: 15px;font-weight: 400;color: rgb(164,166,173);padding-top: 0px;" *ngIf="!postSearchResultDt.postId">Sponsored</div>
                     <div style="font-size: 13px;font-weight: normal;padding: 5px 0px">
                       <div class="text-break lh-2">
-                        <span *ngIf="postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description.slice(0, 500)}}... <a href="javascript:void(0)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Read more</a></span>
+                        <span *ngIf="(!postSearchResultDt?.moreContent) && postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description.slice(0, 500)}}... <a href="javascript:void(0)" (click)="moreContentEnable(i)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Read more</a></span>
                         <span *ngIf="postSearchResultDt?.description && postSearchResultDt?.description?.length <= 500">{{postSearchResultDt.description}}</span>
-                        </div>
+                        <span *ngIf="(postSearchResultDt?.moreContent) && postSearchResultDt?.description && postSearchResultDt?.description?.length > 500">{{postSearchResultDt.description}}</span>
+                      </div>
                       <div style="padding-top: 10px;" *ngIf= "postSearchResultDt.postId && postSearchResultDt?.mediaDetails?.length>0 && postSearchResultDt?.mediaDetails?.length<4">
                         <div class="d-flex">
                           <div class="img-thumbnail-home mr-2" style="cursor: pointer;" *ngFor="let photolist of postSearchResultDt.mediaDetails" data-bs-toggle="modal" data-bs-target="#photoSlides" (click)="slidesPhoto(postSearchResultDt.mediaDetails)">

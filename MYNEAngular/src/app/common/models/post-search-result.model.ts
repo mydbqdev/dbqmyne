@@ -28,7 +28,7 @@ export class PostSearchResult {
     hyperLink:string;//post ads
     privacy:string;
     adsHyperLink:string;
-
+    moreContent:boolean=false;
 }
 
 export class MediaDetails {

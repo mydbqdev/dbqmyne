@@ -524,4 +524,8 @@ export class PostComponent implements OnInit, AfterViewInit {
 	   });
 		
 	 }
+
+	 moreContentEnable(id:number){
+		 this.postSearchResultDt[id].moreContent=true;
+	 }
 }

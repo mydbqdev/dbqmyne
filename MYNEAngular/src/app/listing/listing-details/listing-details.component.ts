@@ -478,4 +478,8 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		 this.adsTitle="";
 		 this.websiteLink="";
 	 }
+
+	 moreContentEnable(id:number){
+		this.searchResultDet[id].moreContent=true;
+	}
 }

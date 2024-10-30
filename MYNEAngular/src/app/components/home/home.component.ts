@@ -15,25 +15,6 @@ import { MediaDetails, PostSearchResult } from 'src/app/common/models/post-searc
 import { PostRequestModel } from 'src/app/common/models/post-request.model';
 import { SignupDetails } from 'src/app/common/shared/signup-details';
 
-export interface DummyJsonResponse {
-	products: Product[];
-	total: number;
-	skip: number;
-	limit: number;
-  }
-  
-  export interface Product {
-	id: string;
-	title: string;
-	price: number;
-	thumbnail: string;
-  }
-  
-  export interface ProductsPaginator {
-	items: Product[];
-	page: number;
-	hasMorePages: boolean;
-  }
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
@@ -593,4 +574,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.mediaPathsSlide=Object.assign([],list);
 		console.info("this.mediaPathsSlide",this.mediaPathsSlide);
 	 }
+	 moreContentEnable(id:number){
+		this.postSearchResult[id].moreContent=true;
+	}
 }

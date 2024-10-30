@@ -120,8 +120,9 @@
                     <div style="font-size: 17px;font-weight: 600;"><span>{{searchResultDet.creatorName}}</span></div>
                     <p class="card-text"><small class="text-muted">0.2km</small></p>
                     <div class="card-text text-break lh-1">
-                        <span *ngIf="searchResultDet?.description && searchResultDet?.description?.length > 400">{{searchResultDet.description.slice(0, 400)}}... <a href="javascript:void(0)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">more</a></span>
-                        <span *ngIf="searchResultDet?.description && searchResultDet?.description?.length <= 400">{{searchResultDet.description}}</span>
+                      <span *ngIf="(!searchResultDet?.moreContent) && searchResultDet?.description && searchResultDet?.description?.length > 400">{{searchResultDet.description.slice(0, 400)}}... <a href="javascript:void(0)" (click)="moreContentEnable(0)" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">more</a></span>
+                      <span *ngIf="searchResultDet?.description && searchResultDet?.description?.length <= 400">{{searchResultDet.description}}</span>
+                      <span *ngIf="(searchResultDet?.moreContent) && searchResultDet?.description && searchResultDet?.description?.length > 400">{{searchResultDet.description}}</span>
                     </div>
                   </div>
                 </div>
