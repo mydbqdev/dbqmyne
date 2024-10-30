@@ -356,7 +356,12 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	 }
      disply(){
 		//console.log(this.listingResultPrint.)
-		 //this.listingResultPrint=[];
+		let lastElement = this.listingResultPrint?.pop();
+		if(lastElement!=null && lastElement?.length){
+		   for( let j=lastElement.length-1;j>=0;j--){
+			   this.listingResult.unshift(lastElement[j])
+			}
+		}	 
 		for(let i=0;i<this.listingResult.length;i=i+4){
 			this.listingResultList=[];
             for(let j=i;j<i+4 && j<this.listingResult.length;j++){
