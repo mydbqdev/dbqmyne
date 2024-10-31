@@ -6,7 +6,8 @@ import ApiService from '../Api/ApiService'; // Adjust the import path
 import { BASE_URL } from '../../devprofile';
 import useStore from '../zustand/useStore';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import MaterialIcons or any other icon library
-
+import { NavigationContainer,useNavigation } from "@react-navigation/native";
+import useAuthStore from '../zustand/useAuthStore';
 // Define an interface for Post and MediaDetail
 interface MediaDetail {
   contentType: string;
@@ -27,8 +28,9 @@ interface Post {
   createdAt: string;
   updatedAt: string;
 }
-
-const HomeScreen = () => {
+ 
+const HomeScreen = ({navigation}:any) => {
+  const createpostsus = useAuthStore((state) => state.isPostSuccessful);
   const [posts, setPosts] = useState<Post[]>([]); // To store the fetched posts
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
   const [newPost, setNewPost] = useState(''); // New post input state
@@ -67,7 +69,10 @@ const HomeScreen = () => {
       setLoading(false); // Set loading to false after fetching
     }
   };
-
+   
+  const toggleModal = () => {
+    navigation.navigate("createpost");
+  };
   // Create a new post
   const createPost = async () => {
     if (!newPost) return;
@@ -119,7 +124,15 @@ const HomeScreen = () => {
       setPageIndex((prevPageIndex) => prevPageIndex + 1); // Increment page index for the next fetch
     }
   };
-
+ 
+  useEffect(() => {
+    if(createpostsus===true){
+    fetchPosts();
+    // Fetch posts on initial load
+    console.log("createpostsus");
+    }
+  }, [createpostsus]);
+ 
   return (
     <View style={styles.container}>
       <FlatList
@@ -169,7 +182,7 @@ const HomeScreen = () => {
       />
 
       {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity style={styles.fab} onPress={toggleModal}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
@@ -250,7 +263,7 @@ const styles = StyleSheet.create({
     bottom: 16,
     width: 56,
     height: 56,
-    backgroundColor: '#6200ea',
+    backgroundColor: '#008080',
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',

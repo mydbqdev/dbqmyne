@@ -1,24 +1,72 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Dimensions, Alert } from "react-native";
 import { FontSize, FontFamily, Color } from "../assets/globalstyles";
 import { launchImageLibrary, ImageLibraryOptions } from 'react-native-image-picker';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
- 
+import ApiService from '../Api/ApiService';
+import { BASE_URL } from "../../devprofile";
+import useAuthStore from "../zustand/useAuthStore";
+import useStore from "../zustand/useStore";
+import { showToast } from "./ToastUtils";
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
  
 const CreatePost = ({navigation}: any) => {
+  const { setPostSuccess } = useAuthStore();
+  const userDetails = useStore(state => state.userDetails);
   const [description, setDescription] = React.useState<string>("");
   const [media, setMedia] = React.useState<any[]>([]);
  
-  const handlePost = () => {
-    console.log("Posted:", description, media);
+  const handlePost = async () => {
+    if (!description && media.length === 0) {
+      console.log('Please add a description or media before posting');
+      return;
+    }
+ 
+    const formData = new FormData();
+ 
+    // Add media files to FormData directly as File objects
+    media.forEach((file, index) => {
+      formData.append('files', {
+        uri: file.uri,
+        type: file.type,
+        name: file.fileName || `media_${index}`,
+      });
+    });
+ 
+    // Add post info as a JSON string
+    const postInfo = {
+      zipCode: userDetails?.zipCode,
+      userId:userDetails?.id ,
+      description,
+      privacy: "public",
+    };
+    formData.append('postInfo', JSON.stringify(postInfo));
+ 
+    try {
+      const response = await ApiService.post(`${BASE_URL}/post/posts/save`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+ 
+      if (response.status === 200) {
+        console.log(response.status); // Success message
+        Alert.alert("posted suscessfully");
+        setPostSuccess(true)
+       
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
+ 
+ 
  
   const selectMedia = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'mixed',
-      selectionLimit: 5,
+      selectionLimit: 10,
     };
  
     launchImageLibrary(options, (response: any) => {
@@ -37,7 +85,7 @@ const CreatePost = ({navigation}: any) => {
   };
  
   const goToHome = () => {
-    navigation.navigate('homescreen');
+    navigation.navigate('home');
   };
  
   return (
@@ -74,6 +122,7 @@ const CreatePost = ({navigation}: any) => {
         <TouchableOpacity onPress={selectMedia} style={styles.footerIcons}>
           <Text style={styles.iconText}>Choose Photo/Video</Text>
         </TouchableOpacity>
+       
         <TextInput
           style={styles.descriptionInput}
           placeholder="Add a description..."
@@ -208,5 +257,6 @@ const styles = StyleSheet.create({
 });
  
 export default CreatePost;
+ 
  
  

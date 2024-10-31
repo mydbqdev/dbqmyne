@@ -16,7 +16,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Import FontA
 import ForSaleScreen from './src/screens/ForSaleScreen';
 import ChatsScreen from './src/screens/ChatsScreen';
 import SearchScreen from './src/screens/SearchScreen';
-
+import createpost from './src/screens/CreatePost';
+ 
 // Define the navigators
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -46,6 +47,11 @@ const App = () => {
           <Stack.Screen
             name="home"
             component={BottomTabs} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+           <Stack.Screen
+            name="createpost"
+            component={createpost} // Use BottomTabs for main navigation
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
