@@ -29,7 +29,7 @@ interface Post {
   updatedAt: string;
 }
  
-const HomeScreen = ({navigation}:any) => {
+const HomeScreen = ({navigation,filterType}:any) => {
   const createpostsus = useAuthStore((state) => state.isPostSuccessful);
   const [posts, setPosts] = useState<Post[]>([]); // To store the fetched posts
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
@@ -47,7 +47,7 @@ const HomeScreen = ({navigation}:any) => {
     setLoading(true);
     // Define the request body
     const requestBody = {
-      filterType: "forYou",
+      filterType: filterType,
       pageIndex: pageIndex, // Use the current page index
       pageSize: 10, // Adjust the page size as needed
       zipCode: userDetails?.zipCode, // Replace with the actual zip code or input value

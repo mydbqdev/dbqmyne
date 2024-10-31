@@ -173,11 +173,28 @@ const HomeTabScreen = () => {
           tabBarStyle: styles.topTabBar,
         }}
       >
-        <Tab.Screen name="ForYou" component={HomeScreen} options={{ title: 'For You' }} />
-        <Tab.Screen name="MyPosts" component={HomeScreen} options={{ title: 'My Posts' }} />
-        <Tab.Screen name="Recent" component={HomeScreen} />
-        <Tab.Screen name="Nearby" component={HomeScreen} />
-        <Tab.Screen name="Trending" component={HomeScreen} />
+       <Tab.Screen 
+          name="ForYou" 
+          options={{ title: 'For You' }}
+          children={() => <HomeScreen filterType="forYou" />} 
+        />
+        <Tab.Screen 
+          name="MyPosts" 
+          options={{ title: 'My Posts' }}
+          children={() => <HomeScreen filterType="myPost" />} 
+        />
+        <Tab.Screen 
+          name="Recent" 
+          children={() => <HomeScreen filterType="recent" />} 
+        />
+        <Tab.Screen 
+          name="Nearby" 
+          children={() => <HomeScreen filterType="nearBy" />} 
+        />
+        <Tab.Screen 
+          name="Trending" 
+          children={() => <HomeScreen filterType="recent" />} 
+        />
       </Tab.Navigator>
     </View>
   );

@@ -64,7 +64,7 @@ const Items = () => {
                         />
                     ) : (
                         <Image
-                            // source={require('../assets/images/No_Image_Available.jpg')}
+                            source={require('../assets/images/noimage.jpg')}
                             style={{ height: 100, width: 100, marginRight: 20 }}
                         />
                     )}

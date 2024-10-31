@@ -63,7 +63,7 @@ const YourListing = () => {
                 <View className=' '>
                     <View className='items-center mt-36'>
                         <Image
-                            // source={require('../assets/MYNE-Images/Frame3234377.png')}
+                            source={require('../assets/images/Frame 3234377.png')}
                             style={{ height: 160, width: 100 }}
                         />
                         <Text>No active listings</Text>
