@@ -46,6 +46,20 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games",
 		"Books","Fashion Accessories","Furniture","Jewelry","Pet Supplies","Musical Instruments","Computers & Tablets","Cell Phones","Tickets & Experiences","Collectibles","Office Supplies","Others"];
 
+	fileDataImgAds: File = null;
+	previewUrlImgAds:any[] = [];
+	filesImgAds:File[]=[];
+	previewUrlImg1:any = false;	
+
+	fileDataLogo: File = null;
+	previewUrlLogo:any = null;
+
+	data: any="";
+	data2: any="";
+	isImg:number=0;
+
+	urlPl:string="";
+	vie:number=0;
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -93,10 +107,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.activeMenu(1, '');
 	}
 
-	fileDataImgAds: File = null;
-	previewUrlImgAds:any[] = [];
-	filesImgAds:File[]=[];
-	previewUrlImg1:any = false;
+
 	onFileChangedImg(event) {
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
@@ -123,8 +134,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
-	fileDataLogo: File = null;
-	previewUrlLogo:any = null;
+	
 	onFileChangedLogo(event) {
 		this.previewUrlLogo=false;
 		if(event.target.files.length>0){
@@ -154,9 +164,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	data: any="";
-	data2: any="";
-	isImg:number=0;
+
 	preview(id) {
 		this.isImg=0;
 		// Show preview 
@@ -482,9 +490,6 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 
-
-	urlPl:string="";
-	vie:number=0;
 	viewpl(i:number){
 	   var l =this.searchResultDet.mediaPaths.length -1;
 	   if(i==0){

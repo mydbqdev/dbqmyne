@@ -40,7 +40,6 @@ export class SigninComponent implements OnInit {
             this.submitted=false;
 			this.authService.getAuthUser(user).subscribe((result) => {
 				const res: ResponseStore = { userEmail: this.username.toLowerCase(), token: result.token };
-				console.log("res>>>",res)
 				this.authService.setSessionStore(res);
 				this.loadInitialData();
 				this.authService.subscribeFcmNotification('unsubscribe').subscribe();
@@ -48,7 +47,6 @@ export class SigninComponent implements OnInit {
 			//	this.authService.checkLoginUser();
 				this.router.navigate(['/home']);
 			}, error => {
-				console.log("error>>>",error.error.error)
 				this.error = error.error.error;// 'Invalid credentials or something went wrong';
 			});
 		}// else {
