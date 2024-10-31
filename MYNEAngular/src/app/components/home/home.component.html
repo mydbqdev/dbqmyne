@@ -236,6 +236,7 @@
                             <div class="video-wrapper"  *ngIf="postSearchResultDt.mediaDetails[3].contentType.includes('video')">                           
                               <video id="myVideo1" controls="true"class="img-thumbnail-home-inner" loop="true" style="background-color: black;border: 1px solid gray;"> <source id="video_src1" [src]="postSearchResultDt.mediaDetails[3].url | safe" [type]="postSearchResultDt.mediaDetails[3].contentType"> </video> 
                              </div>
+                             <div *ngIf="postSearchResultDt?.mediaDetails?.length>=5" class="img-thumbnail-home-more-img"><div style="margin-top:30% ;">+{{postSearchResultDt?.mediaDetails?.length-4}}</div></div>
                           </div>
 
                         </div>
@@ -721,11 +722,11 @@
      <!--modal for slides-->
 <div class="modal fade" id="photoSlides" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" required autocomplete="off">
 	<div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
-	  <div class="modal-content" >
+	  <div class="modal-content" style="background-color: #262626;">
       <div class="d-flex">
         <div></div>
         <div class="ml-auto mr-1">
-          <button type="button" class="close ml-2" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewAds>
+          <button type="button" class="close ml-2" style="color: #fff;" data-bs-dismiss="modal" aria-label="Close" #closeButtonNewAds>
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
