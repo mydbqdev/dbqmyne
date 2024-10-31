@@ -14,6 +14,8 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome for icons
 import ForSaleScreen from './src/screens/ForSaleScreen';
+import ChatsScreen from './src/screens/ChatsScreen';
+import SearchScreen from './src/screens/SearchScreen';
 
 // Define the navigators
 const Stack = createNativeStackNavigator();
@@ -85,7 +87,7 @@ const BottomTabs = () => {
       />
       <BottomTab.Screen 
         name="Search" 
-        component={HomeScreen} 
+        component={SearchScreen} 
         options={{ 
           title: 'Search',
           tabBarIcon: ({ color }) => (
@@ -105,7 +107,7 @@ const BottomTabs = () => {
       />
       <BottomTab.Screen 
         name="Chats" 
-        component={HomeScreen} 
+        component={ChatsScreen} 
         options={{ 
           title: 'Chats',
           tabBarIcon: ({ color }) => (
