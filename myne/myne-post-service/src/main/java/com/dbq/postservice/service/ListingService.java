@@ -164,6 +164,7 @@ public class ListingService {
 	    } else {
 	        listingRes.setCreatorName("Unknown User");
 	    }
+		listingRes.setPrice(listingCollection.getPrice());
 		listingRes.setDescription(listingCollection.getDescription());
 		listingRes.setdiscount(listingCollection.isDiscount());
 		listingRes.setDiscountAmount(listingCollection.getDiscountAmount());
