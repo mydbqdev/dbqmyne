@@ -76,15 +76,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
+		this.postRequestModel.privacy= 'Anywhere';
+		this.window=window;
 		this.dataService.getUserDetails.subscribe(info=>{
 			this.userInfo=info;
+			this.activeMenu('forYou');
 		}
 		)
-	 this.postRequestModel.privacy= 'Anywhere';
-	this.window=window;
+	
 	}
 	ngAfterViewInit() {
-		this.activeMenu('forYou');
+		
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
@@ -402,6 +404,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		
 	 }
 	 activeMenu(menuName:string){
+		console.log('menuName',menuName)
+		this.load=true;
 		this.postSearchResult=[];
 		this.pageIndex=0;
 		this.menuSeleced=menuName;
@@ -417,17 +421,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.spinner.show();
 		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=this.pageIndex;
+		this.searchRequest.userId=this.userInfo.userId;
 		this.searchRequest.pageSize=20;
 		
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo.zipCode;
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
-			this.load=true;
-			if(data.length >0){
+		this.load=true;
+		if(data.length >0){
 			this.postSearchResultResponce=Object.assign([],data);
 			for(let i of this.postSearchResultResponce){
 				this.postSearchResult.push(i);
 			}
-		 }else{
+		 }else if('myPost' == filterType){
+			this.load=false;
+		 }else{			
 			this.pageIndex=0;
 			this.searchPostForHome(filterType);
 		 }

@@ -299,6 +299,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	 }
 
 	 activeMenu(menuName:string){
+		this.load=true;
 		this.menuSeleced=menuName;
 		this.listingResult=[];
 		this.listingResultPrint=[];
@@ -314,15 +315,17 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		this.searchRequest.pageSize=20;
 		this.searchRequest.zipCode=this.userInfo.zipCode;
 		this.appService.getSaleResultList(this.searchRequest).subscribe((data: any) => {
-		 if(data.length >0){
+		 this.load=true;
+		if(data.length >0){
 			for(let i of data){
 				this.listingResult.push(i);
 			}
+		 }else if('yourlistings'== filterType ){
+			this.load=false;
 		 }else{
 			this.pageIndex=0;
 		 }
-		 this.load=true;
-		 console.info("this.listingResult",this.listingResult);
+		
 		 this.disply();
 		 this.spinner.hide();
 	   },error =>{

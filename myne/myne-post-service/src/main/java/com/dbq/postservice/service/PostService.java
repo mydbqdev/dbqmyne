@@ -153,9 +153,9 @@ public class PostService {
 	    		Page<PostCollection> page  = postRepository.findAll(pageable) ;	
 	    		posts = page.getContent();
 				break;
-//			case "myPost":
-//				 posts = postRepository.getPostsMyPost(pageIndex,pageSize,zipCode,) ;		
-//				break;
+			case "myPost":
+				posts = postRepository.findByUserId(postsFilter.getUserId(),pageable) ;		
+				break;
 			case "nearBy":
 				 posts = postRepository.getPostsNearBy(postsFilter.getZipCode(),pageable) ;		
 				break;

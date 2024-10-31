@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class PostsFilterDto {
 
     @JsonProperty("filterType")
-    @JsonInclude(JsonInclude.Include.NON_ABSENT) // Exclude from JSON if absent
-    @JsonSetter(nulls = Nulls.FAIL) // FAIL setting if the value is null
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonSetter(nulls = Nulls.FAIL)
     private String filterType = null;
 
     @JsonProperty("pageIndex")
@@ -41,6 +41,11 @@ public class PostsFilterDto {
     @JsonInclude(JsonInclude.Include.NON_ABSENT)
     @JsonSetter(nulls = Nulls.FAIL)
     private String searchContent = null;
+
+    @JsonProperty("userId")
+    @JsonInclude(JsonInclude.Include.NON_ABSENT)
+    @JsonSetter(nulls = Nulls.FAIL)
+    private String userId = null; 
 
     public PostsFilterDto filterType(String filterType) {
         this.filterType = filterType;
@@ -112,6 +117,20 @@ public class PostsFilterDto {
         this.searchContent = searchContent;
     }
 
+    public PostsFilterDto userId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    @Schema(example = "user123", description = "User ID for filtering posts.")
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,12 +140,13 @@ public class PostsFilterDto {
                Objects.equals(pageIndex, that.pageIndex) &&
                Objects.equals(pageSize, that.pageSize) &&
                Objects.equals(zipCode, that.zipCode) &&
-               Objects.equals(searchContent, that.searchContent);
+               Objects.equals(searchContent, that.searchContent) &&
+               Objects.equals(userId, that.userId); 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filterType, pageIndex, pageSize, zipCode, searchContent);
+        return Objects.hash(filterType, pageIndex, pageSize, zipCode, searchContent, userId);
     }
 
     @Override
@@ -138,6 +158,7 @@ public class PostsFilterDto {
         sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
         sb.append("    zipCode: ").append(toIndentedString(zipCode)).append("\n");
         sb.append("    searchContent: ").append(toIndentedString(searchContent)).append("\n");
+        sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
         sb.append("}");
         return sb.toString();
     }

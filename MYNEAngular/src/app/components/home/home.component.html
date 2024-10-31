@@ -80,6 +80,9 @@
                       <a [ngClass]="menuSeleced=='forYou'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('forYou');" >For you</a>
                     </li>
                     <li class="nav-item">
+                      <a [ngClass]="menuSeleced=='myPost'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('myPost');" >My post</a>
+                    </li>
+                    <li class="nav-item">
                       <a [ngClass]="menuSeleced=='recent'?'nav-link top-menu active': 'nav-link top-menu' " href="javascript:void(0)" (click)="activeMenu('recent');" >Recent</a>
                     </li>
                     <li class="nav-item">

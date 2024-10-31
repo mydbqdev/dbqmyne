@@ -27,8 +27,6 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	previewUrl2:any = null;
 	isSaleSelect:boolean=true;
 	listingId:string;
-	//@ViewChild(SideNavMenuComponent) sidemenuComp;
-	//public rolesArray: string[] = [];
 	public postSearchResult:PostSearchResult[]=[];
 	public searchResultDet:PostSearchResult=new PostSearchResult();
 	searchRequest:SearchRequest=new SearchRequest();
@@ -36,7 +34,6 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	postRequestModel:PostRequestModel=new PostRequestModel();
 	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
 	userInfo:SignupDetails=new SignupDetails();
-
 	
 	@ViewChild('closeButtonNewAds') closeButtonNewAds;
 	 
@@ -261,7 +258,6 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 	 searchListingDet(){
 		this.appService.getListSearchResultDet(this.listingId).subscribe((data: any) => {
 		   this.searchResultDet =data;
-		   console.log(" this.searchResultDet>>", this.searchResultDet)
 		   this.urlPl= this.searchResultDet.mediaPaths[0].url;
 		 this.spinner.hide();
 	   },error =>{

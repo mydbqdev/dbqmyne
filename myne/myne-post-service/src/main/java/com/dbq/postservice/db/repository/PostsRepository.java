@@ -22,5 +22,8 @@ public interface PostsRepository  extends MongoRepository<PostCollection,String>
 	  List<PostCollection> getPostsNearBy(String zipCode, Pageable pageable);
 	 
 	  @Query(value = "{ 'description': { $regex: ?0, $options: 'i' } }")
-		List<PostCollection> findByPostsbytitle(String title, Pageable pageable);
+	  List<PostCollection> findByPostsbytitle(String title, Pageable pageable);
+	  
+	  @Query(value = "{userId : ?0}")
+	  List<PostCollection> findByUserId(String userId, Pageable pageable);
 }
