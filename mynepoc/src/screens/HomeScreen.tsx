@@ -50,8 +50,11 @@ const HomeScreen = ({navigation,filterType}:any) => {
       filterType: filterType,
       pageIndex: pageIndex, // Use the current page index
       pageSize: 10, // Adjust the page size as needed
-      zipCode: userDetails?.zipCode, // Replace with the actual zip code or input value
+      ...(filterType === "myPost"
+        ? { userId: userDetails?.id } // Include userId if filterType is "myPost"
+        : { zipCode: userDetails?.zipCode }), // Otherwise, include zipCode
     };
+    
 
     try {
       const response = await ApiService.post(`${BASE_URL}/post/getPosts`, requestBody);
