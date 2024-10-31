@@ -5,8 +5,9 @@ import axios from 'axios';
 import ApiService from '../Api/ApiService'; // Adjust the import path
 import { BASE_URL } from '../../devprofile';
 import useStore from '../zustand/useStore';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Import MaterialIcons or any other icon library
 
-// Define an interface for Post
+// Define an interface for Post and MediaDetail
 interface MediaDetail {
   contentType: string;
   type: string;
@@ -35,7 +36,8 @@ const HomeScreen = () => {
   const [pageIndex, setPageIndex] = useState(0); // Pagination state
   const [loading, setLoading] = useState(false); // Loading state
   const [hasMore, setHasMore] = useState(true); // Check if there are more posts to load
-  const {userDetails} = useStore();
+  const { userDetails } = useStore();
+
   // Fetch posts from API with filters
   const fetchPosts = async () => {
     if (loading || !hasMore) return; // Prevent multiple requests if already loading or no more posts
@@ -51,7 +53,8 @@ const HomeScreen = () => {
 
     try {
       const response = await ApiService.post(`${BASE_URL}/post/getPosts`, requestBody);
-      console.log("CH: ",response.data)
+      console.log("Fetched Posts: ", response.data);
+
       // Check if response contains data
       if (response.data && response.data.length > 0) {
         setPosts((prevPosts) => [...prevPosts, ...response.data]); // Append new posts to existing ones
@@ -77,9 +80,35 @@ const HomeScreen = () => {
       setPosts([]); // Clear current posts to fetch from the start
       fetchPosts(); // Refresh the post list
     } catch (error) {
-      console.error(error);
+      console.error("Error creating post:", error);
     }
   };
+
+
+  // Like or unlike a post
+  const toggleLike = async (postId: string, isLiked: boolean) => {
+    try {
+      // Send the like/unlike request to your API
+      await ApiService.post(`${BASE_URL}/post/posts/${userDetails?.id}/${postId}/like`);
+  
+      // Update local state
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postId === postId
+            ? {
+                ...post,
+                isLiked: !isLiked,
+                likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
+              }
+            : post
+        )
+      );
+    } catch (error) {
+      console.error("Error liking/unliking post:", error);
+      // Optionally, handle error feedback here
+    }
+  };
+  
 
   useEffect(() => {
     fetchPosts(); // Fetch posts on initial load
@@ -96,7 +125,7 @@ const HomeScreen = () => {
       <FlatList
         data={posts}
         keyExtractor={(item) => item.postId} // Use postId as key
-        renderItem={({ item }: { item: Post }) => ( // Specify the type for item
+        renderItem={({ item }: { item: Post }) => (
           <View style={styles.postContainer}>
             <Text style={styles.creatorName}>{item.creatorName}</Text>
             <Text style={styles.postText}>{item.description}</Text>
@@ -105,7 +134,7 @@ const HomeScreen = () => {
               if (media.contentType.startsWith('image/')) {
                 return (
                   <Image
-                    key={`${item.postId}-${media.url}-${index}`} // Use postId combined with media URL for uniqueness
+                    key={`${item.postId}-${media.url}-${index}`} // Unique key
                     source={{ uri: media.url }}
                     style={styles.image}
                     resizeMode="cover"
@@ -114,13 +143,25 @@ const HomeScreen = () => {
               }
               return null; // Handle other media types if necessary
             })}
-            <View style={styles.statsContainer}>
-              <Text style={styles.statsText}>{item.likeCount} Likes</Text>
-              <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
-            </View>
+           <View style={styles.statsContainer}>
+           <TouchableOpacity onPress={() => toggleLike(item.postId, item.isLiked)}>
+  <View style={styles.likeContainer}>
+    <Icon
+      name="favorite"
+      size={24}
+      color={item.isLiked ? 'red' : 'gray'} // Change color based on like state
+    />
+    <Text style={[styles.statsText, item.isLiked && styles.likedText]}>
+      {item.likeCount || 0} {/* Fallback to 0 */}
+    </Text>
+  </View>
+</TouchableOpacity>
+
+  <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
+</View>
+
           </View>
         )}
-        
         
         onEndReached={loadMorePosts} // Load more posts on scroll to end
         onEndReachedThreshold={0.5} // Trigger when 50% of the screen is left
@@ -181,10 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
-  video: {
-    height: 200,
-    marginBottom: 8,
-  },
   image: {
     height: 200,
     marginBottom: 8,
@@ -192,12 +229,20 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 8,
+  },
+  likeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Align items vertically centered
   },
   statsText: {
     fontSize: 14,
     color: '#888',
+  },
+  likedText: {
+    color: 'blue', // Change the color for liked state
   },
   fab: {
     position: 'absolute',
@@ -209,12 +254,11 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 8,
+    elevation: 5,
   },
   fabText: {
     color: '#fff',
-    fontSize: 24,
-    lineHeight: 56,
+    fontSize: 28,
   },
   modalContainer: {
     flex: 1,
@@ -224,15 +268,14 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     borderRadius: 10,
+    padding: 20,
     elevation: 5,
   },
   input: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
 });
 
 export default HomeScreen;
-

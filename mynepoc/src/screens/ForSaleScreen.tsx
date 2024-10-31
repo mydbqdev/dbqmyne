@@ -31,13 +31,12 @@ const ForSaleScreen = () => {
     try {
       setLoading(true);
       const response: any = await ApiService.post(`${BASE_URL}/post/getlistings`, {
-        listingType: 'forFree',
+        listingType: 'forSale',
         filterType: 'all',
-        userId: userDetails?.userId,
+        userId: userDetails?.id,
         pageIndex: pageIndex,
         pageSize: 10,
       });
-
       if (response && response.data) {
         const data: Listing[] = response.data;
         if (data.length > 0) {
@@ -59,7 +58,11 @@ const ForSaleScreen = () => {
 
   useEffect(() => {
     fetchPosts(pageIndex);
-  }, [pageIndex, userDetails]);
+  }, [pageIndex, userDetails,hasMore]);
+  useEffect(() => {
+    fetchPosts(pageIndex);
+  }, []);
+
 
   const loadMorePosts = () => {
     if (hasMore) {
@@ -125,14 +128,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   video: {
+    width: '100%', // or specify a fixed width
     height: 200,
     marginBottom: 8,
   },
   image: {
+    width: '100%',
     height: 200,
     marginBottom: 8,
-    borderRadius: 5, // Optional: Add rounded corners to the image
+    borderRadius: 5,
   },
+  
+ 
 });
 
 export default ForSaleScreen;
