@@ -6,8 +6,9 @@ import ApiService from '../Api/ApiService'
 import { BASE_URL } from '../../devprofile'
 import useAuthStore from '../zustand/useAuthStore'
 import Entypo from 'react-native-vector-icons/Entypo'
+import useStore from '../zustand/useStore'
 
-interface Item {
+export interface Item {
     mediaPaths: { url: string }[]; // Updated to reflect the object structure for mediaPaths
     title: string;
     description: string;
@@ -21,15 +22,16 @@ console.log(token);
 
 const Items = () => {
     const [res, setRes] = useState([])
+    const {userDetails} =useStore();
     useFocusEffect(
         useCallback(() => {
             const fetchData = async () => {
                 try {
                     const response = await ApiService.post(`${BASE_URL}/post/getlistings`,
                         {
-                            listingType: "forSale",
+                            listingType: "forFree",
                             filterType: "all",
-                            userId: "671b24e15f0362114d95c25c",
+                            userId: userDetails?.id,
                             pageIndex: 0,
                             pageSize: 10
                         }
@@ -62,7 +64,7 @@ const Items = () => {
                         />
                     ) : (
                         <Image
-                            source={require('../assets/images/No_Image_Available.jpg')}
+                            // source={require('../assets/images/No_Image_Available.jpg')}
                             style={{ height: 100, width: 100, marginRight: 20 }}
                         />
                     )}

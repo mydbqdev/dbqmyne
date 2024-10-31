@@ -20,7 +20,7 @@ const SplashLoginScreen = () => {
       {/* Splash Image */}
       <Image
         style={styles.splashImage}
-        source={require("../assets/images/home.png")}
+        // source={require("../assets/images/home.png")}
       />
 
       {/* Button Section */}

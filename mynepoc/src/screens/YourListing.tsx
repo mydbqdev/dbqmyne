@@ -6,6 +6,7 @@ import ApiService from '../Api/ApiService'
 import { BASE_URL } from '../../devprofile'
 import useAuthStore from '../zustand/useAuthStore'
 import Items from './Items'
+import useStore from '../zustand/useStore'
 
 const YourListing = () => {
     const nav = useNavigation<NavigationProp<any>>()
@@ -17,16 +18,16 @@ const YourListing = () => {
     }
     const { token } = useAuthStore.getState();
     console.log(token);
-
+    const {userDetails} =useStore();
 
     const fetchData = async () => {
         try {
             setRefreshing(true);
             const response = await ApiService.post(`${BASE_URL}/post/getlistings`,
                 {
-                    listingType: "forSale",  
+                    listingType: "forFree",  
                     filterType: "all", 
-                    userId: "671b24e15f0362114d95c25c",           
+                    userId: userDetails?.id,           
                     pageIndex: 0,
                     pageSize: 10
                 }
@@ -62,7 +63,7 @@ const YourListing = () => {
                 <View className=' '>
                     <View className='items-center mt-36'>
                         <Image
-                            source={require('../assets/images/Frame3234377.png')}
+                            // source={require('../assets/MYNE-Images/Frame3234377.png')}
                             style={{ height: 160, width: 100 }}
                         />
                         <Text>No active listings</Text>

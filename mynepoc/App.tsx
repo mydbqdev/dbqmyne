@@ -18,6 +18,9 @@ import ChatsScreen from './src/screens/ChatsScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import createpost from './src/screens/CreatePost';
 import YourListing from './src/screens/YourListing';
+import TabBarNav from './src/screens/TabBarNav';
+import SellingScreen from './src/screens/SellingScreen';
+import Listing from './src/screens/Listing';
  
 // Define the navigators
 const Stack = createNativeStackNavigator();
@@ -55,6 +58,35 @@ const App = () => {
             component={createpost} // Use BottomTabs for main navigation
             options={{ headerShown: false }}
           />
+
+
+
+<Stack.Screen
+            name="Listing"
+            component={Listing} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="YourListing"
+            component={YourListing} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForSaleScreen"
+            component={ForSaleScreen} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="TabBarNav"
+            component={TabBarNav} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="SellingScreen"
+            component={SellingScreen} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
+ 
         </Stack.Navigator>
       </NavigationContainer>
     </AutocompleteDropdownContextProvider>
@@ -104,7 +136,7 @@ const BottomTabs = () => {
       />
       <BottomTab.Screen 
         name="ForSale" 
-        component={YourListing} 
+        component={ForSaleScreen} 
         options={{ 
           title: 'For Sale',
           tabBarIcon: ({ color }) => (

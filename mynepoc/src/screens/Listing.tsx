@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, Switch } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, Switch, Alert } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { TextInput } from "react-native-paper";
 import { useState } from "react";
@@ -8,9 +8,13 @@ import DropDownPicker from "react-native-dropdown-picker";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
+import ApiService from "../Api/ApiService";
+import axios from "axios";
+import useAuthStore from "../zustand/useAuthStore";
+import useStore from "../zustand/useStore";
 
 const Listing = () => {
-    const nav=useNavigation<NavigationProp<any>>()
+    const nav = useNavigation<NavigationProp<any>>()
 
     const [isEnabled, setIsEnabled] = useState(false);
     const [splocation, setSplocation] = useState(false)
@@ -18,9 +22,9 @@ const Listing = () => {
     const toggleSwitch1 = () => setSplocation(!isEnabled);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
     const [pickupLocation, setPickupLocation] = useState("");
-
+    const {userDetails} =useStore();
     const [region, setRegion] = useState({
         latitude: 37.78825,
         longitude: -122.4324,
@@ -39,7 +43,7 @@ const Listing = () => {
     ]);
     const handleSelectPhotos = () => {
         launchImageLibrary(
-            { mediaType: 'photo', selectionLimit: 10 }, // Adjust selectionLimit as needed
+            { mediaType: 'photo', selectionLimit: 10 },
             (response) => {
                 if (response.assets) {
                     setPhotos(response.assets);
@@ -48,6 +52,60 @@ const Listing = () => {
         );
     };
 
+
+
+
+    const postData = async () => {
+        const formData = new FormData();
+        photos.forEach((photo, index) => {
+            formData.append('files', {
+                uri: photo.uri,
+                name: `photo${index}.jpg`,
+                type: photo.type,
+            });
+        });
+        formData.append(
+            'listingInfo',
+            JSON.stringify({
+                title: title,
+                description,
+                price,
+                condition: "New",
+                category: categoryValue,
+                zipCode: userDetails?.zipCode,
+                pickupLocation,
+                discount: false,
+                discountAmount: 0,
+                free: true,
+                creatorId: userDetails?.id
+            }));
+ 
+        try {
+            const response = await ApiService.post('https://myne-api-qa.dbqportal.com/v1/post/listings/save', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'accept': 'application/json'
+                }
+            });
+            if (response.status === 200) {
+                console.log(response.data);
+                Alert.alert('Listing has been created successfully');
+                nav.navigate('ForSaleScreen');
+                
+                setTitle('');
+                setPhotos([]);
+                setDescription('');
+                setPrice(0);
+                setCategories([]);
+                setPickupLocation('');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+ 
+
+
     return (
         <ScrollView nestedScrollEnabled={true} className="flex-1 bg-white mb-5">
             <View className="mt-2 ml-4 mr-2">
@@ -55,25 +113,25 @@ const Listing = () => {
                     <TouchableOpacity onPress={nav.goBack}>
                         <AntDesign name="arrowleft" color={'black'} size={25} />
                     </TouchableOpacity>
-                    <TouchableOpacity className=" mr-1">
+                    <TouchableOpacity className=" mr-1" onPress={postData}>
                         <Text className=" text-white bg-cyan-400 px-4 py-2 rounded-lg">Post</Text>
                     </TouchableOpacity>
                 </View>
                 <View className="items-start">
 
-                {photos.length > 0 && (
-                    <ScrollView horizontal className="flex-row mt-4">
-                        {photos.map((photo, index) => (
-                            <Image
-                                key={index}
-                                source={{ uri: photo.uri }}
-                                style={styles.photo}
-                            />
-                        ))}
-                    </ScrollView>
-                )}
+                    {photos.length > 0 && (
+                        <ScrollView horizontal className="flex-row mt-4">
+                            {photos.map((photo, index) => (
+                                <Image
+                                    key={index}
+                                    source={{ uri: photo.uri }}
+                                    style={styles.photo}
+                                />
+                            ))}
+                        </ScrollView>
+                    )}
 
-                    <TouchableOpacity className=" py-8 px-4 bg-green-50 rounded-lg items-center"onPress={handleSelectPhotos} >
+                    <TouchableOpacity className=" py-8 px-4 bg-green-50 rounded-lg items-center" onPress={handleSelectPhotos} >
                         <MaterialIcons name="add-photo-alternate" size={15} />
                         <Text className="">Add Photos</Text>
                     </TouchableOpacity>
@@ -115,8 +173,9 @@ const Listing = () => {
                                 underlineColor="transparent"
                                 activeUnderlineColor="transparent"
                                 cursorColor="black"
-                                value={price}
-                                onChangeText={setPrice}
+                                keyboardType="numeric" // Ensures the keyboard displays numbers
+                                value={price.toString()} // Convert price to a string for display
+                                onChangeText={(text) => setPrice(Number(text))}
                             />
                         </View>
                         <View className="ml-10 flex-row items-center">

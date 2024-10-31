@@ -25,6 +25,10 @@ const LogIn = () => {
   const handleLogin = async () => {
     try {
       // Call the login API
+      if (!email.trim() || !password.trim()) {
+        Alert.alert("Missing Fields", "Please enter both email and password.");
+        return; // Exit the function early if validation fails
+      }
       const response = await ApiService.post(`${BASE_URL}/auth/login`, {
         userEmail: email,
         password: password,
@@ -47,10 +51,16 @@ const LogIn = () => {
   
         navigation.navigate("home");
       }
-    } catch (error) {
-      Alert.alert("Error", "Something went wrong. Please try again later.");
-      console.error("Fetch Error:", error);
+    } catch (error: any) {
+      if (error.response && error.response.data.error === 'Please Enter the valid Email') {
+        Alert.alert("Invalid Credentials: Please Enter a Valid email or Password");
+      } else {
+        console.error("Fetch Error:", error.response ? error.response.data : error.message);
+        Alert.alert("Error", "An unexpected error occurred. Please try again later.");
+      }
     }
+    
+    
   };
 
   return (

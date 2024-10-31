@@ -6,7 +6,7 @@ import { showToast } from './ToastUtils';
 import axios from 'axios';
 import { BASE_URL } from '../../devprofile';
 import ApiService from '../Api/ApiService';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 const SignUp = () => {
   // State for inputs
   const [firstName, setFirstName] = useState('');
@@ -17,9 +17,13 @@ const SignUp = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const handleSignUp = async () => {
+    // Validation for required fields
+    if (!firstName || !lastName || !email || !password || !zipcode) {
+      Alert.alert('Please Fill All the fields.' );
+      return;
+    }
+
     try {
-      console.log("IN EH:: ")
-      
       const response = await ApiService.post(`${BASE_URL}/auth/register`, {
         zipCode: zipcode,
         userEmail: email,
@@ -27,26 +31,19 @@ const SignUp = () => {
         userFirstName: firstName,
         userLastName: lastName,
       });
-      
 
-console.log("RES:: ",response)
-      if (response.status===200) {
-        showToast({type: 'success', text1: `Registration Successful`});
-        navigation.navigate('Login'); // Replace with your desired screen
-       
-      } 
-      
-    } catch (error:any) {
-      showToast({type: 'error', text1: `Registration Failed,${error.message}`});
+      if (response.status === 200) {
+        Alert.alert("Registration Successful")
+        navigation.navigate('Login');
+      }
+    } catch (error: any) {
+      showToast({ type: 'error', text1: `Registration Failed, ${error.message}` });
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require('../assets/images/Logo-2.png')}
-      />
+      <Image style={styles.logo} source={require('../assets/images/Logo-2.png')} />
       <View style={styles.introParent}>
         <Text style={styles.title}>Sign up</Text>
 
@@ -119,9 +116,11 @@ console.log("RES:: ",response)
           <Text style={styles.orText}>Or sign up with</Text>
           <View style={styles.socialButtons}>
             <TouchableOpacity style={styles.socialButton}>
+            <Icon name="google" size={20} color="#EA4335" />
               <Text style={styles.socialText}>Google</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.socialButton}>
+            <Icon name="apple" size={20} color="#000" />
               <Text style={styles.socialText}>Apple</Text>
             </TouchableOpacity>
           </View>
