@@ -54,6 +54,26 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	userInfo:SignupDetails=new SignupDetails();
 	private window!: Window;
 	currentScrolledY:number=1000;
+
+	data: any="";
+	data2: any="";
+	isImg:number=0;
+
+	fileDataImgAds: File = null;
+	previewUrlImgAds:any[] = [];
+	filesImgAds:File[]=[];
+	previewUrlImg1:any = false;
+
+	fileDataLogo: File = null;
+	previewUrlLogo:any = null;
+
+	fileDataPhoto: File = null;
+    previewUrlPhoto:any[] = [];
+    filesPoto:File[]=[];
+
+	load=true;
+	pageIndex=0;
+	isCreating = false;
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		this.userNameSession = userService.getUsername();
@@ -72,6 +92,9 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			}
 		});
 		this.authService.checkLoginUserVlidaate();
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		});
 	}
 
 	ngOnDestroy() {
@@ -83,10 +106,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
-		this.dataService.getUserDetails.subscribe(info=>{
-			this.userInfo=info;
-		}
-		)
 		this.dataService.getIsSale.subscribe(
 			isS=>this.isSaleSelect=isS
 		);
@@ -98,10 +117,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
-	fileDataImgAds: File = null;
-	previewUrlImgAds:any[] = [];
-	filesImgAds:File[]=[];
-	previewUrlImg1:any = false;
+
 	onFileChangedImg(event) {
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
@@ -129,8 +145,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
-	fileDataLogo: File = null;
-	previewUrlLogo:any = null;
+
 	onFileChangedLogo(event) {
 		this.previewUrlLogo=false;
 		if(event.target.files.length>0){
@@ -147,9 +162,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	fileDataPhoto: File = null;
-    previewUrlPhoto:any[] = [];
-    filesPoto:File[]=[];
+
     onFileChangedPhoto(event) {
         if(event.target.files.length>0){
           for(let i=0;i<event.target.files.length;i++){ 
@@ -186,9 +199,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	data: any="";
-	data2: any="";
-	isImg:number=0;
+	
 	preview(id) {
 		this.isImg=0;
 		// Show preview 
@@ -247,7 +258,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		this.searchRequest.filterType='posts';
 		this.searchRequest.pageIndex=0;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
 		this.searchRequest.searchContent=test;
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
@@ -286,8 +297,7 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		 }
 	   }); 
 	 }
-	 load=true;
-	 pageIndex=0;
+	
 	 loadMoreProducts(){
 		if(this.load){
 			this.load=false;
@@ -313,7 +323,8 @@ export class ListingComponent implements OnInit, AfterViewInit {
 		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=this.pageIndex;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode=this.userInfo.zipCode;
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
+		this.searchRequest.userId=this.userInfo?.userId;
 		this.appService.getSaleResultList(this.searchRequest).subscribe((data: any) => {
 		 this.load=true;
 		if(data.length >0){
@@ -559,7 +570,6 @@ export class ListingComponent implements OnInit, AfterViewInit {
 	    });
 	 		 }
 	  }
-	  isCreating = false;
 
 	  resetAdPopup(){
 		 this.isCreating = false;

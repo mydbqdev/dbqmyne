@@ -49,6 +49,18 @@ export class PostComponent implements OnInit, AfterViewInit {
 	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Others"];
 	private window!: Window;
 	currentScrolledY:number=500;
+	fileDataImgAds: File = null;
+	previewUrlImgAds:any[] = [];
+	filesImgAds:File[]=[];
+	previewUrlImg1:any = false;
+	fileDataLogo: File = null;
+	previewUrlLogo:any = null;	
+	data: any="";
+	data2: any="";
+	isImg:number=0;
+	load=true;
+	pageIndex=1;
+	isCreating = false;
 	constructor( @Inject(defMenuEnable) private defMenuEnable: DefMenu,private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		//this.userNameSession = userService.getUsername();
@@ -67,11 +79,12 @@ export class PostComponent implements OnInit, AfterViewInit {
 			}
 		});
 		this.authService.checkLoginUserVlidaate();
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		})
 		this.dataService.$postSearchResult.subscribe(dt=>{
 			this.postSearchResultDt=dt;
-			console.log("this.postSearchResultDt<>< ngOnInit",this.postSearchResultDt)
-			}
-		);
+			});
 	}
 
 	ngOnDestroy() {
@@ -83,10 +96,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
-		this.dataService.getUserDetails.subscribe(info=>{
-			this.userInfo=info;
-		}
-		)
 		this.dataService.$topSearch.subscribe(
 			dt=>this.searchText=dt
 		);
@@ -98,10 +107,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		//this.sidemenuComp.activeMenu(1, '');
 	}
 
-	fileDataImgAds: File = null;
-	previewUrlImgAds:any[] = [];
-	filesImgAds:File[]=[];
-	previewUrlImg1:any = false;
 	onFileChangedImg(event) {
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
@@ -128,8 +133,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
-	fileDataLogo: File = null;
-	previewUrlLogo:any = null;
+
 	onFileChangedLogo(event) {
 		this.previewUrlLogo=false;
 		if(event.target.files.length>0){
@@ -159,9 +163,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	data: any="";
-	data2: any="";
-	isImg:number=0;
+
 	preview(id) {
 		this.isImg=0;
 		// Show preview 
@@ -209,9 +211,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.dataService.setIsSale(iss);
 	  }
 
-	 load=true;
-	 pageIndex=1;
-
 	  loadMoreProducts(){
 		if(this.load){
 		this.load=false;
@@ -239,7 +238,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.searchRequest.filterType='posts';
 		this.searchRequest.pageIndex=this.pageIndex;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
 		this.searchRequest.searchContent=this.searchText;
 		this.spinner.show();
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
@@ -298,7 +297,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.files=[];
 		
 	}
-	isCreating = false;
 
 	createPost(type:number){
 
@@ -333,7 +331,6 @@ export class PostComponent implements OnInit, AfterViewInit {
 		model.likeCount=0;
 		model.commentsCount=0;
 		this.postSearchResultDt.unshift(model);
-		console.log("model",model)
 		  if(type==2){
 			this.closeButtonNewSave.nativeElement.click();
 		  }
@@ -374,9 +371,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 		this.spinner.show();	
 		this.appService.createPostWithOnlyContent(this.postRequestModel).subscribe((data: any) => {
 		 // this.notifyService.showSuccess(data.status, "");
-		 console.log("data>>",data)
 		  var model :PostSearchResult = Object.assign(new PostSearchResult,data) ;
-		  console.log(this.postSearchResultDt,"data>>",model)
 		  model.creatorName=this.userInfo.userFirstName +' '+this.userInfo.userLastName;
 		  model.likeCount=0;
 		  model.commentsCount=0;

@@ -64,6 +64,9 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 			}
 		});
 		this.authService.checkLoginUserVlidaate();
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		});
 	}
 
 	ngOnDestroy() {
@@ -75,10 +78,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		//if (this.userNameSession == null || this.userNameSession == undefined || this.userNameSession == '') {
 		//	this.router.navigate(['/']);
 		//}
-		this.dataService.getUserDetails.subscribe(info=>{
-			this.userInfo=info;
-		}
-		)
+		
 		this.dataService.getIsSale.subscribe(
 			isS=>this.isSaleSelect=isS
 		);
@@ -214,7 +214,7 @@ export class ListingDetailsComponent implements OnInit, AfterViewInit {
 		this.searchRequest.filterType='posts';
 		this.searchRequest.pageIndex=0;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
 		this.searchRequest.searchContent=test;
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){

@@ -47,7 +47,6 @@ export class AppAuthService extends AuthService{
     }
 
     public getAuthUser(user:User) : Observable<any>{
-        console.log("user>>>"+user)
         const url1=this.basePath +'auth/login';
       //  let loginUser : User ={userEmail:user.userEmail,password:this.encryptDecryptHelper.encrypt(user.password)};
         let loginUser : User ={userEmail:user.userEmail,password:user.password};
@@ -118,7 +117,6 @@ export class AppAuthService extends AuthService{
          var msg:string;
          this.sessionSnapshot =null;
          this.message ='';
-         console.info("Refes pg")
          //this.checkLoginUserOnServer().subscribe(
             /* (result)=>{
                 this.sessionSnapshot = result;
@@ -135,9 +133,7 @@ export class AppAuthService extends AuthService{
                // }else if(result.firstTimePwd!=undefined && result.firstTimePwd!='Y'){
                 //    this.router.navigateByUrl('/first-time-chng-pwd')              
                }else{
-                console.info("Refesh pg")
                     this.getUserSignupDetails(sessionStorage.getItem('user')).subscribe((data) => {
-                        console.info("Refesh3 pg")
                         let user:SignupDetails = new SignupDetails() ;
                         user.userId= data.id !=undefined?data.id:"";
                         user.userEmail= data.userEmail !=undefined?data.userEmail:"";
@@ -214,7 +210,6 @@ export class AppAuthService extends AuthService{
        // this.sessionSnapshot =null;
         this.message ='';
         this.getUserSignupDetails(sessionStorage.getItem('user')).subscribe((data) => {
-            console.info("Refesh3 pg",data)
             let user:SignupDetails = new SignupDetails() ;
             user.userId= data.id !=undefined?data.id:"";
             user.userEmail= data.userEmail !=undefined?data.userEmail:"";

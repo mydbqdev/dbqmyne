@@ -25,15 +25,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	errorMsg: any = "";
 	mySubscription: any;
 	fileData: File = null;
-		 previewUrl:any = null;
-		 previewUrl2:any = null;
+	previewUrl:any = null;
+	previewUrl2:any = null;
     files:File[]=[];
-	 public postSearchResult:PostSearchResult[]=[];
-	 searchRequest:SearchRequest=new SearchRequest();
-	 postRequestModel:PostRequestModel=new PostRequestModel();
-	 @ViewChild('closeButtonNewSave') closeButtonNewSave;
-	 @ViewChild('closeButtonNewAds') closeButtonNewAds;
-	 menuSeleced:string=''
+	public postSearchResult:PostSearchResult[]=[];
+	searchRequest:SearchRequest=new SearchRequest();
+	postRequestModel:PostRequestModel=new PostRequestModel();
+	@ViewChild('closeButtonNewSave') closeButtonNewSave;
+	@ViewChild('closeButtonNewAds') closeButtonNewAds;
+	menuSeleced:string=''
 	business: string = '';
 	adsTitle: string = '';
 	adDescription: string = '';
@@ -41,11 +41,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	category:string='';
 	submittedAd=false;
 	categories :string[] = ["Electronics","Clothing","Automotive","Real Estate","Home & Garden","Health & Beauty","Sports & Outdoors","Toys & Games","Others"];
-	//@ViewChild(SideNavMenuComponent) sidemenuComp;
-	//public rolesArray: string[] = [];
 	userInfo:SignupDetails=new SignupDetails();
 	private window!: Window;
 	currentScrolledY:number=2000;
+	fileDataImgAds: File = null;
+	previewUrlImgAds:any[] = [];
+	filesImgAds:File[]=[];
+	previewUrlImg1:any = false;
+	fileDataLogo: File = null;
+	previewUrlLogo:any = null;
+	data: any="";
+	data2: any="";
+	isImg:number=0;
+	load=true;
+	pageIndex=0;
+	postSearchResultResponce:PostSearchResult[]=[];
+	isCreating = false;
+	mediaPathsSlide:MediaDetails[]=[];
+	urlPl:MediaDetails=new MediaDetails();
+	vie:number=0;
 	constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, private userService: UserService,
 		private spinner: NgxSpinnerService, private authService:AuthService,private dataService:DataService,private appService:AppService,private notifyService: NotificationService) {
 		this.userNameSession = userService.getUsername();
@@ -64,6 +78,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 			}
 		});
 		this.authService.checkLoginUserVlidaate();
+		this.dataService.getUserDetails.subscribe(info=>{
+			this.userInfo=info;
+		});
+
 		//this.paginator$ = this.loadProducts$();
 	}
 
@@ -78,22 +96,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		//}
 		this.postRequestModel.privacy= 'Anywhere';
 		this.window=window;
-		this.dataService.getUserDetails.subscribe(info=>{
-			this.userInfo=info;
-			this.activeMenu('forYou');
-		}
-		)
+	
 	
 	}
 	ngAfterViewInit() {
-		
+		this.activeMenu('forYou');
 		//this.sidemenuComp.expandMenu(1);
 		//this.sidemenuComp.activeMenu(1, '');
 	}
-	fileDataImgAds: File = null;
-	previewUrlImgAds:any[] = [];
-	filesImgAds:File[]=[];
-	previewUrlImg1:any = false;
+	
 	onFileChangedImg(event) {
 		if(event.target.files.length>0){
 		  for(let i=0;i<event.target.files.length;i++){	
@@ -120,8 +131,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 			}
 		}
 	}
-	fileDataLogo: File = null;
-	previewUrlLogo:any = null;
+	
 	onFileChangedLogo(event) {
 		this.previewUrlLogo=false;
 		if(event.target.files.length>0){
@@ -152,10 +162,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		}
 	
 	}
-	data: any="";
-	data2: any="";
-	
-	isImg:number=0;
+
 	preview(id) {
 		this.isImg=0;
 		// Show preview 
@@ -226,7 +233,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.searchRequest.filterType='posts';
 		this.searchRequest.pageIndex=0;
 		this.searchRequest.pageSize=20;
-		this.searchRequest.zipCode="123456";
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
 		this.searchRequest.searchContent=test;
 		this.appService.getPostBySearch(this.searchRequest).subscribe((data: any) => {
 		 if(data.length >0){
@@ -404,7 +411,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		
 	 }
 	 activeMenu(menuName:string){
-		console.log('menuName',menuName)
 		this.load=true;
 		this.postSearchResult=[];
 		this.pageIndex=0;
@@ -412,19 +418,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
 		this.searchPostForHome(this.menuSeleced);
 	 }
 
-	 load=true;
-	 pageIndex=0;
-	 postSearchResultResponce:PostSearchResult[]=[];
-	 isCreating = false;
+
 	 searchPostForHome(filterType:string){
 		// api post searrch
 		this.spinner.show();
 		this.searchRequest.filterType=filterType;
 		this.searchRequest.pageIndex=this.pageIndex;
-		this.searchRequest.userId=this.userInfo.userId;
+		this.searchRequest.userId=this.userInfo?.userId;
 		this.searchRequest.pageSize=20;
 		
-		this.searchRequest.zipCode=this.userInfo.zipCode;
+		this.searchRequest.zipCode=this.userInfo?.zipCode;
 		this.appService.getPostSearchResult(this.searchRequest).subscribe((data: any) => {
 		this.load=true;
 		if(data.length >0){
@@ -582,19 +585,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	   });
 		
 	 }
-	 mediaPathsSlide:MediaDetails[]=[];
+
      slidesPhoto(list:any[]){
 		this.mediaPathsSlide=Object.assign([],list);
 		this.urlPl=this.mediaPathsSlide[0] ;
-		console.info("this.mediaPathsSlide",this.mediaPathsSlide);
-		console.log("this.urlPl",this.urlPl);
 	 }
 	 moreContentEnable(id:number){
 		this.postSearchResult[id].moreContent=true;
 	}
 
-	urlPl:MediaDetails=new MediaDetails();
-	vie:number=0;
 	viewpl(i:number){
 	   var l =this.mediaPathsSlide.length -1;
 	   if(i==0){

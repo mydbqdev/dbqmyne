@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  basePath:'https://myne-api-qa.dbqportal.com/v1/',
+  basePath:'http://localhost:8080/v1/',
   version:'1.0.0-04-05-2020-11:41:00',
   oDataBlockSize:100,
   defMenuEnable:{
