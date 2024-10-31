@@ -5,7 +5,12 @@ import { TextInput } from "react-native-paper";
 import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import DropDownPicker from "react-native-dropdown-picker";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { launchImageLibrary } from "react-native-image-picker";
+
 const Listing = () => {
+    const nav=useNavigation<NavigationProp<any>>()
 
     const [isEnabled, setIsEnabled] = useState(false);
     const [splocation, setSplocation] = useState(false)
@@ -22,7 +27,7 @@ const Listing = () => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
-
+    const [photos, setPhotos] = useState<any[]>([]);
     const [categoryOpen, setCategoryOpen] = useState(false);
     const [categoryValue, setCategoryValue] = useState(null);
     const [categories, setCategories] = useState([
@@ -32,18 +37,43 @@ const Listing = () => {
         { label: "Books", value: "books" },
         { label: "Sports", value: "sports" },
     ]);
-
+    const handleSelectPhotos = () => {
+        launchImageLibrary(
+            { mediaType: 'photo', selectionLimit: 10 }, // Adjust selectionLimit as needed
+            (response) => {
+                if (response.assets) {
+                    setPhotos(response.assets);
+                }
+            }
+        );
+    };
 
     return (
         <ScrollView nestedScrollEnabled={true} className="flex-1 bg-white mb-5">
             <View className="mt-2 ml-4 mr-2">
-                <View>
-                    <TouchableOpacity className="items-end mr-1">
-                        <Text className=" text-black bg-teal-200 px-4 py-2 rounded-lg">Post</Text>
+                <View className="flex-row items-center justify-between">
+                    <TouchableOpacity onPress={nav.goBack}>
+                        <AntDesign name="arrowleft" color={'black'} size={25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity className=" mr-1">
+                        <Text className=" text-white bg-cyan-400 px-4 py-2 rounded-lg">Post</Text>
                     </TouchableOpacity>
                 </View>
                 <View className="items-start">
-                    <TouchableOpacity className=" py-8 px-4 bg-green-50 rounded-lg items-center" >
+
+                {photos.length > 0 && (
+                    <ScrollView horizontal className="flex-row mt-4">
+                        {photos.map((photo, index) => (
+                            <Image
+                                key={index}
+                                source={{ uri: photo.uri }}
+                                style={styles.photo}
+                            />
+                        ))}
+                    </ScrollView>
+                )}
+
+                    <TouchableOpacity className=" py-8 px-4 bg-green-50 rounded-lg items-center"onPress={handleSelectPhotos} >
                         <MaterialIcons name="add-photo-alternate" size={15} />
                         <Text className="">Add Photos</Text>
                     </TouchableOpacity>
@@ -93,7 +123,7 @@ const Listing = () => {
                             <Text className="text-black">Free</Text>
                             <Switch
                                 trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                thumbColor={isEnabled ? "cyan" : "cyan"}
+                                thumbColor={isEnabled ? "#05838b" : "#05838b"}
                                 onValueChange={toggleSwitch}
                                 value={isEnabled}
                             />
@@ -157,6 +187,12 @@ const Listing = () => {
 };
 
 const styles = StyleSheet.create({
+    photo: {
+        width: 100,
+        height: 100,
+        marginRight: 10,
+        borderRadius: 8,
+    },
     map: {
         height: 200,
         width: "100%",

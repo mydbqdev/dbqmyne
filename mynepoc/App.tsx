@@ -17,6 +17,7 @@ import ForSaleScreen from './src/screens/ForSaleScreen';
 import ChatsScreen from './src/screens/ChatsScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import createpost from './src/screens/CreatePost';
+import YourListing from './src/screens/YourListing';
  
 // Define the navigators
 const Stack = createNativeStackNavigator();
@@ -103,7 +104,7 @@ const BottomTabs = () => {
       />
       <BottomTab.Screen 
         name="ForSale" 
-        component={ForSaleScreen} 
+        component={YourListing} 
         options={{ 
           title: 'For Sale',
           tabBarIcon: ({ color }) => (
