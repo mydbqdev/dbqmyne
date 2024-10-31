@@ -1,9 +1,11 @@
 package com.dbq.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.data.mongodb.core.CollectionOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,9 +27,9 @@ import reactor.core.publisher.Flux;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-// @CrossOrigin(value = { "*" },
-// maxAge = 900
-// )
+//@CrossOrigin(value = { "*" },
+//maxAge = 900
+//)
 @RestController
 @RequestMapping("/v1/chat")
 @RequiredArgsConstructor
@@ -46,34 +49,33 @@ public class ChatMessageController {
 
 	    @PostMapping("/chats")
 	    @ResponseStatus(HttpStatus.CREATED)
-	    public void postChat(@Valid @RequestBody ChatMessageDTO chatMessageDTO) {
+	    public ResponseEntity<String> postChat(@Valid @RequestBody ChatMessageDTO chatMessageDTO) {
 	    	try
 	    	{
-	        ChatMessage chatMessage = modelMapper.map(chatMessageDTO, ChatMessage.class);
-	        chatMessageRepo.save(chatMessage).subscribe();
-	        String channelId = chatMessageDTO.getChannelId();
-        	String userId = chatMessageDTO.getFrom();
-        	ChatChannel chatChannel= chatChannelRepo.findByChannelId(channelId).block();
-        	if(chatChannel ==null)
-        	{
-        		ChatChannel channel2 = new ChatChannel();
-        		channel2.setChannelId(channelId);
-        		Set<String> set = new HashSet<String>();
-        		set.add(userId);
-        		channel2.setUsers(set);
-        		chatChannelRepo.save(channel2).subscribe();
-        	}
-        	else
-        	{
-        		if(!chatChannel.getUsers().contains(userId))
-        		{
-        			chatChannel.getUsers().add(userId);
-            		chatChannelRepo.save(chatChannel);
-        		}
-        	}
+	    		String channelId = "";
+	    		Set<String> set = new HashSet<String>();
+        		set.add(chatMessageDTO.getFrom());
+        		set.add(chatMessageDTO.getTo());
+        		
+	    		ChatChannel chatChannel= chatChannelRepo.findByUsers(set).block();
+	    		if(chatChannel==null)
+	    		{
+	    			ChatChannel channel2 = new ChatChannel();
+	        		channel2.setUsers(set);
+	        		chatChannelRepo.save(channel2).subscribe();
+	        		channelId = channel2.getId();
+	    		}
+	    		else
+	    			channelId = chatChannel.getId();
+	    		
+	    		chatMessageDTO.setChannelId(channelId);	
+	    		ChatMessage chatMessage = modelMapper.map(chatMessageDTO, ChatMessage.class);
+	    		chatMessageRepo.save(chatMessage).subscribe();
+	    		return new ResponseEntity<>("{\"message\":\"" + channelId + "\"}", HttpStatus.OK);
 	    	}catch(Exception ex)
 	    	{
 	    		ex.printStackTrace();
+	    		return new ResponseEntity<>("{\"message\":\"" + ex.toString() + "\"}", HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 	        
 	    }

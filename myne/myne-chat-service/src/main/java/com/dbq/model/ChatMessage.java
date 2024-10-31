@@ -17,7 +17,7 @@ public class ChatMessage {
     private String id;
     private String message;
     private String from;
-    
+    private String to;
     @CreatedDate
     private Instant createdDate = Instant.now();
     private String channelId;

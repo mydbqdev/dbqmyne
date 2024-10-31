@@ -13,11 +13,15 @@ spring:
         connect-timeout: 60000
         response-timeout: 60s
 #      default-filters:
-#        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+#        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_FIRST
 #      globalcors:
-#          cors-configurations:
+#        add-to-simple-url-handler-mapping: true
+#        corsConfigurations:
 #            '[/**]':
-#              allowed-origins: "*"
+#            allowedOrigins: 
+#              - "http://localhost:3000"
+#              - "http://localhost:4200"
+#              - "https://myne.dbqportal.com"
 #              allowed-methods: "*"
 #              allowed-headers: "*"
 #              allow-credentials: true        

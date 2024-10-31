@@ -17,7 +17,6 @@ public class CorsConfig {
     config.addAllowedMethod("*");
     config.addAllowedOrigin("http://localhost:4200");
     config.addAllowedOrigin("http://localhost:3000");
-    config.addAllowedOrigin("http://localhost:9000");
     config.addAllowedOrigin("https://myne.dbqportal.com");
     config.addAllowedHeader("*");
     config.setAllowCredentials(Boolean.valueOf(true));

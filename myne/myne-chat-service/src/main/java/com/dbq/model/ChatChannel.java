@@ -19,6 +19,5 @@ import java.util.Set;
 public class ChatChannel {
     @Id
     private String id;
-    private String channelId;
     private Set<String> users=new HashSet<String>();
 }

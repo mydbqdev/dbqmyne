@@ -11,6 +11,6 @@ public class ChatMessageDTO {
     private String message;
     private String channelId;
     private String from;
-
+    private String to;
     private String id;
 }
