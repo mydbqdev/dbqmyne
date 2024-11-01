@@ -22,6 +22,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dbq.postservice.client.NotifyClient;
 import com.dbq.postservice.client.S3StorageClient;
 import com.dbq.postservice.client.UserStorageClient;
 import com.dbq.postservice.db.model.AdsCollection;
@@ -46,6 +47,7 @@ public class PostService {
 	 private final S3StorageClient s3StorageClient;
 	 private final AdsRepository adsRepository;
 	 private final UserStorageClient userStorageClient;
+	 private final NotifyClient notifyClient;
 	 
 	    public Object createPosts(MultipartFile[] files, PostsBody body) {
 	    	
@@ -103,6 +105,11 @@ public class PostService {
 	          
 	         updatePost = postRepository.save(savedPost);
 	        }
+	        // Trigger notification
+	        try
+	        {
+	        	notifyClient.sendNotificationToUser(savedPost.getUserId(), "Post processed.Available for viewing");
+	        }catch(Exception ex) {}
 	        return updatePost;
 	    }
 	    
