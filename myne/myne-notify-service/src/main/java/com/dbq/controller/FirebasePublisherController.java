@@ -145,6 +145,7 @@ public class FirebasePublisherController {
 	    					tokenSet.addAll(usersMap.get(user));
 	    			});
 	    		}
+	    		tokenSet.remove(null);
 	    		Notification.Builder builder = Notification.builder();
 	            MulticastMessage firebaseMultiCastmsg = MulticastMessage.builder()
 	            		.setNotification(builder.build())
@@ -165,6 +166,7 @@ public class FirebasePublisherController {
 	    	System.out.println("userId:" + userId + "::" + "message:" + message);
 	    	if(usersMap.containsKey(userId)) {
 	    		Set<String> tokens = usersMap.get(userId);
+	    		tokens.remove(null);
 	    		System.out.println("tokens size::" + tokens.size());
 //	    		List<Message> list = new ArrayList<Message>();
 	    		if(tokens.size()>1)
