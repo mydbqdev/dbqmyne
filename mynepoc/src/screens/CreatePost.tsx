@@ -8,6 +8,7 @@ import { BASE_URL } from "../../devprofile";
 import useAuthStore from "../zustand/useAuthStore";
 import useStore from "../zustand/useStore";
 import { showToast } from "./ToastUtils";
+import HomeScreen from './HomeScreen';
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
  
@@ -53,7 +54,14 @@ const CreatePost = ({navigation}: any) => {
       if (response.status === 200) {
         console.log(response.status); // Success message
         Alert.alert("posted suscessfully");
-        setPostSuccess(true)
+        setPostSuccess(true);
+        navigation.navigate('home', {
+        screen: 'Home',
+        params: {
+          screen: 'ForYou',
+        },
+      });
+       
        
       }
     } catch (error) {
@@ -257,6 +265,3 @@ const styles = StyleSheet.create({
 });
  
 export default CreatePost;
- 
- 
- 

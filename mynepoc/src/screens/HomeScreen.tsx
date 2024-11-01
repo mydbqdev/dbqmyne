@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, FlatList, Text, Modal, TouchableOpacity, Image } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, FlatList, Text, Modal, TouchableOpacity, Image, RefreshControl } from 'react-native';
+import { Button } from 'react-native-paper';
+import Video from 'react-native-video';
 import axios from 'axios';
-import ApiService from '../Api/ApiService'; // Adjust the import path
+import ApiService from '../Api/ApiService';
 import { BASE_URL } from '../../devprofile';
 import useStore from '../zustand/useStore';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Import MaterialIcons or any other icon library
-import { NavigationContainer,useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { NavigationContainer, NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
 import useAuthStore from '../zustand/useAuthStore';
-// Define an interface for Post and MediaDetail
+
 interface MediaDetail {
   contentType: string;
   type: string;
@@ -27,79 +28,79 @@ interface Post {
   mediaDetails: MediaDetail[];
   createdAt: string;
   updatedAt: string;
+  adsHyperLink?: string; 
 }
- 
-const HomeScreen = ({navigation,filterType}:any) => {
-  const createpostsus = useAuthStore((state) => state.isPostSuccessful);
-  const [posts, setPosts] = useState<Post[]>([]); // To store the fetched posts
-  const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
-  const [newPost, setNewPost] = useState(''); // New post input state
-  const [filter, setFilter] = useState('recent'); // Filter state
-  const [pageIndex, setPageIndex] = useState(0); // Pagination state
-  const [loading, setLoading] = useState(false); // Loading state
-  const [hasMore, setHasMore] = useState(true); // Check if there are more posts to load
-  const { userDetails } = useStore();
 
-  // Fetch posts from API with filters
+const HomeScreen = ({ filterType }: any) => {
+  const createpostsus = useAuthStore((state) => state.isPostSuccessful);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mediaModalVisible, setMediaModalVisible] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<MediaDetail | null>(null);
+  const [selectedDescription, setSelectedDescription] = useState('');
+  const [creatorName, setCreatorName] = useState('');
+  const [newPost, setNewPost] = useState('');
+  const [filter, setFilter] = useState('recent');
+  const [pageIndex, setPageIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const { userDetails } = useStore();
+  const navigation = useNavigation<NavigationProp<any>>();
+  const setPostSuccess = useAuthStore((state) => state.setPostSuccess);
   const fetchPosts = async () => {
-    if (loading || !hasMore) return; // Prevent multiple requests if already loading or no more posts
+    if (loading || !hasMore) return;
 
     setLoading(true);
-    // Define the request body
     const requestBody = {
-      filterType: filterType,
-      pageIndex: pageIndex, // Use the current page index
-      pageSize: 10, // Adjust the page size as needed
-      ...(filterType === "myPost"
-        ? { userId: userDetails?.id } // Include userId if filterType is "myPost"
-        : { zipCode: userDetails?.zipCode }), // Otherwise, include zipCode
+        filterType: filterType,
+        pageIndex: pageIndex,
+        pageSize: 10,
+        ...(filterType === "myPost"
+            ? { userId: userDetails?.id, zipCode: userDetails?.zipCode }
+            : { zipCode: userDetails?.zipCode }),
     };
-    
+
+    console.log("POST: ", requestBody);
 
     try {
-      const response = await ApiService.post(`${BASE_URL}/post/getPosts`, requestBody);
-      console.log("Fetched Posts: ", response.data);
+        const response = await ApiService.post<Post[]>(`${BASE_URL}/post/getPosts`, requestBody);
+        if (response.data && response.data.length > 0) {
+            // Filter out posts that have adsHyperLink
+            const filteredPosts = response.data.filter(post => !post.adsHyperLink);
 
-      // Check if response contains data
-      if (response.data && response.data.length > 0) {
-        setPosts((prevPosts) => [...prevPosts, ...response.data]); // Append new posts to existing ones
-      } else {
-        setHasMore(false); // No more posts to load
-      }
+            // Optionally, if you want to keep other properties but ignore adsHyperLink
+            // const filteredPosts = response.data.map(({ adsHyperLink, ...post }: Post) => post);
+
+            setPosts((prevPosts) => [...prevPosts, ...filteredPosts]);
+        } else {
+            setHasMore(false);
+        }
     } catch (error) {
-      console.error("Error fetching posts:", error);
+        console.error("Error fetching posts:", error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+        setLoading(false);
     }
-  };
+};
+
+
    
   const toggleModal = () => {
     navigation.navigate("createpost");
   };
-  // Create a new post
-  const createPost = async () => {
-    if (!newPost) return;
 
-    try {
-      await axios.post(`${BASE_URL}/posts`, { content: newPost }); // Replace with your API endpoint for creating posts
-      setNewPost(''); // Clear the input
-      setModalVisible(false); // Close the modal
-      setPageIndex(0); // Reset to the first page after creating a post
-      setPosts([]); // Clear current posts to fetch from the start
-      fetchPosts(); // Refresh the post list
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setPageIndex(0);
+    setPosts([]);
+    setHasMore(true);
+    await fetchPosts();
+    setRefreshing(false);
   };
 
-
-  // Like or unlike a post
   const toggleLike = async (postId: string, isLiked: boolean) => {
     try {
-      // Send the like/unlike request to your API
       await ApiService.post(`${BASE_URL}/post/posts/${userDetails?.id}/${postId}/like`);
-  
-      // Update local state
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.postId === postId
@@ -113,103 +114,121 @@ const HomeScreen = ({navigation,filterType}:any) => {
       );
     } catch (error) {
       console.error("Error liking/unliking post:", error);
-      // Optionally, handle error feedback here
     }
   };
-  
+
+  const openMediaModal = (createrName:string,media: MediaDetail, description: string) => {
+    setCreatorName(createrName);
+    setSelectedMedia(media);
+    setSelectedDescription(description);
+    setMediaModalVisible(true);
+  };
 
   useEffect(() => {
-    fetchPosts(); // Fetch posts on initial load
-  }, [filter, pageIndex]); // Fetch when filter or page index changes
+    fetchPosts();
+  }, [filter, pageIndex, filterType]);
 
   const loadMorePosts = () => {
     if (hasMore) {
-      setPageIndex((prevPageIndex) => prevPageIndex + 1); // Increment page index for the next fetch
+      setPageIndex((prevPageIndex) => prevPageIndex + 1);
     }
   };
- 
+  useFocusEffect(
+    useCallback(() => {
+      if (createpostsus) {
+        fetchPosts(); // Refresh posts with myPost filter when returning from CreatePost
+        setPostSuccess(false); // Reset the post success state
+      }
+    }, [createpostsus])
+  );
+
   useEffect(() => {
-    if(createpostsus===true){
-    fetchPosts();
-    // Fetch posts on initial load
-    console.log("createpostsus");
+    if (createpostsus === true) {
+      fetchPosts();
     }
-  }, [createpostsus]);
+  }, [createpostsus,filterType]);
  
   return (
     <View style={styles.container}>
       <FlatList
         data={posts}
-        keyExtractor={(item) => item.postId} // Use postId as key
+        keyExtractor={(item) => item.postId}
         renderItem={({ item }: { item: Post }) => (
           <View style={styles.postContainer}>
             <Text style={styles.creatorName}>{item.creatorName}</Text>
             <Text style={styles.postText}>{item.description}</Text>
-            {/* Render media details */}
-            {item.mediaDetails && item.mediaDetails.map((media, index) => {
-              if (media.contentType.startsWith('image/')) {
-                return (
-                  <Image
-                    key={`${item.postId}-${media.url}-${index}`} // Unique key
-                    source={{ uri: media.url }}
-                    style={styles.image}
-                    resizeMode="cover"
+            {item.mediaDetails &&
+              item.mediaDetails.map((media, index) => {
+                if (media.contentType.startsWith('image/')) {
+                  return (
+                    <TouchableOpacity key={`${item.postId}-${media.url}-${index}`} onPress={() => openMediaModal(item.creatorName,media, item.description)}>
+                      <Image
+                        source={{ uri: media.url }}
+                        style={styles.image}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
+                  );
+                } else if (media.contentType.startsWith('video/')) {
+                  return (
+                    <TouchableOpacity key={`${item.postId}-${media.url}-${index}`} onPress={() => openMediaModal(item.creatorName,media, item.description)}>
+                      <Video
+                        source={{ uri: media.url }}
+                        style={styles.video}
+                        resizeMode="cover"
+                        controls={true}
+                      />
+                    </TouchableOpacity>
+                  );
+                }
+                return null;
+              })}
+            <View style={styles.statsContainer}>
+              <TouchableOpacity onPress={() => toggleLike(item.postId, item.isLiked)}>
+                <View style={styles.likeContainer}>
+                  <Icon
+                    name="favorite"
+                    size={24}
+                    color={item.isLiked ? 'red' : 'gray'}
                   />
-                );
-              }
-              return null; // Handle other media types if necessary
-            })}
-           <View style={styles.statsContainer}>
-           <TouchableOpacity onPress={() => toggleLike(item.postId, item.isLiked)}>
-  <View style={styles.likeContainer}>
-    <Icon
-      name="favorite"
-      size={24}
-      color={item.isLiked ? 'red' : 'gray'} // Change color based on like state
-    />
-    <Text style={[styles.statsText, item.isLiked && styles.likedText]}>
-      {item.likeCount || 0} {/* Fallback to 0 */}
-    </Text>
-  </View>
-</TouchableOpacity>
-
-  <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
-</View>
-
+                  <Text style={[styles.statsText, item.isLiked && styles.likedText]}>
+                    {item.likeCount || 0}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
+            </View>
           </View>
         )}
-        
-        onEndReached={loadMorePosts} // Load more posts on scroll to end
-        onEndReachedThreshold={0.5} // Trigger when 50% of the screen is left
-        ListFooterComponent={loading ? <Text>Loading more posts...</Text> : null} // Show loading indicator
+        onEndReached={loadMorePosts}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListFooterComponent={loading ? <Text>Loading posts...</Text> : null}
       />
 
-      {/* Floating Action Button */}
       <TouchableOpacity style={styles.fab} onPress={toggleModal}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
-      {/* Modal for Creating a Post */}
+      {/* Modal for Viewing Selected Media */}
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={mediaModalVisible}
+        onRequestClose={() => setMediaModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <TextInput
-              label="New Post"
-              value={newPost}
-              onChangeText={setNewPost}
-              style={styles.input}
-            />
-            <Button mode="contained" onPress={createPost}>
-              Post
-            </Button>
-            <Button mode="outlined" onPress={() => setModalVisible(false)}>
-              Cancel
-            </Button>
+          <Text style={styles.modalDescription}>{creatorName}</Text>
+            {selectedMedia?.contentType.startsWith('image/') ? (
+              <Image source={{ uri: selectedMedia.url }} style={styles.modalImage} resizeMode="contain" />
+            ) : (
+              <Video source={{ uri: selectedMedia?.url }} style={styles.modalVideo} resizeMode="contain" controls />
+            )}
+            <Text style={styles.modalDescription}>{selectedDescription}</Text>
+            <Button mode="outlined" onPress={() => setMediaModalVisible(false)}>Close</Button>
           </View>
         </View>
       </Modal>
@@ -241,7 +260,12 @@ const styles = StyleSheet.create({
   image: {
     height: 200,
     marginBottom: 8,
-    borderRadius: 5, // Optional: Add rounded corners to the image
+    borderRadius: 5,
+  },
+  video: {
+    height: 200,
+    marginBottom: 8,
+    borderRadius: 5,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -251,14 +275,14 @@ const styles = StyleSheet.create({
   },
   likeContainer: {
     flexDirection: 'row',
-    alignItems: 'center', // Align items vertically centered
+    alignItems: 'center',
   },
   statsText: {
     fontSize: 14,
     color: '#888',
   },
   likedText: {
-    color: 'blue', // Change the color for liked state
+    color: 'blue',
   },
   fab: {
     position: 'absolute',
@@ -270,27 +294,38 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5,
   },
   fabText: {
     color: '#fff',
-    fontSize: 28,
+    fontSize: 24,
   },
   modalContainer: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
+    width: '90%',
+    padding: 16,
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    elevation: 5,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  input: {
-    marginBottom: 12,
+  modalImage: {
+    width: '100%',
+    height: 300,
+    borderRadius: 8,
+  },
+  modalVideo: {
+    width: '100%',
+    height: 300,
+    borderRadius: 8,
+  },
+  modalDescription: {
+    fontSize: 16,
+    marginTop: 10,
+    textAlign: 'center',
   },
 });
 

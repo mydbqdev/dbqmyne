@@ -12,6 +12,8 @@ const ApiService = axios.create({
 
 ApiService.interceptors.request.use((config) => {
     const { token } = useAuthStore.getState(); // Get the token from the Zustand store
+
+    console.log("DELERE:: ",token)
     const method = config.method?.toLowerCase();
 
     if (token && !config.url?.includes('/auth/login') && !config.url?.includes('/auth/register')) {

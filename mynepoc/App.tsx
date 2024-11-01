@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import SplashLoginScreen from './src/screens/SplashLoginScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationProp, useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import SignUp from './src/screens/signup';
@@ -21,6 +21,7 @@ import YourListing from './src/screens/YourListing';
 import TabBarNav from './src/screens/TabBarNav';
 import SellingScreen from './src/screens/SellingScreen';
 import Listing from './src/screens/Listing';
+import ProfileScreen from './src/screens/ProfileScreen';
  
 // Define the navigators
 const Stack = createNativeStackNavigator();
@@ -86,7 +87,12 @@ const App = () => {
             component={SellingScreen} // Use BottomTabs for main navigation
             options={{ headerShown: false }}
           />
- 
+ <Stack.Screen 
+            name="Profile" 
+            options={{ title: 'Profile' }} 
+          >
+            {() => <ProfileScreen/>} 
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </AutocompleteDropdownContextProvider>
@@ -202,9 +208,10 @@ const HomeTabScreen = () => {
 
 // Custom header component
 export const CustomHeader = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity style={styles.iconContainer}>
+      <TouchableOpacity style={styles.iconContainer} onPress={() => navigation.navigate('Profile')}>
         <AntDesign name="user" size={30} color="black" />
       </TouchableOpacity>
       <Image
