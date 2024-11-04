@@ -25,17 +25,17 @@ const YourListing = () => {
             setRefreshing(true);
             const response = await ApiService.post(`${BASE_URL}/post/getlistings`,
                 {
-                    listingType: "forFree",  
-                    filterType: "all", 
+                    listingType: "forSale",  
+                    filterType: "yourlistings", 
                     userId: userDetails?.id,           
                     pageIndex: 0,
                     pageSize: 10
                 }
             )
             setData(response.data)
-            console.log('Listings fetched:', response.data)
-        } catch (error) {
-            console.error('axios', error)
+            console.log('Listings fetched:', response)
+        } catch (error:any) {
+            console.error('axios', error.response.status)
         } finally {
             setRefreshing(false);  // End refreshing
         }
@@ -43,7 +43,7 @@ const YourListing = () => {
     useFocusEffect(
         useCallback(() => {
             fetchData()
-        }, [data])
+        }, [])
     )
 
     const onRefresh = () => {
@@ -63,7 +63,7 @@ const YourListing = () => {
                 <View className=' '>
                     <View className='items-center mt-36'>
                         <Image
-                            source={require('../assets/images/Frame 3234377.png')}
+                            source={require('../assets/images/teddy.png')}
                             style={{ height: 160, width: 100 }}
                         />
                         <Text>No active listings</Text>

@@ -36,7 +36,7 @@ const HomeScreen = ({ filterType }: any) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [mediaModalVisible, setMediaModalVisible] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState<MediaDetail | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<MediaDetail[]>([]);
   const [selectedDescription, setSelectedDescription] = useState('');
   const [creatorName, setCreatorName] = useState('');
   const [newPost, setNewPost] = useState('');
@@ -117,12 +117,11 @@ const HomeScreen = ({ filterType }: any) => {
     }
   };
 
-  const openMediaModal = (createrName:string,media: MediaDetail, description: string) => {
-    setCreatorName(createrName);
-    setSelectedMedia(media);
-    setSelectedDescription(description);
-    setMediaModalVisible(true);
+  const openMediaModal = (creatorName: string, media: MediaDetail[], description: string) => {
+    navigation.navigate('Gallery', { mediaDetails: media, creatorName, description });
   };
+  
+  
 
   useEffect(() => {
     fetchPosts();
@@ -150,89 +149,92 @@ const HomeScreen = ({ filterType }: any) => {
  
   return (
     <View style={styles.container}>
-      <FlatList
-        data={posts}
-        keyExtractor={(item) => item.postId}
-        renderItem={({ item }: { item: Post }) => (
-          <View style={styles.postContainer}>
-            <Text style={styles.creatorName}>{item.creatorName}</Text>
-            <Text style={styles.postText}>{item.description}</Text>
-            {item.mediaDetails &&
-              item.mediaDetails.map((media, index) => {
-                if (media.contentType.startsWith('image/')) {
-                  return (
-                    <TouchableOpacity key={`${item.postId}-${media.url}-${index}`} onPress={() => openMediaModal(item.creatorName,media, item.description)}>
-                      <Image
-                        source={{ uri: media.url }}
-                        style={styles.image}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                  );
-                } else if (media.contentType.startsWith('video/')) {
-                  return (
-                    <TouchableOpacity key={`${item.postId}-${media.url}-${index}`} onPress={() => openMediaModal(item.creatorName,media, item.description)}>
-                      <Video
-                        source={{ uri: media.url }}
-                        style={styles.video}
-                        resizeMode="cover"
-                        controls={true}
-                      />
-                    </TouchableOpacity>
-                  );
-                }
-                return null;
-              })}
-            <View style={styles.statsContainer}>
-              <TouchableOpacity onPress={() => toggleLike(item.postId, item.isLiked)}>
-                <View style={styles.likeContainer}>
-                  <Icon
-                    name="favorite"
-                    size={24}
-                    color={item.isLiked ? 'red' : 'gray'}
-                  />
-                  <Text style={[styles.statsText, item.isLiked && styles.likedText]}>
-                    {item.likeCount || 0}
-                  </Text>
+    <FlatList
+      data={posts}
+      keyExtractor={(item) => item.postId}
+      renderItem={({ item }: { item: Post }) => (
+        <View style={styles.postContainer}>
+          <Text style={styles.creatorName}>{item.creatorName}</Text>
+          <Text style={styles.postText}>{item.description}</Text>
+          {item.mediaDetails && item.mediaDetails.length > 0 && (
+            <>
+              <TouchableOpacity onPress={() => openMediaModal(item.creatorName, item.mediaDetails, item.description)}>
+                <View>
+                  {item.mediaDetails[0].contentType.startsWith('image/') ? (
+                    <Image
+                      source={{ uri: item.mediaDetails[0].url }}
+                      style={styles.image}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <Video
+                      source={{ uri: item.mediaDetails[0].url }}
+                      style={styles.video}
+                      resizeMode="cover"
+                      controls={true}
+                    />
+                  )}
+                  {item.mediaDetails.length > 1 && (
+                    <View style={styles.overlay}>
+                      <Text style={styles.overlayText}>+{item.mediaDetails.length - 1}</Text>
+                    </View>
+                  )}
                 </View>
               </TouchableOpacity>
-              <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
-            </View>
-          </View>
-        )}
-        onEndReached={loadMorePosts}
-        onEndReachedThreshold={0.5}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ListFooterComponent={loading ? <Text>Loading posts...</Text> : null}
-      />
-
-      <TouchableOpacity style={styles.fab} onPress={toggleModal}>
-        <Text style={styles.fabText}>+</Text>
-      </TouchableOpacity>
-
-      {/* Modal for Viewing Selected Media */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={mediaModalVisible}
-        onRequestClose={() => setMediaModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-          <Text style={styles.modalDescription}>{creatorName}</Text>
-            {selectedMedia?.contentType.startsWith('image/') ? (
-              <Image source={{ uri: selectedMedia.url }} style={styles.modalImage} resizeMode="contain" />
-            ) : (
-              <Video source={{ uri: selectedMedia?.url }} style={styles.modalVideo} resizeMode="contain" controls />
-            )}
-            <Text style={styles.modalDescription}>{selectedDescription}</Text>
-            <Button mode="outlined" onPress={() => setMediaModalVisible(false)}>Close</Button>
+            </>
+          )}
+          <View style={styles.statsContainer}>
+            <TouchableOpacity onPress={() => toggleLike(item.postId, item.isLiked)}>
+              <View style={styles.likeContainer}>
+                <Icon
+                  name="favorite"
+                  size={24}
+                  color={item.isLiked ? 'red' : 'gray'}
+                />
+                <Text style={[styles.statsText, item.isLiked && styles.likedText]}>
+                  {item.likeCount || 0}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.statsText}>{item.commentsCount} Comments</Text>
           </View>
         </View>
-      </Modal>
-    </View>
+      )}
+      
+      onEndReached={loadMorePosts}
+      onEndReachedThreshold={0.5}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      ListFooterComponent={loading ? <Text>Loading posts...</Text> : null}
+    />
+
+<TouchableOpacity style={styles.fab} onPress={toggleModal}>
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
+    {/* Modal for Viewing Selected Media */}
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={mediaModalVisible}
+      onRequestClose={() => setMediaModalVisible(false)}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalDescription}>{creatorName}</Text>
+          {selectedMedia?.map((mediaItem: { contentType: string; url: any; }, index: React.Key | null | undefined) => (
+            mediaItem.contentType.startsWith('image/') ? (
+              <Image key={index} source={{ uri: mediaItem.url }} style={styles.modalImage} resizeMode="contain" />
+            ) : (
+              <Video key={index} source={{ uri: mediaItem.url }} style={styles.modalVideo} resizeMode="contain" controls />
+            )
+          ))}
+          <Text style={styles.modalDescription}>{selectedDescription}</Text>
+          <Button mode="outlined" onPress={() => setMediaModalVisible(false)}>Close</Button>
+        </View>
+      </View>
+    </Modal>
+  </View>
   );
 };
 
@@ -249,6 +251,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  overlayText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  
   creatorName: {
     fontWeight: 'bold',
     marginBottom: 4,
@@ -283,6 +302,10 @@ const styles = StyleSheet.create({
   },
   likedText: {
     color: 'blue',
+  },
+  seeMoreText: {
+    color: 'blue',
+    marginTop: 4,
   },
   fab: {
     position: 'absolute',

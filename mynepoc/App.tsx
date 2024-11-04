@@ -22,6 +22,9 @@ import TabBarNav from './src/screens/TabBarNav';
 import SellingScreen from './src/screens/SellingScreen';
 import Listing from './src/screens/Listing';
 import ProfileScreen from './src/screens/ProfileScreen';
+import ImageScreen from './src/screens/ImageScreen';
+import ListingDetails from './src/screens/ListingDetails';
+import GalleryScreen from './src/screens/GalleryScreen';
  
 // Define the navigators
 const Stack = createNativeStackNavigator();
@@ -87,12 +90,27 @@ const App = () => {
             component={SellingScreen} // Use BottomTabs for main navigation
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+           name="ListingDetails"
+           component={ListingDetails} // Use BottomTabs for main navigation
+           options={{ headerShown: false }}
+          />
+          <Stack.Screen
+           name="ImageScreen"
+           component={ImageScreen} // Use BottomTabs for main navigation
+           options={{ headerShown: false }}
+          />
  <Stack.Screen 
             name="Profile" 
             options={{ title: 'Profile' }} 
           >
             {() => <ProfileScreen/>} 
           </Stack.Screen>
+          <Stack.Screen
+            name="Gallery"
+            component={GalleryScreen} // Use BottomTabs for main navigation
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </AutocompleteDropdownContextProvider>
@@ -252,16 +270,20 @@ const styles = StyleSheet.create({
     elevation: 0, // Set elevation to 0 to remove shadow
     shadowColor: 'transparent', // Ensure no shadow color
   },
-  topTabBar: {
+  tabLabel: {
+    fontSize: 10,  // Reduced font size
+    fontWeight: 'bold',
+    textTransform: 'none',  // Prevents all-caps (optional)
+},
+topTabBar: {
     backgroundColor: '#ffffff',
-  },
+    paddingHorizontal: 5,  // Add padding if needed
+},
+
   tabIndicator: {
     backgroundColor: '#008080',
   },
-  tabLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
+ 
 });
 
 export default App;

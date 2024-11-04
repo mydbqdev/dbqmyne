@@ -1,70 +1,81 @@
-import { View, Text, TouchableOpacity, FlatList, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Item } from './Items';
 import ApiService from '../Api/ApiService';
 import { BASE_URL } from '../../devprofile';
 import { CustomHeader } from '../../App';
 import useStore from '../zustand/useStore';
 
+// Define a type for the listing item
+interface ListingItem {
+  listingId: string;
+  price: number;
+  mediaPaths: { url: string }[];
+}
+
 const ForSaleScreen = () => {
   const nav = useNavigation<NavigationProp<any>>();
+  const create = () => nav.navigate('Listing');
+  const yourlist = () => nav.navigate('SellingScreen');
 
-  const create = () => {
-    nav.navigate('Listing');
-  };
-  
-  const yourlist = () => {
-    nav.navigate('SellingScreen');
+  const [listings, setListings] = useState<ListingItem[]>([]);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const { userDetails } = useStore();
+
+  const fetchListings = async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const response = await ApiService.post(`${BASE_URL}/post/getlistings`, {
+        listingType: 'all',
+        filterType: 'all',
+        userId: userDetails?.id,
+        pageIndex,
+        pageSize: 10,
+      });
+      const newData: ListingItem[] = response.data;
+      
+      if (newData.length > 0) {
+        setListings((prevListings) => [...prevListings, ...newData]);
+        setPageIndex(pageIndex + 1);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+    }
+    setLoading(false);
   };
 
-  const [res, setRes] = useState([]);
-const {userDetails} =useStore();
   useFocusEffect(
     useCallback(() => {
-      const fetchData = async () => {
-        try {
-          const response = await ApiService.post(`${BASE_URL}/post/getlistings`, {
-            listingType: "all",
-            filterType: "all",
-            userId: userDetails?.id,
-            pageIndex: 0,
-            pageSize: 10,
-          });
-          console.log('Listings fetched:', response.data);
-          const uniqueData = response.data.filter(
-            (item: Item, index: number, self: Item[]) =>
-              index === self.findIndex((t) => t.listingId === item.listingId)
-          );
-          setRes(uniqueData);
-        } catch (error) {
-          console.error('axios', error);
-        }
-      };
-      fetchData();
+      setListings([]);  // Reset the listings on component focus
+      setPageIndex(0);
+      setHasMore(true);
+      fetchListings();
     }, [])
   );
 
-  const renderItem = ({ item }: { item: Item }) => (
-    <View style={styles.listingContainer}>
-      {item.mediaPaths && item.mediaPaths.length > 0 ? (
-        <Image
-          source={{ uri: item.mediaPaths[0].url }}
-          style={styles.listingImage}
-        />
-      ) : (
-        <Image
-          style={styles.defaultImage}
-        />
-      )}
-      <View style={styles.listingDetails}>
-        <Text style={styles.priceText}>Price: ₹{item.price}</Text>
+  const renderItem = ({ item }: { item: ListingItem }) => (
+    <TouchableOpacity onPress={() => nav.navigate('ListingDetails', { item })}>
+      <View style={styles.listingContainer}>
+        {item.mediaPaths && item.mediaPaths.length > 0 ? (
+          <Image source={{ uri: item.mediaPaths[0].url }} style={styles.listingImage} />
+        ) : (
+          <Image style={styles.gridImage} />
+        )}
+        <View style={styles.listingDetails}>
+          <Text style={styles.priceText}>Price: ₹{item.price}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <CustomHeader />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.createButton} onPress={create}>
@@ -74,15 +85,57 @@ const {userDetails} =useStore();
           <Text style={styles.buttonText}>Your Listings</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text style={styles.sectionHeader}>Saved Listings</Text>
-        <FlatList
-          data={res}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.listingId}
-        />
+   <View className=''>
+   <Text style={styles.sectionHeader}>Popular Listings</Text>
+
+        <View className='flex-row justify-evenly'>
+          <View  >
+            <TouchableOpacity className='flex-row items-center mb-3 bg-green-100 rounded-md px-4 py-2'>
+              <Text>Hone Decor</Text>
+              <Image
+                source={require('../assets/images/202938654_10852128.png')}
+                style={{ height: 50, width: 50 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity className='flex-row items-center bg-blue-100 rounded-md px-4 py-2'>
+              <Text className='mr-3'>Furniture</Text>
+              <Image
+                source={require('../assets/images/358181730_11444651.png')}
+                style={{ height: 50, width: 50 }}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View >
+            <TouchableOpacity className='flex-row items-center mb-3 bg-pink-100 rounded-md px-4 py-2'>
+              <Text>Baby & Kids</Text>
+              <Image
+                source={require('../assets/images/65a3713e-0e20-4b5e-9c1a-81a0f6f1f5c9.png')}
+                style={{ height: 50, width: 50 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity className='flex-row items-center bg-cyan-100 rounded-md px-4 py-2'>
+              <Text>Electronics</Text>
+              <Image
+                source={require('../assets/images/fd83e35d-5ba1-435d-b290-82377056132e.png')}
+                style={{ height: 50, width: 50 }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </ScrollView>
+      <Text style={styles.sectionHeader}>Listings</Text>
+      <FlatList
+        data={listings}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.listingId}
+        onEndReached={fetchListings}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading ? <ActivityIndicator size="small" color="#05838b" /> : null
+        }
+      />
+    </View>
   );
 };
 
@@ -123,16 +176,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#f9f9f9',
   },
+  // Style for carousel images
   listingImage: {
     height: 150,
     width: '100%',
     borderRadius: 8,
   },
-  defaultImage: {
-    height: 100,
-    width: 100,
-    alignSelf: 'center',
-    marginVertical: 10,
+  // Style for grid layout
+  imageGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  gridImage: {
+    width: '48%',
+    height: 75,
+    margin: 2,
+    borderRadius: 8,
   },
   listingDetails: {
     padding: 10,
@@ -143,5 +203,6 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 });
+
 
 export default ForSaleScreen;

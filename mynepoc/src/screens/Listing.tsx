@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, Switch, Alert } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity, Switch, Alert, ActivityIndicator } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { TextInput } from "react-native-paper";
 import { useState } from "react";
@@ -11,11 +11,13 @@ import { launchImageLibrary } from "react-native-image-picker";
 import ApiService from "../Api/ApiService";
 import axios from "axios";
 import useAuthStore from "../zustand/useAuthStore";
+import { Item } from "./Items";
+import { BASE_URL } from "../../devprofile";
 import useStore from "../zustand/useStore";
 
 const Listing = () => {
     const nav = useNavigation<NavigationProp<any>>()
-
+    const {userDetails} =useStore();
     const [isEnabled, setIsEnabled] = useState(false);
     const [splocation, setSplocation] = useState(false)
     const toggleSwitch = () => setIsEnabled(!isEnabled);
@@ -24,7 +26,8 @@ const Listing = () => {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
     const [pickupLocation, setPickupLocation] = useState("");
-    const {userDetails} =useStore();
+    const [loading, setLoading] = useState(false); // Add loading state
+
     const [region, setRegion] = useState({
         latitude: 37.78825,
         longitude: -122.4324,
@@ -52,10 +55,12 @@ const Listing = () => {
         );
     };
 
-
+  
+    // console.log(isEnabled);
 
 
     const postData = async () => {
+        setLoading(true);
         const formData = new FormData();
         photos.forEach((photo, index) => {
             formData.append('files', {
@@ -76,34 +81,41 @@ const Listing = () => {
                 pickupLocation,
                 discount: false,
                 discountAmount: 0,
-                free: true,
-                creatorId: userDetails?.id
+                free: isEnabled,
+                creatorId: userDetails?.id,
             }));
- 
+
+
+        console.log(formData);
+
         try {
             const response = await ApiService.post('https://myne-api-qa.dbqportal.com/v1/post/listings/save', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'accept': 'application/json'
+                    // 'accept': 'application/json'
                 }
             });
             if (response.status === 200) {
                 console.log(response.data);
-                Alert.alert('Listing has been created successfully');
                 nav.navigate('ForSaleScreen');
-                
+                Alert.alert('Listing has been created successfully');
                 setTitle('');
                 setPhotos([]);
                 setDescription('');
                 setPrice(0);
                 setCategories([]);
                 setPickupLocation('');
+                
             }
         } catch (error) {
+            setLoading(false);
+
             console.error('Error:', error);
         }
+        finally {
+            setLoading(false);
+        }
     };
- 
 
 
     return (
@@ -113,8 +125,12 @@ const Listing = () => {
                     <TouchableOpacity onPress={nav.goBack}>
                         <AntDesign name="arrowleft" color={'black'} size={25} />
                     </TouchableOpacity>
-                    <TouchableOpacity className=" mr-1" onPress={postData}>
-                        <Text className=" text-white bg-cyan-400 px-4 py-2 rounded-lg">Post</Text>
+                    <TouchableOpacity className=" mr-1" onPress={postData} disabled={loading}>
+                        {loading ? (
+                            <ActivityIndicator size="large" color="cyan" /> // Loader when posting
+                        ) : (
+                            <Text className=" text-white bg-cyan-400 px-4 py-2 rounded-lg">Post</Text>
+                        )}
                     </TouchableOpacity>
                 </View>
                 <View className="items-start">
